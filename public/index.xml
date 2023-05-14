@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>joelaul.dev</title>
+    <link>https://joelaul.dev/</link>
+    <description>Recent content on joelaul.dev</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 May 2023 19:20:50 -0400</lastBuildDate><atom:link href="https://joelaul.dev/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
