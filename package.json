@@ -1,0 +1,8 @@
+{
+  "name": "joelaul.dev",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/joelaul/joelaul.dev.git",
+  "author": "Joe Lauletta <laulettaj@gmail.com>",
+  "license": "MIT"
+}
