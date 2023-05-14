@@ -1,4 +1,4 @@
-baseURL = 'https://joelaul.dev/'
+baseURL = '/'
 languageCode = 'en-us'
 title = 'joelaul.dev'
 theme = 'nix'
