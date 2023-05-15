@@ -16,15 +16,15 @@ languageCode = "en-us"
 [params]
   Name = "Joe Lauletta"
   GithubID = "joelaul"
-  LinkedInID = "joe-lauletta-271508132/"
+  LinkedInID = "joe-lauletta"
   InstagramID = "joelaul"
-  SpotifyID = "d"
+  SpotifyID = " "
   Email = "laulettaj@gmail.com"
 
   HeaderUsername = "joe"
   HeaderHostname = "joelaul.dev"
 
-  About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity."
+  About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. Whether it be an app or song, I like building things that awaken people's curiosity."
 
   ProfilePicture = "/profile.png"
   Favicon = "favicon.ico"
