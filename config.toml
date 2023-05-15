@@ -1,17 +1,17 @@
-baseurl = "joelaul.dev"
+baseurl = "https://joelaul.dev/"
 title = "Joe Lauletta"
 theme = "nix"
 languageCode = "en-us"
 
 [menu]
   [[menu.header]]
-    name = "blog"
-    weight = 0
-    url = "blog"
-  [[menu.header]]
     name = "portfolio"
     weight = 1
     url = "portfolio"
+  [[menu.header]]
+    name = "blog"
+    weight = 0
+    url = "blog"
 
 [params]
   Name = "Joe Lauletta"
@@ -28,4 +28,3 @@ languageCode = "en-us"
 
   ProfilePicture = "/profile.png"
   Favicon = "/favicon.ico/"
-

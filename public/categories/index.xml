@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Joe Lauletta</title>
-    <link>joelaul.dev/categories/</link>
+    <link>https://joelaul.dev/categories/</link>
     <description>Recent content in Categories on Joe Lauletta</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="joelaul.dev/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://joelaul.dev/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Development</title>
-      <link>joelaul.dev/categories/development/</link>
+      <link>https://joelaul.dev/categories/development/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/categories/development/</guid>
+      <guid>https://joelaul.dev/categories/development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>golang</title>
-      <link>joelaul.dev/categories/golang/</link>
+      <link>https://joelaul.dev/categories/golang/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/categories/golang/</guid>
+      <guid>https://joelaul.dev/categories/golang/</guid>
       <description></description>
     </item>
     

@@ -2,62 +2,62 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Joe Lauletta</title>
-    <link>joelaul.dev/tags/</link>
+    <link>https://joelaul.dev/tags/</link>
     <description>Recent content in Tags on Joe Lauletta</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="joelaul.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Apr 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://joelaul.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>development</title>
-      <link>joelaul.dev/tags/development/</link>
+      <link>https://joelaul.dev/tags/development/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/tags/development/</guid>
+      <guid>https://joelaul.dev/tags/development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>go</title>
-      <link>joelaul.dev/tags/go/</link>
+      <link>https://joelaul.dev/tags/go/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/tags/go/</guid>
+      <guid>https://joelaul.dev/tags/go/</guid>
       <description></description>
     </item>
     
     <item>
       <title>golang</title>
-      <link>joelaul.dev/tags/golang/</link>
+      <link>https://joelaul.dev/tags/golang/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/tags/golang/</guid>
+      <guid>https://joelaul.dev/tags/golang/</guid>
       <description></description>
     </item>
     
     <item>
       <title>hugo</title>
-      <link>joelaul.dev/tags/hugo/</link>
+      <link>https://joelaul.dev/tags/hugo/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/tags/hugo/</guid>
+      <guid>https://joelaul.dev/tags/hugo/</guid>
       <description></description>
     </item>
     
     <item>
       <title>templates</title>
-      <link>joelaul.dev/tags/templates/</link>
+      <link>https://joelaul.dev/tags/templates/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/tags/templates/</guid>
+      <guid>https://joelaul.dev/tags/templates/</guid>
       <description></description>
     </item>
     
     <item>
       <title>themes</title>
-      <link>joelaul.dev/tags/themes/</link>
+      <link>https://joelaul.dev/tags/themes/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>joelaul.dev/tags/themes/</guid>
+      <guid>https://joelaul.dev/tags/themes/</guid>
       <description></description>
     </item>
     
