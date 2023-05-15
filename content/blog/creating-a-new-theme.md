@@ -1,7 +1,7 @@
 ---
-author: "Michael Henderson"
-date: 2014-09-28
-linktitle: Creating a New Theme
+author: "Joe Lauletta"
+date: 2023-02-09
+linktitle: God is real and I connected with him on LinkedIn
 menu:
   main:
     parent: tutorials

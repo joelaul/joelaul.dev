@@ -3,54 +3,19 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://joelaul.dev/blog/creating-a-new-theme/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/blog/migrate-from-jekyll/</loc>
-    <lastmod>2014-03-10T00:00:00+00:00</lastmod>
+    <lastmod>2023-02-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/blog/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-02-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
+    <lastmod>2023-02-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/portfolio/</loc>
     <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://joelaul.dev/blog/goisforlovers/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://joelaul.dev/categories/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/tags/development/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/categories/development/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/blog/hugoisforlovers/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/tags/go/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/tags/golang/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/categories/golang/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/tags/hugo/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/tags/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/tags/templates/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/tags/themes/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
   </url>
 </urlset>
