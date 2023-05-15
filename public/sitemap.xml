@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://joelaul.dev/post/creating-a-new-theme/</loc>
+    <loc>https://joelaul.dev/blog/creating-a-new-theme/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://joelaul.dev/post/migrate-from-jekyll/</loc>
+    <loc>https://joelaul.dev/blog/migrate-from-jekyll/</loc>
     <lastmod>2014-03-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://joelaul.dev/blog/</loc>
+    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://joelaul.dev/post/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://joelaul.dev/about/</loc>
+    <loc>https://joelaul.dev/portfolio/</loc>
     <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://joelaul.dev/post/goisforlovers/</loc>
+    <loc>https://joelaul.dev/blog/goisforlovers/</loc>
     <lastmod>2014-04-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/categories/</loc>
@@ -29,7 +29,7 @@
     <loc>https://joelaul.dev/categories/development/</loc>
     <lastmod>2014-04-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://joelaul.dev/post/hugoisforlovers/</loc>
+    <loc>https://joelaul.dev/blog/hugoisforlovers/</loc>
     <lastmod>2014-04-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://joelaul.dev/tags/go/</loc>

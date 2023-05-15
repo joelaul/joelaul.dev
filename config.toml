@@ -27,4 +27,4 @@ languageCode = "en-us"
   About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity."
 
   ProfilePicture = "/profile.png"
-  Favicon = "/favicon.ico/"
+  Favicon = "/favicon.ico"
