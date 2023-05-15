@@ -15,7 +15,7 @@
 				<ul class="nav navbar-nav ms-auto">
 					<li class="nav-item">
 						<a class="nav-link" href='{{ .Site.BaseURL | absLangURL }}'>
-							/home/{{ .Site.Params.HeaderUsername }}</a>
+							/home</a>
 					</li>
 					{{ if .IsTranslated }}
 					<li class="nav-item dropdown">
@@ -44,12 +44,12 @@
 						<ul class="dropdown-menu">
 							{{ range .Children }}
 							<li>
-								<a class="dropdown-item" href="{{ .URL | absLangURL }}">~/{{ lower .Name }}</a>
+								<a class="dropdown-item" href="{{ .URL | absLangURL }}">/{{ lower .Name }}</a>
 							</li>
 							{{ end }}
 						</ul>
 						{{ else }}
-						<a class="nav-link" href="{{ .URL | absLangURL }}">~/{{ lower .Name }}</a>
+						<a class="nav-link" href="{{ .URL | absLangURL }}">/{{ lower .Name }}</a>
 						{{ end  }}
 					</li>
 					{{ end }}

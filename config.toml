@@ -21,10 +21,10 @@ languageCode = "en-us"
   SpotifyID = " "
   Email = "laulettaj@gmail.com"
 
-  HeaderUsername = "joe"
+  HeaderUsername = "you"
   HeaderHostname = "joelaul.dev"
 
-  About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. Whether it be an app or song, I like building things that awaken people's curiosity."
+  About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity."
 
   ProfilePicture = "/profile.png"
   Favicon = "favicon.ico"
