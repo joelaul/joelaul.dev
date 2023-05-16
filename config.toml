@@ -5,9 +5,9 @@ languageCode = "en-us"
 
 [menu]
   [[menu.header]]
-    name = "portfolio"
+    name = "projects"
     weight = 1
-    url = "portfolio"
+    url = "projects"
   [[menu.header]]
     name = "blog"
     weight = 0
@@ -18,13 +18,12 @@ languageCode = "en-us"
   GithubID = "joelaul"
   LinkedInID = "joe-lauletta"
   InstagramID = "joelaul"
-  SpotifyID = " "
   Email = "laulettaj@gmail.com"
 
   HeaderUsername = "joe"
   HeaderHostname = "joelaul.dev"
 
-  About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. Whether it be an app or song, I like building things that awaken people's curiosity."
+  About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity."
 
   ProfilePicture = "/profile.png"
   Favicon = "favicon.ico"
