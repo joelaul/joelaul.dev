@@ -7,23 +7,24 @@ languageCode = "en-us"
   [[menu.header]]
     name = "projects"
     weight = 1
-    url = "projects"
+    url = "/projects"
   [[menu.header]]
     name = "blog"
-    weight = 0
-    url = "blog"
+    weight = 2
+    url = "/blog"
 
 [params]
+  Favicon = "favicon.ico"
+
+  HeaderUsername = "you"
+  HeaderHostname = "joelaul.dev"
+
+  ProfilePicture = "/profile.png"
+
   Name = "Joe Lauletta"
   GithubID = "joelaul"
   LinkedInID = "joe-lauletta"
   InstagramID = "joelaul"
   Email = "laulettaj@gmail.com"
 
-  HeaderUsername = "you"
-  HeaderHostname = "joelaul.dev"
-
   About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity."
-
-  ProfilePicture = "/profile.png"
-  Favicon = "favicon.ico"

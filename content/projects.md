@@ -1,15 +1,13 @@
 ---
-show_date: false
+title: Projects
 ---
-
-## Projects
 
 -
 
 - [**Ask Biden!**](https://askbiden.io)
-        - An All-American chatbot powered by [OpenAI](https://openai.com/) and [ElevenLabs](https://beta.elevenlabs.io/)
+        - An All-American chatbot powered by [OpenAI](https://openai.com) and [ElevenLabs](https://beta.elevenlabs.io)
 
-- [**tubescreamer**](https://vermillion-flan-876ced.netlify.app/)
+- [**tubescreamer**](https://vermillion-flan-876ced.netlify.app)
         - Experimenting with [Tone.js](https://tonejs.github.io) and CSS illustration
 
 - [**joelaul.dev**](https://joelaul.dev)
@@ -29,5 +27,5 @@ show_date: false
 
 -
 
-I'm not a full-time goth e-girl yet (working on it!), but [donations](https://paypal.me/joelaul) are always welcome.
+I'm not a full-time goth e-girl yet (working on it!), but [your support](https://paypal.me/joelaul) will get me there faster.
  
