@@ -1,4 +1,5 @@
 ---
+show_date: false
 ---
 
 ## Projects
@@ -20,7 +21,7 @@
 
 - [**Jared Johnson** (Google)](https://jaredjohnson.dev)
         -  Liable to pull out a whiteboard to explain algorithms over Facetime.
-        
+
 - [**Shayan Javadi** (Autodesk)](https://shayanjavadi.com)
         - She told me to drop Java for web and I listened. Blame her.
 
