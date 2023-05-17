@@ -11,7 +11,7 @@ languageCode = "en-us"
   [[menu.header]]
     name = "blogs"
     weight = 2
-    url = "/blog"
+    url = "/blogs"
 
 [params]
   Favicon = "favicon.ico"
