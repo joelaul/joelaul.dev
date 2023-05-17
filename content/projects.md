@@ -24,6 +24,9 @@ title: Projects
 - [**Shayan Javadi** (Autodesk)](https://shayanjavadi.com)
         - She told me to drop Java for web and I listened. Blame her.
 
+- [**Cameron French** (Komodo Tech)](https://www.linkedin.com/in/camfrench/)
+        - Great collaborator, greater meme connoisseur.
+
 ## Donate
 
 -
