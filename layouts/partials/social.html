@@ -10,23 +10,6 @@
 <a href="https://instagram.com/{{.}}" rel="me" title="Instagram"><i class="fab fa-instagram fa-3x" aria-hidden="true"></i></a>
 {{ end }}
 
-{{ with .Site.Params.HashnodeID }}
-<a href="https://{{.}}.hashnode.dev/" rel="me" title="Hashnode"><i class="fab fa-brands fa-hashnode fa-3x" aria-hidden="true"></i></a>
+{{ with .Site.Params.Resume }}
+<a href="https://drive.google.com/file/d/1P9T0pKZFDMjGNyx2e3ThQRdX7Y8te3x8/view?usp=sharing" title="Resume"><i class="fas fa-envelope fa-3x" aria-hidden="true"></i></a>
 {{ end }}
-
-{{ with .Site.Params.SpotifyID }}
-<a href="https://open.spotify.com/artist/6o2NWnXwAdnP9xxSCBHKcY?si=gKDXimEySOiQNawFKN4H-A" rel="me" title="Spotify"><i class="fab fa-spotify fa-3x" aria-hidden="true"></i></a>
-{{ end }}
-
-{{ with .Site.Params.Email }}
-<a href="mailto:{{.}}" title="Email"><i class="fas fa-envelope fa-3x" aria-hidden="true"></i></a>
-{{ end }}
-
-{{ with .Site.Params.Mobile }}
-<a href="tel:{{.}}" title="Mobile"><i class="fas fa-mobile fa-3x" aria-hidden="true"></i></a>
-{{ end }}
-
-{{ with .Site.Params.PayPalMeID }}
-<a href="https://www.paypal.me/{{.}}" rel="me" title="PayPal.Me"><i class="fab fa-paypal fa-3x" aria-hidden="true"></i></a>
-{{ end }}
-

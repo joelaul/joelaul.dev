@@ -11,7 +11,8 @@ title: Projects
         - Experimenting with [Tone.js](https://tonejs.github.io) and CSS illustration
 
 - [**joelaul.dev**](https://joelaul.dev)
-        - Award-winning, GMO-free, farm-to-table personal site made with [Hugo](https://gohugo.io)
+        - Award-winning, GMO-free, soy-based personal site made with [Hugo](https://gohugo.io)
+
 
 ## Homies and Mentors
 
@@ -27,5 +28,5 @@ title: Projects
 
 -
 
-I'm not a full-time goth e-girl yet (working on it!), but [your support](https://paypal.me/joelaul) will get me there faster.
+I'm not a full-time goth e-girl yet, but [your support](https://paypal.me/joelaul) will get me there faster.
  
