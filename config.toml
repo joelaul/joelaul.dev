@@ -2,16 +2,17 @@ baseurl = "https://joelaul.dev/"
 title = "Joe Lauletta"
 theme = "nix"
 languageCode = "en-us"
+pluralizelisttitles = false
 
 [menu]
   [[menu.header]]
-    name = "projects"
+    name = "portfolio"
     weight = 1
-    url = "/projects"
+    url = "/portfolio"
   [[menu.header]]
-    name = "blogs"
+    name = "blog"
     weight = 2
-    url = "/blogs"
+    url = "/blog"
 
 [params]
   Favicon = "favicon.ico"

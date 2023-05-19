@@ -1,6 +1,10 @@
 ---
-title: Projects
+title: Portfolio
 ---
+
+-
+
+#### Projects
 
 -
 
@@ -14,7 +18,7 @@ title: Projects
         - Award-winning, GMO-free, soy-based personal site made with [Hugo](https://gohugo.io)
 
 
-## Homies and Mentors
+#### Friends and Mentors
 
 -
 
@@ -27,7 +31,7 @@ title: Projects
 - [**Cameron French** (Komodo Tech)](https://www.linkedin.com/in/camfrench/)
         - Great collaborator, greater meme connoisseur.
 
-## Donate
+#### Donate
 
 -
 
