@@ -9,13 +9,13 @@ title: Portfolio
 -
 
 - [**Ask Biden!**](https://askbiden.io) 
-        - *An All-American chatbot powered by [OpenAI](https://openai.com) and [ElevenLabs](https://beta.elevenlabs.io).* -- [**Github**](https://github.com/joelaul/ask-biden)
+        - An All-American chatbot powered by [OpenAI](https://openai.com) and [ElevenLabs](https://beta.elevenlabs.io) -- [**Github**](https://github.com/joelaul/ask-biden)
 
 - [**tubescreamer**](https://vermillion-flan-876ced.netlify.app)
-        - *Experimenting with [Tone.js](https://tonejs.github.io) and CSS illustration.* -- [**Github**](https://github.com/joelaul/tubescreamer)
+        - Experimenting with [Tone.js](https://tonejs.github.io) and CSS illustration -- [**Github**](https://github.com/joelaul/tubescreamer)
 
 - [**joelaul.dev**](https://joelaul.dev)
-        - *Award-winning, GMO-free personal site made with [Hugo](https://gohugo.io).* -- [**Github**](https://github.com/joelaul/joelaul.dev)
+        - Award-winning, GMO-free personal site made with [Hugo](https://gohugo.io) -- [**Github**](https://github.com/joelaul/joelaul.dev)
 
 
 #### Friends and Mentors
@@ -23,17 +23,17 @@ title: Portfolio
 -
 
 - [**Jared Johnson** (Google)](https://jaredjohnson.dev)
-        -  *Liable to pull out a whiteboard to explain algorithms over Facetime.*
+        -  Liable to pull out a whiteboard to explain algorithms over Facetime.
 
 - [**Shayan Javadi** (Autodesk)](https://shayanjavadi.com)
-        - *She told me to drop Java for web and I listened. Blame her.*
+        - She told me to drop Java for web and I listened. Blame her.
 
 - [**Cameron French** (Komodo Tech)](https://www.linkedin.com/in/camfrench/)
-        - *Great collaborator, greater meme connoisseur.*
+        - Great collaborator, greater meme connoisseur.
 
 #### Donate
 
 -
 
-I'm not a full-time goth e-girl yet, but [your support](https://paypal.me/joelaul) will get me there faster.
+I'm not a full-time goth e-girl yet, but [your support](https://paypal.me/joelaul) can get me there faster.
  
