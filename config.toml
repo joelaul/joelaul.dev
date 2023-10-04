@@ -4,6 +4,9 @@ theme = "nix"
 languageCode = "en-us"
 pluralizelisttitles = false
 
+[taxonomies]
+  tag = 'tags'
+
 [menu]
   [[menu.header]]
     name = "portfolio"

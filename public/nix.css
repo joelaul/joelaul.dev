@@ -9,6 +9,7 @@ html {
 body {
 	background-color: #fdfdfd;
 	height: 100%;
+	max-width: 300px;
 	font-family: 'Open Sans', sans-serif;
 }
 
