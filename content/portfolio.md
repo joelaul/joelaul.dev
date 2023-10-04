@@ -8,7 +8,7 @@ title: Portfolio
 
 -
 
-- [**pickupmusic**](https://pickupmusic.onrender.com) - Exploring gamification in a music ed context using Next.js and TypeScript -- [**Github**](https://github.com/joelaul/pickupmusic)
+- [**pickupmusic**](https://pickupmusic.onrender.com) - [Next.js](https://nextjs.org) demo exploring game elements in music education -- [**Github**](https://github.com/joelaul/pickupmusic)
 
 - [**Ask Biden!**](https://askbiden.io) - An All-American chatbot powered by [OpenAI](https://openai.com) and [ElevenLabs](https://beta.elevenlabs.io) -- [**Github**](https://github.com/joelaul/ask-biden)
 
