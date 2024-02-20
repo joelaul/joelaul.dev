@@ -6,47 +6,53 @@ const h1 = document.querySelector('.h1');
 const socialEls = document.querySelectorAll('.user-social > a');
 const socialRow = document.querySelector('.row.social');
 const desc = document.querySelector('.user-description');
-let cta;
 
 // STATE
 
 const state = {
     descText: `🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity.`,
-    hoveredSocialEls: []
-}
-
-// HELPERS
-
-const typewriter = (element, text, ms) => {
-        desc.textContent = '';
-        let index = 0;
-
-        let interval = setInterval(() => {
-            if (index < text.length) {
-                element.innerHTML += text.charAt(index);
-                index++;
-            } else {
-                clearInterval(interval);
-            }
-        }, ms)
-}
-
-const isUniqueSocialEl = (el) => {
-    return state.hoveredSocialEls.indexOf(el) == -1;
-}
-
-const renderCallToAction = (ms) => {
-    setTimeout(() => {
-        desc.innerHTML += `
+    ctaText: `
         <div>
             <a class="cta" href="/portfolio" target="_blank">
                 Check out some of my work!
             </a>
         </div>
-        `
-    }, ms);
+        `,
+    hoveredSocialEls: [],
+    typewriterInterval: null,
+    typewriterDone: false
+}
 
-    cta = document.querySelector('.cta');
+// HELPERS
+
+const isUniqueSocialEl = (el) => {
+    return state.hoveredSocialEls.indexOf(el) == -1;
+}
+
+const typewriter = (element, text, ms) => {
+        desc.textContent = '';
+        let index = 0;
+
+        state.typewriterInterval = setInterval(() => {
+            if (index < text.length) {
+                element.innerHTML += text.charAt(index);
+                index++;
+            } else {
+                clearInterval(state.typewriterInterval);
+                state.typewriterDone = true;
+            }
+        }, ms)
+
+}
+
+const renderCallToAction = () => {
+    if (state.typewriterDone) {
+        desc.innerHTML += state.ctaText;
+    } else {
+        clearInterval(state.typewriterInterval);
+        desc.innerHTML = state.descText + state.ctaText;
+        state.typewriterDone = true;
+    }
 }
 
 // HANDLERS
@@ -67,7 +73,7 @@ const handleSocialElMouseover = (el) => {
     if (state.hoveredSocialEls.length < 5 && isUniqueSocialEl(el)) {
         state.hoveredSocialEls.push(el);
         if (state.hoveredSocialEls.length == 5) {
-            renderCallToAction(0);
+            renderCallToAction();
         }
     } else {}
 }
@@ -111,3 +117,4 @@ init();
 // TODO(joe): on load, require click (start) + slide in components from opposite sides
 // TODO(joe): profile rolling animation
 // TODO(joe): dsp w/ webaudioapi
+// TODO(joe): fix css responsive
