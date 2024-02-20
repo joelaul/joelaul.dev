@@ -13,11 +13,10 @@
     
     <div class="flex-wrapper">
       <!-- <div class="overlay"></div> -->
-
       <main class="container">
 
         {{ with .Site.Params.ProfilePicture }}
-        <div class="row">
+        <div class="row profile">
           <div class="me col-sm-3 col-centered text-center">
             <img
               alt="profile-picture"
@@ -43,7 +42,6 @@
         {{ with .Site.Params.About }}
         <div class="row">
           <div class="col-lg-4 offset-lg-4 user-description text-center">
-            <p>{{ . }}</p>
           </div>
         </div>
         {{ end }} 

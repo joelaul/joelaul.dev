@@ -1,0 +1,85 @@
+/* pic */
+
+.user-picture {
+	border-style: solid;
+	border-width: 5px;
+	border-color: #292929;
+	margin-top: 20px;
+}
+
+.me {
+	perspective: 500px;
+	transition: transform 500ms ease-in-out;
+}
+
+/* header */
+
+.h1 {
+	font-size: 3em;
+	text-transform: uppercase;
+	font-family: Protest Strike;
+}
+
+.user-profile {
+	padding: 0;
+}
+
+/* socials */
+
+.user-social {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.user-social > a {
+	text-decoration: none;
+	transition: flex-grow 0.3s;
+	perspective: 500px;
+	transition: transform 500ms ease-in-out;
+}
+
+.user-social > a :hover {
+	transform: scale(115%);
+	flex: 2;
+}
+
+.user-social > a :active {
+	transform: scale(120%);
+}
+
+.user-social.resume {
+	margin: 15.5px;
+}
+
+/* description */
+
+.user-description {
+	font-family: nds-bios;
+	font-size: 1.5rem;
+	border-style: solid;
+	border-width: 5px;
+	border-color: #292929;
+	margin-top: 20px;
+	margin-bottom: 1em;
+	padding: 15px;
+}
+
+.cta {
+	background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+	background-size: 300% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	animation: rainbow 4s ease-in-out infinite;
+}
+
+@keyframes rainbow {
+	0%,100% {
+		background-position: 0 0;
+	}
+
+	50% {
+		background-position: 100% 0;
+	}
+}
