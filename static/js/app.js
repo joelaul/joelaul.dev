@@ -108,6 +108,6 @@ const init = () => {
 init();
 
 // TODO(joe): when all socialEls are colored, animate sequential bounce + arpeggio
-// TODO(joe): on load, slide in components from opposite sides
-// TODO(joe): profile rolling animation?
-// TODO(joe): dsp w/ webaudioapi?
+// TODO(joe): on load, require click (start) + slide in components from opposite sides
+// TODO(joe): profile rolling animation
+// TODO(joe): dsp w/ webaudioapi

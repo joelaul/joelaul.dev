@@ -1,0 +1,61 @@
+/* import */
+
+@import url('home.css');
+@import url('portfolio-blog.css');
+@import url('responsive.css');
+@import url('util.css');
+
+/* font */
+
+@import url("https://fonts.googleapis.com/css?family=Muli&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap');
+
+@font-face {
+	font-family: 'nds-bios';
+	src: url('../font/nds-bios.woff') format('woff');
+}
+
+/* reset */
+
+* {
+	margin: 0;
+	box-sizing: border-box;
+}
+
+/* types */
+
+body {
+	background-color: rgba(250, 250, 250, .75);
+	height: 100%;
+	font-family: nds-bios;
+}
+
+nav {
+	font-size: 1.5em;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+img {
+	max-width: 100%;
+}
+
+i {
+	margin: 10px 20px 10px 20px;
+	color: #333;
+}
+
+/* classes */
+
+.flex-wrapper {
+	display: flex;
+  	min-height: 100vh;
+  	flex-direction: column;
+	justify-content: space-between;
+	padding-top: 70px;
+}
+
+#green-terminal {
+	color: #00ff00;
+	font-family: "Iconsolata", monospace;
+}

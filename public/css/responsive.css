@@ -1,0 +1,38 @@
+@media screen and (max-width: 480px) {
+	.row.profile {
+		transform: scale(60%);
+	}
+	.user-social {
+		font-size: 80%;
+	}
+	.user-social.resume {
+		transform: scale(68%);
+	}
+	.user-name {
+		font-size: em;
+	}
+	nav {
+		font-size: 80%;
+	}
+	.dropdown-menu li {
+		font-size: 80%;
+	}
+}
+
+@media screen and (max-width: 320px) {
+	.row.profile {
+		transform: scale(80%);
+	}
+	.user-social {
+		font-size: 70%;
+	}
+	#user-name {
+		font-size: 2em;
+	}
+	nav {
+		font-size: 80%;
+	}
+	.dropdown-menu li {
+		font-size: 80%;
+	}
+}
