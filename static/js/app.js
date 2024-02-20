@@ -50,6 +50,7 @@ const init = () => {
         el.firstChild.addEventListener('mouseover', () => {
             h1.textContent = el.title;
             let audio = new Audio(`audio/${el.title.toLowerCase()}.wav`);
+            audio.setAttribute('aria-muted', 'false');
             audio.play();
             el.firstChild.style.color = el.classList[2];
             h1.style.color = el.classList[2];
