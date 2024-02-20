@@ -1,5 +1,5 @@
 baseurl = "https://joelaul.dev/"
-title = "Joe Lauletta"
+title = "Joe Lauletta | Software Engineer"
 theme = "nix"
 languageCode = "en-us"
 pluralizelisttitles = false
@@ -23,13 +23,13 @@ pluralizelisttitles = false
   HeaderUsername = "you"
   HeaderHostname = "joelaul.dev"
 
-  ProfilePicture = "/profile.png"
+  ProfilePicture = "/profile-bw.png"
 
   Name = "Joe Lauletta"
   GithubID = "joelaul"
   LinkedInID = "joelaul"
   InstagramID = "joelaul"
-  SpotifyID = "6o2NWnXwAdnP9xxSCBHKcY"
+  SpotifyID = "joelaul"
   Resume = " "
 
   About = "🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity."
