@@ -3,9 +3,10 @@
 const body = document.querySelector('body');
 const me = document.querySelector('.me');
 const h1 = document.querySelector('.h1');
-const socialEls = document.querySelectorAll('.user-social > a');
-const socialRow = document.querySelector('.row.social');
-const desc = document.querySelector('.user-description');
+const socialEls = document.querySelectorAll('.social > a');
+const socialContainer = document.querySelector('.social-container');
+const desc = document.querySelector('.description');
+const brand = document.querySelector('.navbar-brand');
 
 // STATE
 
@@ -53,6 +54,8 @@ const renderCallToAction = () => {
         desc.innerHTML = state.descText + state.ctaText;
         state.typewriterDone = true;
     }
+
+    // desc.classList.add('cta-border');
 }
 
 // HANDLERS
@@ -62,11 +65,18 @@ const handleSocialElMouseover = (el) => {
     audio.setAttribute('aria-muted', 'false');
     audio.play();
 
-    h1.textContent = el.title;
-    el.firstChild.style.color = el.classList[2];
-    h1.style.color = el.classList[2];
+    let link = el.classList[1];
+    let color = el.classList[2];
 
-    if (el.classList[1] == 'resume') {
+    h1.textContent = el.title;
+    el.firstChild.style.color = color;
+    h1.style.color = color;
+    brand.style.color = color;
+    
+    body.style.background = `linear-gradient(-45deg, ${color}40, white)`;
+
+
+    if (link == 'resume') {
         el.firstChild.src = "../img/resume-hover.png"
     }
 
@@ -80,9 +90,13 @@ const handleSocialElMouseover = (el) => {
 
 const handleMeClick = () => {
     me.classList.toggle('spin');
+    h1.style.color = 'black';
+    body.style.background = 'white';
+    brand.style.color = 'white';
     for (let el of socialEls) {
+        let link = el.classList[1];
         el.firstChild.style.color = '#333333';
-        if (el.classList[1] == 'resume') {
+        if (link == 'resume') {
             el.firstChild.src = "../img/resume.png"
         }
         el.classList.toggle('spin');
@@ -102,9 +116,9 @@ const init = () => {
         });
     };
 
-    socialRow.addEventListener('mouseout', () => {
+    socialContainer.addEventListener('mouseout', () => {
         h1.textContent = 'Joe Lauletta';
-        h1.style.color = 'black';
+       
     });
 
     me.addEventListener('click', handleMeClick);
@@ -113,8 +127,11 @@ const init = () => {
 
 init();
 
-// TODO(joe): when all socialEls are colored, animate sequential bounce + arpeggio
-// TODO(joe): on load, require click (start) + slide in components from opposite sides
-// TODO(joe): profile rolling animation
-// TODO(joe): dsp w/ webaudioapi
-// TODO(joe): fix css responsive
+
+// TODO(joe)
+
+// fix mobile css / hover (how did old responsive disappear?);
+// fix background animation
+// onload - require click, slide in components, cache audio files
+// cta animation - linear hop, confetti, falling stars
+// dsp w/ webaudioapi

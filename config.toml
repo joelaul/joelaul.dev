@@ -20,16 +20,13 @@ pluralizelisttitles = false
 [params]
   Favicon = "favicon.ico"
 
-  HeaderUsername = "you"
-  HeaderHostname = "joelaul.dev"
+  Profile = "/img/profile.png"
+  h1 = "Joe Lauletta"
 
-  ProfilePicture = "/img/profile-bw.png"
-
-  Name = "Joe Lauletta"
   GithubID = "joelaul"
   LinkedInID = "joelaul"
   InstagramID = "joelaul"
   SpotifyID = "joelaul"
   Resume = " "
 
-  About = " "
+  Description = " "

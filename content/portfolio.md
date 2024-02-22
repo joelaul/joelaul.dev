@@ -2,8 +2,6 @@
 title: Portfolio
 ---
 
--
-
 #### Projects
 
 -

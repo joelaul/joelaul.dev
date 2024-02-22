@@ -9,55 +9,48 @@
   </head>
 
   <body>
-    {{ partial "header.html" . }}
+    {{ partial "nav.html" . }}
     
     <div class="flex-wrapper">
       <!-- <div class="overlay"></div> -->
+
       <main class="container">
 
-        {{ with .Site.Params.ProfilePicture }}
-        <div class="row profile">
+        {{ with .Site.Params.Profile }}
+        <div class="profile-container">
           <div class="me col-sm-3 col-centered text-center">
             <img
-              alt="profile-picture"
-              class="rounded-circle user-picture"
+              alt="profile"
+              class="profile rounded-circle"
               src="{{.}}"
             />
           </div>
         </div>
         {{ end }}
 
-        <div class="row">
-          <div class="col-xs-12 user-profile text-center">
-            <h1 class="h1">{{ .Site.Params.Name }}</h1>
+        <div class="h1-container">
+          <div class="col-xs-12 text-center">
+            <h1 class="h1">{{ .Site.Params.h1 }}</h1>
           </div>
         </div>
-        
-        <div class="row social">
-          <div class="col-xs-12 user-social text-center">
+
+        <div class="social-container">
+          <div class="social col-xs-12 text-center">
             {{ partial "social.html" . }}
           </div>
         </div>
 
-        {{ with .Site.Params.About }}
-        <div class="row">
-          <div class="col-lg-4 offset-lg-4 user-description text-center">
+        {{ with .Site.Params.Description }}
+        <div class="description-container">
+          <div class="description col-lg-4 offset-lg-4 text-center">
           </div>
         </div>
         {{ end }} 
-        
-        {{ if .Site.Params.Blog }}
-        <div class="row">
-          <div class="col-xs-12 text-center">
-            <h1>Blog</h1>
-          </div>
-        </div>
-        {{ partial "postlist.html" . }} 
-        {{ end }}
         
       </main>
 
       {{ partial "footer.html" }}
     </div>
+    
   </body>
 </html>
