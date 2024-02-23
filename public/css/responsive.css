@@ -1,77 +1,31 @@
-/* @media screen and (max-width: 480px) {
-	.h1-container {
-		transform: scale(60%);
+@media screen and (max-width: 430px) {
+	.container {
+		touch-action: none;
+	}
+	.nav-link {
+		font-size: 130%;
+	}	
+	.profile-container {
+		position: absolute;
+		top: 340px;
+		transform: scale(30%);
+	}
+	.profile {
+		border: 10px solid #292929;
+	}
+	.social-container {
+
 	}
 	.social {
 		font-size: 80%;
 	}
-	.user-social.resume {
-		transform: scale(68%);
+	.description-container {
+		background: transparent;
 	}
-	.user-name {
-		font-size: em;
+	.description {
+		font-size: 1.4em;
 	}
-	nav {
-		font-size: 80%;
-	}
-	.dropdown-menu li {
-		font-size: 80%;
-	}
-}
-
-@media screen and (max-width: 320px) {
-	.row.profile {
-		transform: scale(80%);
-	}
-	.social {
-		font-size: 70%;
-	}
-	#user-name {
-		font-size: 2em;
-	}
-	nav {
-		font-size: 80%;
-	}
-	.dropdown-menu li {
-		font-size: 80%;
-	}
-} */
-
-@media screen and (max-width: 480px) {
-	.row.profile {
-		transform: scale(60%);
-	}
-	.user-social {
-		font-size: 80%;
-	}
-	.user-social.resume {
-		transform: scale(68%);
-	}
-	.user-name {
-		font-size: em;
-	}
-	nav {
-		font-size: 80%;
-	}
-	.dropdown-menu li {
-		font-size: 80%;
-	}
-}
-
-@media screen and (max-width: 320px) {
-	.row.profile {
-		transform: scale(80%);
-	}
-	.user-social {
-		font-size: 70%;
-	}
-	#user-name {
-		font-size: 2em;
-	}
-	nav {
-		font-size: 80%;
-	}
-	.dropdown-menu li {
-		font-size: 80%;
+	.social.resume {
+		transform: scale(70%);
 	}
 }

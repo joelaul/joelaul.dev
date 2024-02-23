@@ -1,7 +1,7 @@
 /* profile */
 
 .profile {
-	border: 4px solid #292929;
+	border: 5px solid #292929;
 	margin-top: 20px;
 }
 
@@ -48,6 +48,11 @@
 }
 
 /* description */
+
+.description-container {
+	background: transparent;
+	transition: max-height 500ms ease-in-out
+}
 
 .description {
 	border: 4px solid #292929;

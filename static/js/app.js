@@ -114,11 +114,20 @@ const init = () => {
         el.firstChild.addEventListener('mouseover', () => {
             handleSocialElMouseover(el);
         });
+        el.firstChild.addEventListener('touchmove', () => {
+            handleSocialElMouseover(el);
+        });
     };
 
     socialContainer.addEventListener('mouseout', () => {
         h1.textContent = 'Joe Lauletta';
-       
+    });
+
+    socialContainer.addEventListener('touchend', () => {
+        h1.textContent = 'Joe Lauletta';
+        socialContainer.removeEventListener('touchmove', () => {
+            handleSocialElMouseover(el);
+        });
     });
 
     me.addEventListener('click', handleMeClick);
@@ -130,8 +139,7 @@ init();
 
 // TODO(joe)
 
-// fix mobile css / hover (how did old responsive disappear?);
-// fix background animation
-// onload - require click, slide in components, cache audio files
-// cta animation - linear hop, confetti, falling stars
-// dsp w/ webaudioapi
+// fix      - mob css / touch, talk-anim, bg-anim (ring pulse?), cache audio
+// onload   - solo-face / click -> slide in components
+// extras   - social hop sequence / slidebar, webaudio-dsp
+// !        - migrate from hugo / bootstrap, integrate pedalboard
