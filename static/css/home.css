@@ -50,8 +50,8 @@
 /* description */
 
 .description-container {
-	background: transparent;
-	transition: max-height 500ms ease-in-out
+	margin: 0 auto;
+	max-width: 550px;
 }
 
 .description {

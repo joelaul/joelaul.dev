@@ -43,6 +43,7 @@
 
             <!-- conditionally render submenus -->
             {{ if .HasChildren }}
+
               <a
                 href="#"
                 class="nav-link dropdown-toggle"
@@ -52,6 +53,7 @@
                 aria-expanded="false"
                 >{{ .Name }} <span class="caret"></span
               ></a>
+
               <ul class="dropdown-menu">
                 {{ range .Children }}
                   <li>
@@ -61,6 +63,7 @@
                   </li>
                 {{ end }}
               </ul>
+              
             {{ else }}
               <a
                 class="nav-link d-flex justify-content-center"

@@ -14,7 +14,7 @@ const state = {
     descText: `🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity.`,
     ctaText: `
         <div>
-            <a class="cta" href="/portfolio" target="_blank">
+            <a class="cta" style="padding-right: 10px" href="/portfolio" target="_blank">
                 Check out some of my work!
             </a>
         </div>
@@ -139,7 +139,6 @@ init();
 
 // TODO(joe)
 
-// fix      - mob css / touch, talk-anim, bg-anim (ring pulse?), cache audio
-// onload   - solo-face / click -> slide in components
-// extras   - social hop sequence / slidebar, webaudio-dsp
-// !        - migrate from hugo / bootstrap, integrate pedalboard
+// fix      - mob-touch-profilefix, anim-talk_bg (ring pulse?), cache-audio
+// onload   - solo-face / click -> slide-containers
+// extras   - social-linearhop_slidebar, dsp, migrate from hugo / bs, add-pedalboard

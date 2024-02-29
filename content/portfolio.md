@@ -12,7 +12,7 @@ title: Portfolio
 
 - [**tubescreamer**](https://tubescreamer.onrender.com) - Experimenting with [Tone.js](https://tonejs.github.io) and CSS illustration -- [**Github**](https://github.com/joelaul/tubescreamer)
 
-- [**joelaul.dev**](https://joelaul.dev) - Award-winning, GMO-free portfolio site made with [Hugo](https://gohugo.io) -- [**Github**](https://github.com/joelaul/joelaul.dev)
+- [**joelaul.dev**](https://joelaul.dev) - Award-winning, GMO-free portfolio site bootstrapped with [Hugo](https://gohugo.io) -- [**Github**](https://github.com/joelaul/joelaul.dev)
 
 #### Friends and Mentors
 
@@ -28,4 +28,4 @@ title: Portfolio
 
 -
 
-I'm not a full-time goth e-girl yet, but [your support](https://paypal.me/joelaul) can get me there faster.
+I'm not a full-time goth e-girl yet, but [your support](https://paypal.me/tipjoelaul) can get me there faster.

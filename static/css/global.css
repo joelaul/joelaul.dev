@@ -7,10 +7,6 @@
 
 /* font */
 
-@import url('https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans%7CConcert+One');
-@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap');
-
 @font-face {
 	font-family: 'nds-bios';
 	src: url('../font/nds-bios.woff') format('woff');
@@ -66,8 +62,13 @@ td {
 	padding-top: 70px;
 }
 
+.container {
+	margin: 0 auto;
+	max-width: 725px;
+}
+
 .navbar-dark {
-	opacity: 0.92;
+	opacity: 0.94;
 }
 
 .navbar-brand {
@@ -75,6 +76,10 @@ td {
 }
 
 .footer {
+	/* position: fixed;
+	width: 100%;
+	bottom: 0; */
+
 	background-color: #F5F5F5;
 	display: flex;
 	justify-content: center;
@@ -89,4 +94,8 @@ td {
 .col-centered {
 	float: none;
 	margin: 0 auto;
+}
+
+.notfound-content {
+	font-size: 1.15em;
 }
