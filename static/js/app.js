@@ -139,6 +139,6 @@ init();
 
 // TODO(joe)
 
-// fix      - mob-touch-profilefix, anim-talk_bg (ring pulse?), cache-audio
-// onload   - solo-face / click -> slide-containers
-// extras   - social-linearhop_slidebar, dsp, migrate from hugo / bs, add-pedalboard
+// fix      - mobfix-touch-profilepos, anim-talk_bg (ring pulse?), cache-audio
+// onload   - solo-face / click -> slidein-containers
+// extras   - social-linearhop, add-pedalboard, migrate from hugo/bs

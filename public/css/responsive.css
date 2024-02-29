@@ -1,0 +1,31 @@
+@media screen and (max-width: 430px) {
+	.flex-wrapper {
+		justify-content: flex-start;
+	}
+	.container {
+		touch-action: none;
+	}
+	.nav-link {
+		font-size: 130%;
+	}	
+	.profile-container {
+		position: absolute;
+		top: 340px;
+		transform: scale(30%);
+	}
+	.profile {
+		border: 10px solid #292929;
+	}
+	.social {
+		font-size: 80%;
+	}
+	.description-container {
+		background: transparent;
+	}
+	.description {
+		font-size: 1.35em;
+	}
+	.social.resume {
+		transform: scale(70%);
+	}
+}
