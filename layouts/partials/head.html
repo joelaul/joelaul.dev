@@ -31,4 +31,14 @@
 
 {{ if .IsHome }}
 	<script defer src="{{ "js/app.js" | absURL }}"></script>
+{{ else }}
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			let theme = localStorage.getItem('theme');
+			if (theme) {
+				document.body.style.background = `linear-gradient(-45deg, ${theme}40, white)`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
 {{ end }}

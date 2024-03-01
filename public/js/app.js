@@ -66,15 +66,14 @@ const handleSocialElMouseover = (el) => {
     audio.play();
 
     let link = el.classList[1];
-    let color = el.classList[2];
+    let theme = el.classList[2];
 
     h1.textContent = el.title;
-    el.firstChild.style.color = color;
-    h1.style.color = color;
-    brand.style.color = color;
+    el.firstChild.style.color = theme;
+    h1.style.color = theme;
+    brand.style.color = theme;
     
-    body.style.background = `linear-gradient(-45deg, ${color}40, white)`;
-
+    body.style.background = `linear-gradient(-45deg, ${theme}40, white)`;
 
     if (link == 'resume') {
         el.firstChild.src = "../img/resume-hover.png"
@@ -86,6 +85,8 @@ const handleSocialElMouseover = (el) => {
             renderCallToAction();
         }
     } else {}
+
+    localStorage.setItem('theme', theme)
 }
 
 const handleMeClick = () => {
@@ -93,6 +94,7 @@ const handleMeClick = () => {
     h1.style.color = 'black';
     body.style.background = 'white';
     brand.style.color = 'white';
+
     for (let el of socialEls) {
         let link = el.classList[1];
         el.firstChild.style.color = '#333333';
@@ -101,13 +103,15 @@ const handleMeClick = () => {
         }
         el.classList.toggle('spin');
     }
+
+    localStorage.clear();
 }
 
 // INIT
 
 const init = () => {
     window.addEventListener('load', () => {
-        typewriter(desc, state.descText, 25)
+        typewriter(desc, state.descText, 25);
     });
 
     for (let el of socialEls) {
@@ -139,6 +143,6 @@ init();
 
 // TODO(joe)
 
-// fix      - mobfix-touch-profilepos, anim-talk_bg (ring pulse?), cache-audio
+// fix      - mobfix-touch-profilepos, social-slidebar, anim-talk_bg (ring pulse?), cache-audio
 // onload   - solo-face / click -> slidein-containers
 // extras   - social-linearhop, add-pedalboard, migrate from hugo/bs
