@@ -7,8 +7,6 @@
 
 	</head>
 
-	<!-- /blog -->
-
 	<body>
 
 		{{ partial "nav.html" . }}
@@ -20,6 +18,28 @@
 				<div class="col-xs-12 text-center">
 					<h1 class="post-title">{{ .Page.Title }}</h1>
 				</div>
+
+				{{ if in .Permalink "blog" }}
+						
+					<div class="tags">
+						<a href="/tags/tech">
+							<p class="tag">
+								tech
+							</p>
+						</a>
+						<a href="/tags/society">
+							<p class="tag">
+								society
+							</p>
+						</a>
+						<a href="/tags/personal">
+							<p class="tag">
+								personal
+							</p>
+						</a>
+					</div>
+
+				{{ end }}
 			
 				{{ partial "postlist.html" . }}
 				<!-- {{ partial "pagination" . }} -->

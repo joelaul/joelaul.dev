@@ -1,4 +1,4 @@
-// DOM
+// dom
 
 const body = document.querySelector('body');
 const me = document.querySelector('.me');
@@ -8,7 +8,7 @@ const socialContainer = document.querySelector('.social-container');
 const desc = document.querySelector('.description');
 const brand = document.querySelector('.navbar-brand');
 
-// STATE
+// state
 
 const state = {
     descText: `🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity.`,
@@ -24,7 +24,7 @@ const state = {
     typewriterDone: false
 }
 
-// HELPERS
+// helpers
 
 const isUniqueSocialEl = (el) => {
     return state.hoveredSocialEls.indexOf(el) == -1;
@@ -58,7 +58,7 @@ const renderCallToAction = () => {
     // desc.classList.add('cta-border');
 }
 
-// HANDLERS
+// handlers
 
 const handleSocialElMouseover = (el) => {
     let audio = new Audio(`audio/${el.title.toLowerCase()}.wav`);
@@ -107,7 +107,7 @@ const handleMeClick = () => {
     localStorage.clear();
 }
 
-// INIT
+// init
 
 const init = () => {
     window.addEventListener('load', () => {
@@ -143,6 +143,6 @@ init();
 
 // TODO(joe)
 
-// fix      - mobfix-touch-profilepos, social-slidebar, anim-talk_bg (ring pulse?), cache-audio
-// onload   - solo-face / click -> slidein-containers
-// extras   - social-linearhop, add-pedalboard, migrate from hugo/bs
+// fix      - mob-touch-pfp, social-slidebar, anim-talk, audio-cache
+// onload   - solo-face,  click -> container-slidein
+// extras   - social-hop, add-pedalboard, migrate

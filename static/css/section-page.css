@@ -38,6 +38,18 @@
 	float: right;
 }
 
+.tags {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 25px;
+}
+
+.tag {
+	margin: 0px;
+	font-size: 1.2em;
+}
+
 /* page */
 
 .post-title {
@@ -57,7 +69,7 @@
 	font-size: 2em;
 }
 
-.post-content a:hover {
+.post-content a:hover, .tags a:hover {
 	transform: scale(103%);
 	
 	background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
