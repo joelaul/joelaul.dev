@@ -17,10 +17,18 @@
 {{ with .Site.Params.Resume }}
 <a
   class="social resume #f2541f"
-  href="https://drive.google.com/file/d/1OOstkgpLMN49U3_aQ6wdgoyyAeKBSJi_/view?usp=sharing"
+  href="https://drive.google.com/file/d/1kNGM9Ogw2Y4N7q28wRgkRlvmli-IKws_/view?usp=sharing"
   title="Resume"
     ><img src="img/resume.png" width="43.5"
   ></a>
+{{ end }}
+
+{{ with .Site.Params.SpotifyID }}
+<a 
+  class="social spotify #1db954"
+  href="https://sptfy.com/{{.}}" rel="me" title="Spotify"
+  ><i class="fab fa-spotify fa-3x" aria-hidden="true"></i
+></a>
 {{ end }}
 
 {{ with .Site.Params.InstagramID }}
@@ -30,11 +38,3 @@
   ><i class="fab fa-instagram fa-3x" aria-hidden="true"></i
 ></a>
 {{ end }} 
-
-{{ with .Site.Params.SpotifyID }}
-<a 
-  class="social spotify #1db954"
-  href="https://sptfy.com/{{.}}" rel="me" title="Spotify"
-  ><i class="fab fa-spotify fa-3x" aria-hidden="true"></i
-></a>
-{{ end }}

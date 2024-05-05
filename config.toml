@@ -19,10 +19,8 @@ pluralizelisttitles = false
 
 [params]
   Favicon = "favicon.ico"
-  
   Profile = "/img/profile.png"
   h1 = "Joe Lauletta"
-
   GithubID = "joelaul"
   LinkedInID = "joelaul"
   InstagramID = "joelaul"

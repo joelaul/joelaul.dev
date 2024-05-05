@@ -20,7 +20,7 @@ title: Portfolio
 
 - [**Jared Johnson** (Google)](https://jaredjohnson.dev) - Liable to pull out a whiteboard to explain algorithms over FaceTime.
 
-- [**Shayan Javadi** (Autodesk)](https://shayanjavadi.com) - She told me to drop Java for web and I listened. Blame her.
+- [**Shayan Javadi** (Slack)](https://shayanjavadi.com) - She told me to drop Java for web and I listened. Blame her.
 
 - [**Cameron French** (Komodo Tech)](https://www.linkedin.com/in/camfrench/) - Great collaborator, greater meme connoisseur.
 
