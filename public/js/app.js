@@ -1,6 +1,7 @@
 // DOM
 
 const body = document.querySelector('body');
+const bg = document.querySelector('.background');
 const me = document.querySelector('.me');
 const h1 = document.querySelector('.h1');
 const socialEls = document.querySelectorAll('.social > a');
@@ -25,6 +26,7 @@ const state = {
     typewriterInterval: null,
     typewriterDone: false
 }
+const leaves = `url("./img/leaves.png")`
 
 // HELPERS
 
@@ -65,7 +67,7 @@ const renderCallToAction = () => {
 const handleSocialElMouseover = (el) => {
     let audio = new Audio(`audio/${el.title.toLowerCase()}.wav`);
     audio.setAttribute('aria-muted', 'false');
-    audio.play();
+    audio.play();                       
 
     let link = el.classList[1];
     let theme = el.classList[2];
@@ -74,11 +76,12 @@ const handleSocialElMouseover = (el) => {
     el.firstChild.style.color = theme;
     h1.style.color = theme;
     navBrand.style.color = theme;
-    
-    body.style.background = `linear-gradient(-45deg, ${theme}40, white)`;
+
+    let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+    body.style.background = `${bgColor}, ${leaves}`;
 
     if (link == 'resume') {
-        el.firstChild.src = "../img/resume-hover.png"
+        el.firstChild.src = "./img/resume-hover.png"
     }
 
     if (state.hoveredSocialEls.length < 5 && isUniqueSocialEl(el)) {
@@ -98,14 +101,15 @@ const handleSocialElTouch = (el) => {
 const handleMeClick = () => {
     me.classList.toggle('spin');
     h1.style.color = 'black';
-    body.style.background = 'white';
+    body.style.background = leaves;
+
     navBrand.style.color = 'white';
 
     for (let el of socialEls) {
         let link = el.classList[1];
         el.firstChild.style.color = '#333333';
         if (link == 'resume') {
-            el.firstChild.src = "../img/resume.png"
+            el.firstChild.src = "./img/resume.png"
         }
         el.classList.toggle('spin');
     }

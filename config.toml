@@ -1,4 +1,5 @@
-baseurl = "https://joelaul.dev/"
+baseURL = "https://joelaul.dev/"
+
 title = "Joe Lauletta"
 theme = "nix"
 languageCode = "en-us"

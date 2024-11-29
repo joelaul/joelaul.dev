@@ -21,10 +21,10 @@
 
 /* types */
 
-body {
-	background-size: 400% 400%;
+body { 
+	background-image: url("../img/leaves.png");
 	animation: gradient 15s ease infinite;
-
+	
 	font-family: nds-bios;
 	cursor: url('../mp-hand.cur'), auto;
 }

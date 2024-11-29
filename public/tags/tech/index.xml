@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>tech on Joe Lauletta</title>
-    <link>https://joelaul.dev/tags/tech/</link>
+    <link>http://localhost:5500/frontend/joelaul.dev/public/tags/tech/</link>
     <description>Recent content in tech on Joe Lauletta</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://joelaul.dev/tags/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:5500/frontend/joelaul.dev/public/tags/tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ride the bull before it tramples you</title>
-      <link>https://joelaul.dev/blog/2023-06-18/</link>
+      <link>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-06-18/</link>
       <pubDate>Sun, 18 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://joelaul.dev/blog/2023-06-18/</guid>
+      <guid>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-06-18/</guid>
       <description>As AI advances, my definition of creativity will have to become more flexible. In a way, this might be the gun to my head that I needed the whole time. I want to think that the average person is so lazy that GPT may never become a household name no matter how streamlined / forced down our throats it gets, but look at how easily we&amp;rsquo;ve adopted every other technology.</description>
     </item>
     

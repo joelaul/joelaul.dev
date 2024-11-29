@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog on Joe Lauletta</title>
-    <link>https://joelaul.dev/blog/</link>
+    <link>http://localhost:5500/frontend/joelaul.dev/public/blog/</link>
     <description>Recent content in Blog on Joe Lauletta</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://joelaul.dev/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:5500/frontend/joelaul.dev/public/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ride the bull before it tramples you</title>
-      <link>https://joelaul.dev/blog/2023-06-18/</link>
+      <link>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-06-18/</link>
       <pubDate>Sun, 18 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://joelaul.dev/blog/2023-06-18/</guid>
+      <guid>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-06-18/</guid>
       <description>As AI advances, my definition of creativity will have to become more flexible. In a way, this might be the gun to my head that I needed the whole time. I want to think that the average person is so lazy that GPT may never become a household name no matter how streamlined / forced down our throats it gets, but look at how easily we&amp;rsquo;ve adopted every other technology.</description>
     </item>
     
     <item>
       <title>A special retrospective</title>
-      <link>https://joelaul.dev/blog/2023-05-29/</link>
+      <link>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-05-29/</link>
       <pubDate>Mon, 29 May 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://joelaul.dev/blog/2023-05-29/</guid>
+      <guid>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-05-29/</guid>
       <description>It took me five years to finish high school.
 I dragged my therapists and guidance counselors through a logistical obstacle course instead of getting a GED and calling it a day. Obviously this is water under the bridge 6 years past graduation, but as I look through email correspondences from that mess of a time, I recognize an early case of my obsessive need to prove my worth by taking on unnecessary burdens.</description>
     </item>
     
     <item>
       <title>God is real and I connected with him on LinkedIn</title>
-      <link>https://joelaul.dev/blog/2023-02-09/</link>
+      <link>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-02-09/</link>
       <pubDate>Thu, 09 Feb 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://joelaul.dev/blog/2023-02-09/</guid>
+      <guid>http://localhost:5500/frontend/joelaul.dev/public/blog/2023-02-09/</guid>
       <description>Some of us go for the four-year computer science degree at Big State University, pre-gaming for exclusive job fairs with adderall. Some of us like to eat paint and binge watch Top 10 Things You Need To Learn As A Minimalist Soydev videos all day until we hit 10,000 hours and reach Gladwell status. Personally, I went to Jared.
 I obsessed over guitar for half my life, then I watched the masterpiece that is Mr.</description>
     </item>
