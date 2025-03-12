@@ -2,9 +2,9 @@
 	.flex-wrapper {
 		justify-content: flex-start;
 	}
-	.container {
+	/* .container {
 		touch-action: none;
-	}
+	} */
 	.nav-link {
 		font-size: 130%;
 	}	
