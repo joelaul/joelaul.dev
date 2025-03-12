@@ -12,7 +12,7 @@ const navBrand = document.querySelector('.navbar-brand');
 // STATE
 
 const state = {
-    descText: `🎸👨‍💻 I'm a guitarist and recording artist turned fullstack developer. I like building things that awaken people's curiosity.`,
+    descText: `🎸👨‍💻 I'm a fullstack developer, musician, and educator. I like building things that awaken people's curiosity.`,
     ctaText: `
         <div>
             <a class="cta" style="padding-right: 10px" href="/portfolio" target="_blank">
@@ -151,7 +151,7 @@ const init = () => {
 init();
 
 
-// TODO(joe)
+// TODO(joe):
 
 // fix      - mob-touch-pfp, social-slidebar, anim-talk, audio-cache, sessionStorage.clear() on index revisit in same session
 // onload   - solo-face,  click -> container-slidein
