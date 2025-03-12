@@ -1,0 +1,95 @@
+.wrapper {
+	min-height: 100%;
+	margin: 0 auto;
+}
+
+/* section */
+
+#post-list {
+	list-style: none;
+	padding-left: 0;
+}
+
+.post-header {
+	/* background-color: #F5F5F5; */
+	overflow: hidden;
+	padding: 0 5px 0 5px;
+}
+
+.post-link a:hover {
+	transform: scale(103%);
+	
+	background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+	background-size: 300% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	animation: rainbow 4s ease-in-out infinite;
+	text-decoration: underline;
+
+}
+
+.blog-title {
+	display: flex;
+	justify-content: space-between;
+}
+
+.post-date {
+	float: right;
+}
+
+.tags {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 25px;
+}
+
+.tag {
+	margin: 0px;
+	font-size: 1.2em;
+}
+
+/* page */
+
+.post-title {
+	font-size: 3.5em;
+	text-align: center;
+	text-transform: uppercase;
+	margin: 20px;
+}
+
+.post-content {
+	font-size: 1.3em;
+	margin: 20px;
+
+}
+
+.post-content h2 {
+	font-size: 2em;
+}
+
+.post-content a:hover, .tags a:hover {
+	transform: scale(103%);
+	
+	background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+	background-size: 300% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	animation: rainbow 4s ease-in-out infinite;
+	text-decoration: underline;
+}
+
+/* unused */
+
+.post-summary {
+	padding: 0 5px 0 5px;
+	font-size: initial;
+	font-size: 1.3em;
+}
+
+.post-list-footer {
+	padding-bottom: 15px;
+	font-size: 1.2em;
+}

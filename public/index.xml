@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Joe Lauletta</title>
+    <link>https://joelaul.dev/</link>
+    <description>Recent content on Joe Lauletta</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://joelaul.dev/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Portfolio</title>
+      <link>https://joelaul.dev/portfolio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/portfolio/</guid>
+      <description>Projects -
+Ask Biden! - An All-American chatbot powered by OpenAI and ElevenLabs &amp;ndash; Github
+pickupmusic - Next.js / TypeScript / Tailwind demo exploring gamification in music ed &amp;ndash; Github
+tubescreamer - Experimenting with the Web Audio API and CSS illustration &amp;ndash; Github
+joelaul.dev - Award-winning, GMO-free portfolio site bootstrapped with Hugo &amp;ndash; Github
+Donate -
+I&amp;rsquo;m not a full-time goth e-girl yet, but your support can get me there faster.</description>
+    </item>
+    
+  </channel>
+</rss>
