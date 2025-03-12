@@ -15,7 +15,7 @@ const state = {
     descText: `🎸👨‍💻 I'm a fullstack developer, musician, and educator. I like building things that awaken people's curiosity.`,
     ctaText: `
         <div>
-            <a class="cta" style="padding-right: 10px" href="/portfolio" target="_blank">
+            <a class="cta" style="padding-right: 10px" href="/portfolio">
                 Check out some of my work!
             </a>
         </div>
