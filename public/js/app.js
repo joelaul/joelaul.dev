@@ -15,11 +15,12 @@ const state = {
     descText: `🎸👨‍💻 I'm a fullstack developer, musician, and educator. I like building things that awaken people's curiosity.`,
     ctaText: `
         <div>
-            <a class="cta" style="padding-right: 10px" href="/portfolio">
+            <a class="cta hide" style="padding-right: 10px" href="/portfolio">
                 Check out some of my work!
             </a>
         </div>
         `,
+    ctaDisplayed: false,
     hoveredSocialEls: [],
     isTouching: false,
     touchedEl: null,
@@ -47,20 +48,26 @@ const typewriter = (element, text, ms) => {
                 state.typewriterDone = true;
             }
         }, ms)
-        if (window.innerWidth <= 576) setTimeout(renderCallToAction, ms * (text.length + 5));
-
+        if (window.innerWidth <= 576) { 
+            setTimeout(renderCallToAction, ms * (text.length + 3));
+            state.ctaDisplayed = true;
+        }
 }
 
 const renderCallToAction = () => {
-    if (state.typewriterDone) {
-        desc.innerHTML += state.ctaText;
-    } else {
+    if (!state.typewriterDone) {
         clearInterval(state.typewriterInterval);
-        desc.innerHTML = state.descText + state.ctaText;
-        state.typewriterDone = true;
     }
+    desc.innerHTML = state.descText + state.ctaText;
 
-    // desc.classList.add('cta-border');
+    const cta = document.querySelector('.cta');
+
+    if (cta) {
+        setTimeout(() => {
+            cta.classList.remove('hide');
+        }, 10); // Short delay allows the browser to register opacity: 0 before switching to 1
+    }
+    state.typewriterDone;
 }
 
 // HANDLERS

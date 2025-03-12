@@ -77,9 +77,18 @@
 	-webkit-background-clip: text;
 	color: transparent;
 	animation: rainbow 4s ease-in-out infinite;
+
+	opacity: 1;
+	transition: opacity 1000ms;
 }
 
 .cta-border {
 	border-image: conic-gradient(from var(--angle), red, yellow, lime, aqua, blue, magenta, red) 1;
 	border-color: rgba(255, 0, 0, .3);
+}
+
+/* util */
+
+.hide {
+	opacity: 0;
 }
