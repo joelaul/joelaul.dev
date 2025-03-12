@@ -47,6 +47,7 @@ const typewriter = (element, text, ms) => {
                 state.typewriterDone = true;
             }
         }, ms)
+        if (window.innerWidth <= 576) setTimeout(renderCallToAction, ms * (text.length + 5));
 
 }
 
@@ -122,6 +123,14 @@ const handleMeClick = () => {
 const init = () => {
     window.addEventListener('load', () => {
         typewriter(desc, state.descText, 25);
+
+        const theme = sessionStorage.getItem('theme');
+        if (theme) {
+            sessionStorage.removeItem('theme');
+            // document.body.style.backgroundColor = `linear-gradient(-45deg, ${theme}40, white)`;
+            // document.querySelector('.navbar-brand').style.color = theme;
+        }
+            
     });
 
     for (let el of socialEls) {
