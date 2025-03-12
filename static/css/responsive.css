@@ -8,13 +8,9 @@
 	.nav-link {
 		font-size: 130%;
 	}	
-	.profile-container {
-		position: absolute;
-		top: 340px;
-		transform: scale(30%);
-	}
 	.profile {
-		border: 10px solid #292929;
+		height: 175px;
+		border-width: 5px;
 	}
 	.social {
 		font-size: 80%;

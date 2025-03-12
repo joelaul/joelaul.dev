@@ -14,7 +14,7 @@ title: Portfolio
 
 - [**joelaul.dev**](https://joelaul.dev) - Award-winning, GMO-free portfolio site bootstrapped with [Hugo](https://gohugo.io) -- [**Github**](https://github.com/joelaul/joelaul.dev)
 
-#### Friends and Mentors
+<!-- #### Friends and Mentors
 
 -
 
@@ -22,7 +22,7 @@ title: Portfolio
 
 - [**Shayan Javadi** (Slack)](https://shayanjavadi.com) - She told me to drop Java for web and I listened. Blame her.
 
-- [**Cameron French** (Komodo Tech)](https://www.linkedin.com/in/camfrench/) - Great collaborator, greater meme connoisseur.
+- [**Cameron French** (Komodo Tech)](https://www.linkedin.com/in/camfrench/) - Great collaborator, greater meme connoisseur. -->
 
 #### Donate
 

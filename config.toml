@@ -1,7 +1,7 @@
 baseURL = "https://joelaul.dev"
 
 title = "Joe Lauletta"
-theme = "nix"
+# theme = "nix"
 languageCode = "en-us"
 pluralizelisttitles = false
 

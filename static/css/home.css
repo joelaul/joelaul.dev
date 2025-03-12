@@ -1,7 +1,13 @@
 /* profile */
 
+.profile-container {
+	display: flex;
+	justify-content: center;
+}
+
 .profile {
-	border: 5px solid #292929;
+	height: 300px;
+	border: 8px solid rgba(15, 184, 184, 0.729);
 	margin-top: 20px;
 }
 
