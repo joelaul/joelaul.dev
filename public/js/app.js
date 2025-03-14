@@ -49,12 +49,12 @@ const typewriter = (element, text, ms) => {
             }
         }, ms)
         if (window.innerWidth <= 576) { 
-            setTimeout(renderCallToAction, ms * (text.length + 3));
+            setTimeout(renderCta, ms * (text.length + 3));
             state.ctaDisplayed = true;
         }
 }
 
-const renderCallToAction = () => {
+const renderCta = () => {
     if (!state.typewriterDone) {
         clearInterval(state.typewriterInterval);
     }
@@ -95,7 +95,7 @@ const handleSocialElMouseover = (el) => {
     if (state.hoveredSocialEls.length < 5 && isUniqueSocialEl(el)) {
         state.hoveredSocialEls.push(el);
         if (state.hoveredSocialEls.length == 5) {
-            renderCallToAction();
+            renderCta();
         }
     } else {}
 

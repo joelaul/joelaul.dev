@@ -61,7 +61,6 @@ td {
 	justify-content: space-between;
 	padding-top: 70px;
 }
-
 .container {
 	margin: 0 auto;
 	max-width: 725px;
@@ -70,7 +69,6 @@ td {
 .navbar-dark {
 	opacity: 0.94;
 }
-
 .navbar-brand {
 	font-size: 1.07em;
 }
@@ -85,7 +83,6 @@ td {
 	justify-content: center;
 	padding: 10px;
 }
-
 .footer p {
 	margin: 0 !important;
 	font-size: initial;

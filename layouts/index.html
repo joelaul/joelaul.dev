@@ -10,9 +10,10 @@
   </head>
 
   <body>
-    {{ partial "nav.html" . }}
 
     <div class="flex-wrapper">
+      {{ partial "nav.html" . }}
+
       <main class="container">
 
         {{ with .Site.Params.Profile }}
