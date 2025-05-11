@@ -52,6 +52,15 @@
 
 /* page */
 
+pre {
+	font-size: 0.6em;
+	background-color: #303030;
+	color: #fff;
+	padding: 10px;
+	max-height: 175px;
+	white-space: pre-wrap;
+}
+
 .post-title {
 	font-size: 3.5em;
 	text-align: center;
