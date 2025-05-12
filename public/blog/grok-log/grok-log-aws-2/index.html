@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grok-log-aws-2 | Joe Lauletta</title>
+
+    <meta name="generator" content="Hugo 0.111.3">
+
+<meta content='initial-scale=1.0, width=device-width' name='viewport'>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+
+
+<link rel="icon" href="https://joelaul.dev/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://joelaul.dev/css/global.css">
+
+
+	<script>
+		window.addEventListener('load', () => {
+			const theme = sessionStorage.getItem('theme');
+			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+			console.log(bgColor);
+			const leaves = `url("../img/leaves.png")`
+
+			if (theme) {
+				document.body.style.background = `${bgColor}, ${leaves}`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
+
+  </head>
+
+  	
+
+  <body>
+    
+    <header>
+  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
+    <div class="container-fluid">
+
+      
+      <a
+        class="navbar-brand"
+        href="https://joelaul.dev"
+      >
+        joelaul.dev
+      </a>
+
+      
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse-1"
+        aria-controls="navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav ms-auto">
+
+          
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link d-flex justify-content-center"
+              href="https://joelaul.dev"
+            >
+              /home</a
+            >
+          </li>
+
+          
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/portfolio"
+                >/portfolio</a
+              >
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/blog"
+                >/blog</a
+              >
+            </li>
+          
+          
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+    <div class="flex-wrapper">
+
+      <div class="container wrapper">
+
+        <h1 class="post-title">grok-log-aws-2</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>how does &ldquo;git push aws master:master&rdquo; work at the end?</p>
+<pre tabindex="0"><code>async function deploy() {
+const BUMP_FLAGS = {
+    PATCH: &#39;--patch&#39;,
+    MINOR: &#39;--minor&#39;,
+    MAJOR: &#39;--major&#39;,
+};
+
+const bump = BUMP.getOrDefault(&#39;PATCH&#39;);
+const branch = BRANCH.getOrDefault(&#39;master&#39;);
+const remote = REMOTE.getOrDefault(&#39;aws&#39;);
+
+if (!(bump in BUMP_FLAGS)) {
+    throw new TypeError(BUMP must be one of: ${Object.keys(BUMP_FLAGS).join(&#39;, &#39;)}, got: ${bump});
+}
+const bumpFlag = BUMP_FLAGS[bump as keyof typeof BUMP_FLAGS];
+
+log(&#39;bumping api version&#39;);
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, bumpFlag, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.API });
+
+log(&#39;bumping web version&#39;); 
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, bumpFlag, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.WEB });
+
+log(&#39;committing version changes&#39;);
+const version = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+await cmd(&#39;git&#39;, [&#39;add&#39;, &#39;api/package.json&#39;, &#39;web/package.json&#39;]);
+await cmd(&#39;git&#39;, [&#39;commit&#39;, &#39;-m&#39;, Bump app version to v${version}]);
+await cmd(&#39;git&#39;, [&#39;tag&#39;, &#39;-a&#39;, v${version}, &#39;-m&#39;, Bump app version to v${version}]);
+
+log(&#39;pushing to remotes&#39;);
+await cmd(&#39;git&#39;, [&#39;push&#39;, &#39;origin&#39;]);
+await cmd(&#39;git&#39;, [&#39;push&#39;, remote, ${branch}:master]);
+}
+</code></pre><hr>
+<p>The bottom two commands are the source of the confusion. First one makes enough sense: push to the github remote, set via git remote add. Second one, assuming REMOTE.getOrDefault(&ldquo;aws&rdquo;) returns &ldquo;aws&rdquo;, would run git push aws&hellip; master:master. Does this imply &ldquo;aws&rdquo; was set as a branch, somehow linking to the AWS CodeCommit repo?</p>
+<hr>
+<p>Nah, that tracks &ndash; &ldquo;git remote add aws&rdquo; set the codecommit repo as a second origin. I don&rsquo;t understand &ldquo;master:master&rdquo;, or the implication that only patches are cut, unless a BUMP env var is manually set to major or minor.</p>
+<hr>
+<p>I&rsquo;ve never used local:remote syntax when pushing to github. Is this an AWS quirk?</p>
+<hr>
+<p>Define a breaking change, and how problematic code is more easily corrected when pushed as a patch vs. a minor or major change.</p>
+<hr>
+<p>Explain the difference between these task runner commands:</p>
+<pre tabindex="0"><code>async function deploy() {
+const BUMP_FLAGS = {
+    PATCH: &#39;--patch&#39;,
+    MINOR: &#39;--minor&#39;,
+    MAJOR: &#39;--major&#39;,
+};
+
+const bump = BUMP.getOrDefault(&#39;PATCH&#39;);
+const branch = BRANCH.getOrDefault(&#39;master&#39;);
+const remote = REMOTE.getOrDefault(&#39;aws&#39;);
+
+if (!(bump in BUMP_FLAGS)) {
+    throw new TypeError(BUMP must be one of: ${Object.keys(BUMP_FLAGS).join(&#39;, &#39;)}, got: ${bump});
+}
+const bumpFlag = BUMP_FLAGS[bump as keyof typeof BUMP_FLAGS];
+
+log(&#39;bumping api version&#39;);
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, bumpFlag, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.API });
+
+log(&#39;bumping web version&#39;); 
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, bumpFlag, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.WEB });
+
+log(&#39;committing version changes&#39;);
+const version = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+await cmd(&#39;git&#39;, [&#39;add&#39;, &#39;api/package.json&#39;, &#39;web/package.json&#39;]);
+await cmd(&#39;git&#39;, [&#39;commit&#39;, &#39;-m&#39;, Bump app version to v${version}]);
+await cmd(&#39;git&#39;, [&#39;tag&#39;, &#39;-a&#39;, v${version}, &#39;-m&#39;, Bump app version to v${version}]);
+
+log(&#39;pushing to remotes&#39;);
+await cmd(&#39;git&#39;, [&#39;push&#39;, &#39;origin&#39;]);
+await cmd(&#39;git&#39;, [&#39;push&#39;, remote, ${branch}:master]);
+}
+</code></pre><pre tabindex="0"><code>async function rollback() {
+const tag = TAG.get();
+const branch = BRANCH.getOrDefault(&#39;master&#39;);
+const remote = REMOTE.getOrDefault(&#39;aws&#39;);
+
+log(&#39;getting current version&#39;);
+const prevVersion = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+
+// Leverage yarn to bump the version for us, so we don&#39;t have to deal with edge cases of all the semantic version
+// names.
+log(&#39;bumping version by a minor step&#39;);
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, &#39;--minor&#39;, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.API });
+
+log(&#39;getting next version&#39;);
+const nextVersion = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+
+log(&#39;cleaning changes&#39;);
+await cmd(&#39;git&#39;, [&#39;checkout&#39;, &#39;./package.json&#39;], { cwd: Project.API });
+
+log(getting commit of tag: ${tag});
+const commit = (await cmd(&#39;git&#39;, [&#39;rev-list&#39;, &#39;-n&#39;, &#39;1&#39;, tag], { shell: true, stdio: &#39;pipe&#39; })).stdout;
+
+log(reverting all commits back to: ${commit});
+await cmd(&#39;git&#39;, [&#39;revert&#39;, &#39;--no-edit&#39;, &#39;--no-commit&#39;, ${commit}..HEAD]);
+
+log(updating api version to: ${nextVersion});
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;, &#39;--new-version&#39;, v${nextVersion}], {
+    cwd: Project.API,
+});
+
+log(updating web version to: ${nextVersion});
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;, &#39;--new-version&#39;, v${nextVersion}], {
+    cwd: Project.WEB,
+});
+
+log(&#39;committing version changes&#39;);
+await cmd(&#39;git&#39;, [&#39;add&#39;, &#39;api/package.json&#39;, &#39;web/package.json&#39;]);
+await cmd(&#39;git&#39;, [&#39;commit&#39;, &#39;-m&#39;, Rollback app version to v${prevVersion} as v${nextVersion}]);
+await cmd(&#39;git&#39;, [
+    &#39;tag&#39;,
+    &#39;-a&#39;,
+    v${nextVersion},
+    &#39;-m&#39;,
+    Rollback app version to v${prevVersion} as v${nextVersion},
+]);
+
+log(&#39;pushing to remotes&#39;);
+await cmd(&#39;git&#39;, [&#39;push&#39;, &#39;origin&#39;]);
+await cmd(&#39;git&#39;, [&#39;push&#39;, remote, ${branch}:master]);
+}
+</code></pre><hr>
+<p>What is the &ldquo;aws&rdquo; command pointing to, assuming the below cmd() function is running its params as a CLI command in the gulpfile.ts cwd (project root), where &ldquo;aws&rdquo; isn&rsquo;t a valid command (nothing in package.json suggesting it could be with deps installed)? Only thought is that there&rsquo;s a cd into ./aws, where &ldquo;aws&rdquo; is valid (loads CDK stack), but I&rsquo;m not seeing it in the code.</p>
+<pre tabindex="0"><code>export async function getStackOutputValue(stackName: string, exportName: string) { 
+const result = await cmd(
+    &#39;aws&#39;,
+    [
+    &#39;cloudformation&#39;,
+    &#39;describe-stacks&#39;,
+    &#39;--stack-name&#39;,
+    stackName,
+    &#39;--query&#39;,
+    &#39;&#34;Stacks[0].Outputs[?ExportName==\\&#39; + exportName + &#39;\\].OutputValue&#34;&#39;,
+    &#39;--no-cli-pager&#39;,
+    &#39;--output&#39;,
+    &#39;text&#39;,
+    ],
+    { shell: true, stdio: &#39;pipe&#39; }
+);
+return result.stdout;
+}
+</code></pre><hr>
+<p>./aws/package.json binary alias &ldquo;aws&rdquo; runs ./aws/bin/aws.ts:</p>
+<pre tabindex="0"><code>#!/usr/bin/env node
+import * as core from &#39;aws-cdk-lib&#39;;
+import &#39;source-map-support/register&#39;;
+
+import { CodebaseStack } from &#39;../lib/CodebaseStack&#39;;
+
+const app = new core.App();
+
+new CodebaseStack(app, &#39;codebase&#39;, {
+stackName: &#39;codebase&#39;,
+description: &#39;Production resources for codebase&#39;,
+});
+</code></pre><p>But none of the gulpfile.ts logic contains an &ldquo;aws&rdquo; command run in the ./aws directory. My understanding is that loading the CDK root construct in memory is necessary for updating a deployed CDK stack, and is similar to &ldquo;cdk synth&rdquo;. Is this file accessed under-the-hood somehow when cdk deploy is run?</p>
+<hr>
+<p>Checks out.</p>
+<p>cdk.json:</p>
+<pre tabindex="0"><code>{
+&#34;app&#34;: &#34;npx ts-node --prefer-ts-exts bin/aws.ts&#34;,
+&#34;context&#34;: {
+    &#34;@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId&#34;: true,
+    &#34;aws-cdk:enableDiffNoFail&#34;: &#34;true&#34;,
+    &#34;@aws-cdk/core:stackRelativeExports&#34;: &#34;true&#34;,
+    &#34;@aws-cdk/aws-ecr-assets:dockerIgnoreSupport&#34;: true,
+    &#34;@aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount&#34;: true,
+    &#34;@aws-cdk/aws-rds:lowercaseDbIdentifier&#34;: true,
+    &#34;@aws-cdk/aws-efs:defaultEncryptionAtRest&#34;: true,
+    &#34;@aws-cdk/aws-lambda:recognizeVersionProps&#34;: true
+}
+}
+</code></pre><hr>
+<p>Is the binary alias used? Or the file referenced directly through cdk.json? One paragraph response.</p>
+<hr>
+<p>The below service is never used by the API in dev &ndash; its encompassing AssociateVideoUrl bullmq job is never enqueued. However, it seems to depend on the same VIDEO_QUEUE_SQS_URL env var that the app&rsquo;s CDK stack does.</p>
+<ol>
+<li>My hunch is that AWS VOD requires a queue service for video delivery, but why is an SQS queue called in dev?</li>
+<li>The services encompassing BullMQ job is set to run every 60 seconds. Why would videos be checked for regularly, rather than ad-hoc when one is uploaded?</li>
+<li>What exactly is video URL association? Not following the &ldquo;hslUrl&rdquo; part of the code.</li>
+</ol>
+<p>VideoUrlService.ts:</p>
+<pre tabindex="0"><code>import { inject, injectable } from &#39;inversify&#39;;
+import { Config } from &#39;../../config&#39;;
+import { NotFoundError, UnknownError } from &#39;../../errors&#39;;
+import { TYPES } from &#39;../../inversify.constants&#39;;
+import { JSONObject, Logger, Message, MessageQueue } from &#39;../../util&#39;;
+import { NotationService } from &#39;../Notation&#39;;
+
+// Hunch: AWS VOD requires a queue service. This is part of the CDK stack (staging / production).
+
+@injectable()
+export class VideoUrlService {
+constructor(
+    @inject(TYPES.Logger) public logger: Logger,
+    @inject(TYPES.MessageQueue) public messageQueue: MessageQueue,
+    @inject(TYPES.NotationService) public notationService: NotationService,
+    @inject(TYPES.Config) public config: Config
+) {}
+
+async processNextMessage(): Promise&lt;void&gt; {
+    const queueUrl = this.config.VIDEO_QUEUE_SQS_URL;
+
+    const message = await this.messageQueue.get(queueUrl);
+    if (!message) {
+    return;
+    }
+
+    try {
+    await this.process(message);
+    } catch (e) {
+    this.logger.error(encountered an error when processing message &#39;${message.id}&#39;: ${e});
+    }
+
+    await this.messageQueue.ack(message);
+}
+
+private async process(message: Message) {
+    const data: JSONObject = JSON.parse(message.body);
+
+    const srcVideo = data.srcVideo;
+    if (!srcVideo) {
+    throw new UnknownError(message data missing &#39;srcVideo&#39; property);
+    }
+    if (typeof srcVideo !== &#39;string&#39;) {
+    throw new UnknownError(message data corrupt &#39;srcVideo&#39; property must be a string);
+    }
+
+    const hlsUrl = data.hlsUrl;
+    if (!hlsUrl) {
+    throw new UnknownError(message data missing &#39;hlsUrl&#39; property);
+    }
+    if (typeof hlsUrl !== &#39;string&#39;) {
+    throw new UnknownError(message data corrupt &#39;hlsUrl&#39; property must be a string);
+    }
+
+    const notation = await this.notationService.findByVideoFilename(srcVideo);
+    if (!notation) {
+    throw new NotFoundError(could not find notation from srcVideo: ${srcVideo});
+    }
+
+    await this.notationService.update(notation.id, { videoUrl: hlsUrl });
+}
+}
+</code></pre><p>CDK stack file, ECS setup snippet:</p>
+<pre tabindex="0"><code>    /**
+    * ECS ENVIRONMENT
+    */
+
+    const cluster = new aws_ecs.Cluster(this, &#39;Cluster&#39;, { vpc, containerInsights: false });
+    const environment = {
+    NODE_ENV: &#39;production&#39;,
+    LOG_LEVEL: &#39;debug&#39;,
+    PORT: &#39;3000&#39;,
+    DOMAIN_NAME: domainName,
+    WEB_UI_CDN_DOMAIN_NAME: appDistribution.domainName,
+    MEDIA_CDN_DOMAIN_NAME: https://${domain.sub(&#39;media&#39;)},
+    MEDIA_S3_BUCKET: mediaBucket.bucketName,
+    VIDEO_SRC_S3_BUCKET: vod.sourceBucket.bucketName,
+    VIDEO_QUEUE_SQS_URL: vod.queue.queueUrl,
+    DEV_EMAIL: &#39;dev@codebase.com&#39;,
+    INFO_EMAIL: &#39;info@codebase.com&#39;,
+    DB_HOST: db.hostname,
+    DB_PORT: db.port.toString(),
+    DB_NAME: db.databaseName,
+    DB_USERNAME: db.username,
+    DB_PASSWORD: db.password,
+    REDIS_HOST: cache.host,
+    REDIS_PORT: cache.port.toString(),
+    };
+    const appSessionSecret = new aws_secretsmanager.Secret(this, &#39;AppSessionSecret&#39;);
+    const secrets = {
+    SESSION_SECRET: aws_ecs.Secret.fromSecretsManager(appSessionSecret),
+    };
+    const taskExecutionRole = new aws_iam.Role(this, &#39;TaskExecutionRole&#39;, {
+    assumedBy: new aws_iam.ServicePrincipal(&#39;ecs-tasks.amazonaws.com&#39;),
+    roleName: PhysicalName.GENERATE_IF_NEEDED,
+    managedPolicies: [aws_iam.ManagedPolicy.fromAwsManagedPolicyName(&#39;AmazonEC2ContainerRegistryPowerUser&#39;)],
+    }); 
+</code></pre><p>There&rsquo;s no connection between the VideoUrlService and the S3 bucket to which notation videos are uploaded. Here&rsquo;s the key bit from the NotationService&rsquo;s create() handler:</p>
+<pre tabindex="0"><code>// VIDEO_SRC_S3_BUCKET=codebasedev-source-1itxo9v3058ci
+this.blobStorage.put(videoFilepath, this.config.VIDEO_SRC_S3_BUCKET, video.createReadStream()),  
+</code></pre><p>BONUS QUESTION: The S3 bucket in the CDK environment is pulled from the stack&rsquo;s VOD construct&rsquo;s &ldquo;sourceBucket&rdquo; property, which is located with aws_s3.Bucket.fromBucketName(scope, &lsquo;VodSourceBucket&rsquo;, bucketName);. Is &lsquo;VodSourceBucket&rsquo; set during in-browser AWS initialization? It&rsquo;s mentioned nowhere else in the codebase.</p>
+<p>Vod.ts:</p>
+<pre tabindex="0"><code>export class Vod extends Construct {
+readonly template: cloudformation_include.CfnInclude;
+readonly sourceBucket: aws_s3.IBucket;
+readonly queue: aws_sqs.IQueue;
+
+constructor(scope: Construct, id: string, props: VodProps) {
+    super(scope, id);
+
+    this.template = new cloudformation_include.CfnInclude(scope, &#39;VodTemplate&#39;, {
+    templateFile: &#39;templates/vod.yml&#39;,
+    parameters: {
+        AdminEmail: props.adminEmail,
+        EnableSns: props.enableSns ? &#39;Yes&#39; : &#39;No&#39;,
+        AcceleratedTranscoding: props.enableAcceleratedTranscoding ? &#39;ENABLED&#39; : &#39;DISABLED&#39;,
+    },
+    });
+
+    const bucketName = this.template.getOutput(&#39;Source&#39;).value;
+    this.sourceBucket = aws_s3.Bucket.fromBucketName(scope, &#39;VodSourceBucket&#39;, bucketName);
+
+    const queueArn = this.template.getOutput(&#39;SqsARN&#39;).value;
+    this.queue = aws_sqs.Queue.fromQueueArn(scope, &#39;VodSqsQueue&#39;, queueArn);
+}
+}
+</code></pre><hr>
+<p>Only suspects in vod.yml I could find, with no explicit URL anywhere:</p>
+<pre tabindex="0"><code>Source: 
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+    LoggingConfiguration:
+        DestinationBucketName: !Ref Logs
+        LogFilePrefix: s3-access/
+    LifecycleConfiguration:
+        Rules:
+        - Id: !Sub &#39;${AWS::StackName}-source-archive&#39;
+            TagFilters:
+            - Key: !Ref AWS::StackName
+                Value: GLACIER
+            Status: Enabled
+            Transitions:
+            - TransitionInDays: 1
+                StorageClass: GLACIER
+        - Id: !Sub &#39;${AWS::StackName}-source-deep-archive&#39;
+            TagFilters:
+            - Key: !Ref AWS::StackName
+                Value: DEEP_ARCHIVE
+            Status: Enabled
+            Transitions:
+            - TransitionInDays: 1
+                StorageClass: DEEP_ARCHIVE
+    BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+    PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+    Metadata:
+    cfn_nag:
+        rules_to_suppress:
+        - id: W51
+            reason: &#39;Bucket does not need a bucket policy&#39;
+
+S3Config:
+    DependsOn: CloudFront
+    Type: Custom::S3
+    Properties:
+    ServiceToken: !GetAtt CustomResource.Arn
+    Source: !Ref Source
+    IngestArn: !GetAtt StepFunctions.Arn
+    Resource: S3Notification
+    WorkflowTrigger: !Ref WorkflowTrigger
+</code></pre><hr>
+<p>To clarify, dev does not incorporate CDK, but a local docker compose network. So this service is outside of the CDK region of the codebase, and not invoked anywhere.</p>
+<hr>
+<p>With your point 3 in mind, can you explain where the VOD workflow is mimicked in the NotationService&rsquo;s create() handler, or if it&rsquo;s not present, why it&rsquo;s not necessary in dev?</p>
+<pre tabindex="0"><code>async create(args: CreateArgs): Promise&lt;Notation&gt; {
+    const { artistName, songName, tagIds, transcriberId, thumbnail, video } = args;
+
+    this.validateMimeType(thumbnail, &#39;image&#39;);
+    this.validateMimeType(video, &#39;video&#39;);
+
+    const notation = await this.notationRepo.create({ artistName, songName, transcriberId });
+
+    const thumbnailFilepath = this.getThumbnailFilepath(thumbnail.filename, notation.id);
+    const videoFilepath = this.getVideoFilepath(video.filename, notation.id);
+    const notationTags = tagIds.map((tagId) =&gt; ({ notationId: notation.id, tagId }));
+
+    // There seems to be an issue when creating multiple read streams, so we do this separate from the blob upload.
+    const durationMs = await this.videoInfoService.getDurationMs(video.createReadStream());
+    notation.durationMs = durationMs;
+
+    const [thumbnailKey] = await Promise.all([
+    // MEDIA_S3_BUCKET=codebasedev-mediabucketbcbb02ba-hv54h8w2yv04
+    this.blobStorage.put(thumbnailFilepath, this.config.MEDIA_S3_BUCKET, thumbnail.createReadStream()),
+
+    // VIDEO_SRC_S3_BUCKET=codebasedev-source-1itxo9v3058ci
+    this.blobStorage.put(videoFilepath, this.config.VIDEO_SRC_S3_BUCKET, video.createReadStream()),  
+        
+    this.notationTagService.bulkCreate(notationTags),
+    ]);
+
+    notation.thumbnailUrl = this.getMediaUrl(thumbnailKey);
+    await this.notationRepo.update(notation.id, notation);
+
+    return notation;
+}
+</code></pre><hr>
+<p>Could the chainable function properties below be written within the function itself, or must they come after?</p>
+<pre tabindex="0"><code>export const useGqlHandler: UseGqlHandler = (status, res, handler, deps = []): StaticEventHandlers =&gt; {
+// eslint-disable-next-line react-hooks/exhaustive-deps
+const callback = useCallback(handler, deps);
+useEffect(() =&gt; {
+    if (res.status === status) {
+    callback(res as Extract&lt;typeof res, { status: typeof status }&gt;);
+    }
+}, [status, res, callback]);
+
+// allow for chaining
+return staticEventHandlers;
+};
+
+useGqlHandler.onInit = (res, handler, deps = []) =&gt; {
+return useGqlHandler(GqlStatus.Init, res, handler, deps);
+};
+
+useGqlHandler.onPending = (res, handler, deps = []) =&gt; {
+return useGqlHandler(GqlStatus.Pending, res, handler, deps);
+};
+
+useGqlHandler.onSuccess = (res, handler, deps = []) =&gt; {
+return useGqlHandler(GqlStatus.Success, res, handler, deps);
+};
+
+useGqlHandler.onErrors = (res, handler, deps = []) =&gt; {
+return useGqlHandler(GqlStatus.Errors, res, handler, deps);
+};
+
+useGqlHandler.onCancelled = (res, handler, deps = []) =&gt; {
+return useGqlHandler(GqlStatus.Cancelled, res, handler, deps);
+};
+</code></pre><hr>
+<p>Okay, this is an unusual pattern to me &ndash; function object with methods, injecting the developer&rsquo;s choice of useEffect hooks into the calling component which run their respective callbacks. I&rsquo;m just confused by the useEffect()&rsquo;s &ldquo;status&rdquo; dep, which strikes me as redundant. If the component is calling these useGqlHandler methods in a chainable fashion, each useEffect() is in charge of its own callback. So why is useEffect set to be run more than once?</p>
+<hr>
+<p>The function methods are meant to track the GraphQL response (loginRes) as its status changes. So it makes sense that, since each method injects its own useEffect meant to re-run on status change, only the correct callback for that status runs (res.status === status). So then I should ask how exactly loginRes is tracked by the calling component. How does loginRes.status morph from &ldquo;pending&rdquo; to &ldquo;success&rdquo; if fetches are atomic?</p>
+<pre tabindex="0"><code>const [login, loginRes] = useGql(queries.login);
+
+useGqlHandler
+    .onPending(loginRes, () =&gt; {
+    dispatch(AUTH_ACTIONS.pending());
+    })
+    .onSuccess(loginRes, ({ data }) =&gt; {
+    switch (data.login?.__typename) {
+        case &#34;User&#34;:
+
+        // Calling useReducer() above allows dispatch() to send loginRes data to the reducer.
+        dispatch(AUTH_ACTIONS.setUser({ user: data.login }));
+
+        notify.message.success({
+            content: logged in as ${data.login.username},
+        });
+
+        break;
+        default:
+        dispatch(
+            AUTH_ACTIONS.setErrors({
+            errors: [data.login?.message || UNKNOWN_ERROR_MSG],
+            })
+        );
+    }
+    });
+</code></pre><hr>
+<p>useGql.ts:</p>
+<pre tabindex="0"><code>import { useCallback, useState } from &#34;react&#34;;
+
+import { useReq } from &#34;./useReq&#34;;
+import { useResHandler } from &#34;./useResHandler&#34;;
+
+import * as graphql from &#34;../lib/graphql&#34;;
+import * as xhr from &#34;../lib/xhr&#34;;
+import { MissingDataError } from &#34;../lib/errors&#34;;
+
+const GRAPHQL_URI = ${window.location.origin}/graphql;
+
+// =========================================
+//                 TYPES
+// =========================================
+
+export type Exec&lt;G extends graphql.Any$gql&gt; = (
+variables: graphql.VariablesOf&lt;G&gt;
+) =&gt; void;
+
+// The reason why we use this instead of $gql.GqlResponseOf, is because the server can return data and populate errors.
+// Callers can use the status discriminant to determine what the response looks like instead of testing the presence
+// of the data and errors properties.
+
+export enum GqlStatus {
+Init,
+Pending,
+Success,
+Errors,
+Cancelled,
+}
+
+export type GqlRes&lt;G extends graphql.Any$gql&gt; =
+| {
+    status: GqlStatus.Init;
+    }
+| {
+    status: GqlStatus.Pending;
+    }
+| {
+    status: GqlStatus.Success;
+    data: graphql.SuccessfulResponse&lt;G&gt;[&#34;data&#34;];
+    }
+| {
+    status: GqlStatus.Errors;
+    errors: string[];
+    }
+| {
+    status: GqlStatus.Cancelled;
+    };
+
+// =========================================
+//                 CLASSES
+// =========================================
+
+// Note: Any$gql = any type of $gql object (built fetch request body).
+// Note: queries.login, passed to useGql() in AuthCtx.ts, is of this type.
+
+export const useGql = &lt;G extends graphql.Any$gql&gt;(
+gql: G
+): [exec: Exec&lt;G&gt;, res: GqlRes&lt;G&gt;, cancel: xhr.Cancel, reset: xhr.Reset] =&gt; {
+
+const [req, res, cancel, reset] = useReq(graphql.$gql.toGqlResponse);
+
+// Note: calls the core API fetch defined in useReq.ts.
+const exec = useCallback(
+    (variables: graphql.VariablesOf&lt;G&gt;) =&gt; {
+    req(GRAPHQL_URI, gql.toRequestInit(variables));
+    },
+    [req, gql]
+);
+
+const [gqlRes, setGqlRes] = useState&lt;GqlRes&lt;G&gt;&gt;({ status: GqlStatus.Init });
+
+useResHandler(xhr.Status.Init, res, (res) =&gt; {
+    setGqlRes({ status: GqlStatus.Init });
+});
+useResHandler(xhr.Status.Pending, res, (res) =&gt; {
+    setGqlRes({ status: GqlStatus.Pending });
+});
+useResHandler(xhr.Status.Success, res, (res) =&gt; {
+    const { data, errors } = res.result;
+    if (errors) {
+    setGqlRes({
+        status: GqlStatus.Errors,
+        errors: errors.map((error) =&gt; error.message),
+    });
+    } else if (!data) {
+    setGqlRes({
+        status: GqlStatus.Errors,
+        errors: [new MissingDataError().message],
+    });
+    } else {
+    setGqlRes({ status: GqlStatus.Success, data });
+    }
+});
+useResHandler(xhr.Status.Error, res, (res) =&gt; {
+    setGqlRes({ status: GqlStatus.Errors, errors: [res.error.message] });
+});
+useResHandler(xhr.Status.Cancelled, res, (res) =&gt; {
+    setGqlRes({ status: GqlStatus.Cancelled });
+});
+
+return [exec, gqlRes, cancel, reset];
+};
+</code></pre><hr>
+<ol>
+<li>
+<p>the api container connects to redis for session store, but i can&rsquo;t tell if it connects to its own redis process on a non-native port, or the docker compose network&rsquo;s redis container hosted on port 6379, which is used for the bullmq job queue.</p>
+</li>
+<li>
+<p>the app&rsquo;s dispatcher and worker containers both connect to the database (db.init()) and i&rsquo;m not sure why, since they&rsquo;re simply preparing bullmq job instances laid out in inversify, and communicating with the redis container as required.</p>
+</li>
+</ol>
+<p>dispatcher container endpoint:</p>
+<pre tabindex="0"><code>import { Db } from &#39;../db&#39;; 
+import { container } from &#39;../inversify.config&#39;;
+import { TYPES } from &#39;../inversify.constants&#39;;
+import { getAllJobs } from &#39;../jobs&#39;;
+import { JobServer } from &#39;../server&#39;;
+import { Logger } from &#39;../util&#39;;
+
+(async () =&gt; {
+const db = container.get&lt;Db&gt;(TYPES.Db);
+await db.init();
+
+const logger = container.get&lt;Logger&gt;(TYPES.Logger);
+const jobs = getAllJobs(container);
+await Promise.all(jobs.map((job) =&gt; job.startDispatching()));
+
+logger.info(&#39;job dispatcher started&#39;);
+
+const server = container.get&lt;JobServer&gt;(TYPES.WorkerServer);
+server.start(jobs);
+})();
+</code></pre><hr>
+<p>Got it &ndash; I do believe it&rsquo;s the same shared container. 6379 is used in the redis init object in inversify config. The redis instance seems to have THREE different uses across this app: API session store, DB cache, and BullMq job queue.</p>
+<hr>
+<p>&ldquo;The app doesn&rsquo;t need video playback in dev — just storing the original MP4 may be enough for test/staging workflows.&rdquo;</p>
+<p>Are you suggesting that a VOD workflow is required for video playback? Can&rsquo;t it be pulled from the S3 bucket and streamed to the client within the getNotation resolver function? Also realizing that the frontend depends on notation field &ldquo;videoUrl&rdquo; for playback, but the field is never set in the NotationService create() function I sent earlier.</p>
+<pre tabindex="0"><code>async create(args: CreateArgs): Promise&lt;Notation&gt; {
+    const { artistName, songName, tagIds, transcriberId, thumbnail, video } = args;
+
+    this.validateMimeType(thumbnail, &#39;image&#39;);
+    this.validateMimeType(video, &#39;video&#39;);
+
+    const notation = await this.notationRepo.create({ artistName, songName, transcriberId });
+
+    const thumbnailFilepath = this.getThumbnailFilepath(thumbnail.filename, notation.id);
+    const videoFilepath = this.getVideoFilepath(video.filename, notation.id);
+    const notationTags = tagIds.map((tagId) =&gt; ({ notationId: notation.id, tagId }));
+
+    // There seems to be an issue when creating multiple read streams, so we do this separate from the blob upload.
+    const durationMs = await this.videoInfoService.getDurationMs(video.createReadStream());
+    notation.durationMs = durationMs;
+
+    const [thumbnailKey] = await Promise.all([
+    // MEDIA_S3_BUCKET=codebasedev-mediabucketbcbb02ba-hv54h8w2yv04
+    this.blobStorage.put(thumbnailFilepath, this.config.MEDIA_S3_BUCKET, thumbnail.createReadStream()),
+
+    // VIDEO_SRC_S3_BUCKET=codebasedev-source-1itxo9v3058ci
+    this.blobStorage.put(videoFilepath, this.config.VIDEO_SRC_S3_BUCKET, video.createReadStream()),      
+    
+    this.notationTagService.bulkCreate(notationTags),
+    ]);
+
+    notation.thumbnailUrl = this.getMediaUrl(thumbnailKey);
+    await this.notationRepo.update(notation.id, notation);
+
+    return notation;
+}
+</code></pre><p>The only instance of a call to the NotationService update() function (which handles videoUrl field assignment) happens inside of the VideoUrlService, which we&rsquo;ve established isn&rsquo;t used.</p>
+<pre tabindex="0"><code>async processNextMessage(): Promise&lt;void&gt; {
+    const queueUrl = this.config.VIDEO_QUEUE_SQS_URL;
+
+    const message = await this.messageQueue.get(queueUrl);
+    if (!message) {
+    return;
+    }
+
+    try {
+    await this.process(message);
+    } catch (e) {
+    this.logger.error(encountered an error when processing message &#39;${message.id}&#39;: ${e});
+    }
+
+    await this.messageQueue.ack(message);
+}
+
+private async process(message: Message) {
+    const data: JSONObject = JSON.parse(message.body);
+
+    const srcVideo = data.srcVideo;
+    if (!srcVideo) {
+    throw new UnknownError(message data missing &#39;srcVideo&#39; property);
+    }
+    if (typeof srcVideo !== &#39;string&#39;) {
+    throw new UnknownError(message data corrupt &#39;srcVideo&#39; property must be a string);
+    }
+
+    const hlsUrl = data.hlsUrl;
+    if (!hlsUrl) {
+    throw new UnknownError(message data missing &#39;hlsUrl&#39; property);
+    }
+    if (typeof hlsUrl !== &#39;string&#39;) {
+    throw new UnknownError(message data corrupt &#39;hlsUrl&#39; property must be a string);
+    }
+
+    const notation = await this.notationService.findByVideoFilename(srcVideo);
+    if (!notation) {
+    throw new NotFoundError(could not find notation from srcVideo: ${srcVideo});
+    }
+
+    await this.notationService.update(notation.id, { videoUrl: hlsUrl });
+}
+</code></pre><p>These observations seem to confirm that the app&rsquo;s video layer relies on seed videoUrl-equipped notation records in dev. But I&rsquo;m not sure why the notation service would be fully built out, including video file upload, with the exception of url assignment and delivery.</p>
+<hr>
+<p>Within the NotationRepo (CRUD layer w/ MikroORM), there are three main operation classes: (1) basic Entity Manager functions like em.find(), (2) Dataloader functions like Dataloader(someId).load(), and (3) presumably for more complex queries where things like pagination are desired, db.query(), taking a knex query as a callback. Examples in order below. Can you explain the importance of each? Is eschewing the Entity Manager and calling db.query() simply for greater control?</p>
+<pre tabindex="0"><code>async findAll(): Promise&lt;Notation[]&gt; {
+    const notations = await this.em.find(NotationEntity, {}, { orderBy: { cursor: QueryOrder.DESC } });
+    return pojo(notations);
+}
+
+async findAllByTranscriberId(transcriberId: string): Promise&lt;Notation[]&gt; {
+    const notations = await this.byTranscriberIdLoader.load(transcriberId);
+    this.byTranscriberIdLoader.clearAll();
+    return ensureNoErrors(notations);
+}
+async findSuggestions(notation: Notation, limit: number): Promise&lt;Notation[]&gt; {
+    const notationTags = await this.em.find(NotationTagEntity, { notationId: notation.id });
+    const tagIds = notationTags.map((notationTag) =&gt; notationTag.tagId);
+    return await this.db.query&lt;Notation&gt;(findSuggestedNotationsQuery(notation, tagIds, limit));
+}
+</code></pre><hr>
+<p>What is the advantage of graphql-codegen? I see a package.json script called &ldquo;typegen&rdquo; which generates a graphQLTypes.ts file, presumably by scanning resolvers for types used and compiling them. But since the developer has already manually declared the types in the resolver files (which I assume is necessary for graphql-codegen to work&hellip;), why do they need to be centralized?</p>
+<hr>
+<p>Oh, so you&rsquo;re saying that the author did not declare these types manually, but rather graphql-codegen inferred them from the schema and resolver operations?</p>
+<hr>
+<p>But &ldquo;types.Health&rdquo; is written below. Was that line of code inserted by graphql-codegen, or did the author have to go back and enter these types after generating the types?</p>
+<pre tabindex="0"><code>import { inject, injectable } from &#39;inversify&#39;;
+import { Query, Resolver } from &#39;type-graphql&#39;;
+import { TYPES } from &#39;../../inversify.constants&#39;;
+import { HealthCheckerService } from &#39;../../services&#39;;
+import { APP_VERSION } from &#39;../../util&#39;;
+import * as types from &#39;../graphqlTypes&#39;;
+
+@Resolver()
+@injectable()
+export class MetaResolver {
+constructor(@inject(TYPES.HealthCheckerService) private healthCheckerService: HealthCheckerService) {}
+
+@Query((returns) =&gt; types.Health)
+async health(): Promise&lt;types.Health&gt; {
+    return await this.healthCheckerService.checkHealth();
+}
+
+@Query((returns) =&gt; String)
+async version(): Promise&lt;string&gt; {
+    return APP_VERSION;
+}
+}
+</code></pre><hr>
+<p>&ldquo;Your component tracks loginRes (which is really gqlRes from useState) — a derived state driven by the internal response from useReq.&rdquo;</p>
+<p>Would it be accurate to think of the calling component (AuthCtx.tsx - auth context provider) as plugging the useState hooks from useGql() into itself? So when the gqlRes state changes within useGql(), AuthCtx re-runs the handlers with an updated loginRes, triggering the appropriate one&rsquo;s callback?</p>
+<hr>
+<p>So:</p>
+<p>useReq makes the core fetch, and there is a graphql mechanism that tracks the status of the response.</p>
+<p>useGql packages a status object + the useReq payload if existent, and passes it up to AuthCtx every time the response status changes.</p>
+<p>On each pass from useGql, AuthCtx re-renders with a new loginRes value, re-running logic that depends on it (or all logic?), so the appropriate GqlHandler callback is invoked.</p>
+<p>Since a GqlHander.method runs a useEffect() (in addition to returning the other methods for chainability), I assume those hooks are &ldquo;plugged into&rdquo; AuthCtx in the same way, such that on re-render they&rsquo;re not re-imported, but persisted and simply run or not.</p>
+<hr>
+<p>&ldquo;Triggers setState() when the response arrives — this is what causes React to re-render the component that called useReq()&rdquo;</p>
+<p>No component directly calls useReq. AuthCtx calls it indirectly by calling useGql. Is this what you meant? How is it that it re-renders only on useGql state update, not useReq?</p>
+<hr>
+<p>Okay, so technically AuthCtx re-renders on state changes at both levels, twice for every useReq change upward. But only useGql-returned data is consumed within it, so we only consider the useGql-based re-renders.</p>
+<hr>
+<p>Is parsing this form of abstraction useful outside of the context of this particular app?</p>
+<hr>
+</div>
+
+      </div>
+
+        <footer class="footer text-center">
+	<p>Copyright &copy; 2025  -
+		<span class="credit">
+			Joe Lauletta
+		</span>
+	</p>
+</footer>
+
+    </div>
+
+  </body>
+</html>

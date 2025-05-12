@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grok-log-arch-3 | Joe Lauletta</title>
+
+    <meta name="generator" content="Hugo 0.111.3">
+
+<meta content='initial-scale=1.0, width=device-width' name='viewport'>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+
+
+<link rel="icon" href="https://joelaul.dev/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://joelaul.dev/css/global.css">
+
+
+	<script>
+		window.addEventListener('load', () => {
+			const theme = sessionStorage.getItem('theme');
+			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+			console.log(bgColor);
+			const leaves = `url("../img/leaves.png")`
+
+			if (theme) {
+				document.body.style.background = `${bgColor}, ${leaves}`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
+
+  </head>
+
+  	
+
+  <body>
+    
+    <header>
+  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
+    <div class="container-fluid">
+
+      
+      <a
+        class="navbar-brand"
+        href="https://joelaul.dev"
+      >
+        joelaul.dev
+      </a>
+
+      
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse-1"
+        aria-controls="navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav ms-auto">
+
+          
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link d-flex justify-content-center"
+              href="https://joelaul.dev"
+            >
+              /home</a
+            >
+          </li>
+
+          
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/portfolio"
+                >/portfolio</a
+              >
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/blog"
+                >/blog</a
+              >
+            </li>
+          
+          
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+    <div class="flex-wrapper">
+
+      <div class="container wrapper">
+
+        <h1 class="post-title">grok-log-arch-3</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>calling useDevice() eturns the state stored in this component. It seems overkill when you can simply query navigator.userAgent as needed. Device can&rsquo;t change during a session, so I don&rsquo;t see how there could be a case where the context changes and subscribed components re-render in response. Is the redux setup mostly meant to achieve a consistent global state layer?</p>
+<pre tabindex="0"><code>import { createAction, createReducer } from &#39;@reduxjs/toolkit&#39;; 
+import React, { PropsWithChildren, useReducer } from &#39;react&#39;;
+import { useEffectOnce } from &#39;../../hooks/useEffectOnce&#39;;
+import { getDevice } from &#39;./getDevice&#39;;
+import { Device } from &#39;./types&#39;;
+
+const DEVICE_ACTIONS = {
+setDevice: createAction&lt;{ device: Device }&gt;(&#39;setDevice&#39;),
+};
+
+const INITIAL_USER_AGENT = navigator.userAgent || &#39;&#39;;
+
+const getInitialState = (): Device =&gt; getDevice(INITIAL_USER_AGENT);
+
+const deviceReducer = createReducer(getInitialState(), (builder) =&gt; {
+builder.addCase(DEVICE_ACTIONS.setDevice, (state, action) =&gt; {
+    return action.payload.device;
+});
+});
+
+export const DeviceCtx = React.createContext&lt;Device&gt;(getInitialState());
+
+export const DeviceProvider: React.FC&lt;PropsWithChildren&lt;{}&gt;&gt; = (props) =&gt; {
+const [state, dispatch] = useReducer(deviceReducer, getInitialState());
+
+useEffectOnce(() =&gt; {
+    const device = getDevice(navigator.userAgent || &#39;&#39;);
+    dispatch(DEVICE_ACTIONS.setDevice({ device }));
+});
+
+return &lt;DeviceCtx.Provider value={state}&gt;{props.children}&lt;/DeviceCtx.Provider&gt;;
+};
+</code></pre><hr>
+<p>ViewportCtx&rsquo;s Redux setup is a bit more understandable, since screen dimensions are obviously more likely to change throughout a session. Just to test understanding though: contexts are typically exposed as state and controllers that update that state. The AuthCtx&rsquo;s controllers are returned along with the state by useAuth(), and operate via network calls &ndash; hands-on, user-triggered. However, ViewportCtx&rsquo;s controllers are exposed as event listeners&hellip;. that are mounted to the subscribed component &ndash; hands-off.</p>
+<pre tabindex="0"><code>import { createAction, createReducer } from &#39;@reduxjs/toolkit&#39;;
+import React, { PropsWithChildren, useEffect, useReducer } from &#39;react&#39;;
+import { useMedia } from &#39;../../hooks/useMedia&#39;;
+import { getViewportState } from &#39;./getViewportState&#39;;
+import { Breakpoint, ViewportState } from &#39;./types&#39;;
+
+const VIEWPORT_ACTIONS = {
+setViewportState: createAction&lt;{ state: ViewportState }&gt;(&#39;setBreakpoint&#39;),
+updateDimensions: createAction&lt;{ innerHeight: number; innerWidth: number }&gt;(&#39;updateDimensions&#39;),
+};
+
+const BREAKPOINT_QUERIES = [
+&#39;(max-width: 575px)&#39;,
+&#39;(max-width: 767px)&#39;,
+&#39;(max-width: 991px)&#39;,
+&#39;(max-width: 1199px)&#39;,
+&#39;(max-width: 1599px)&#39;,
+];
+
+const BREAKPOINTS: Breakpoint[] = [&#39;xs&#39;, &#39;sm&#39;, &#39;md&#39;, &#39;lg&#39;, &#39;xl&#39;];
+
+const getInitialState = (): ViewportState =&gt; getViewportState(&#39;xs&#39;);
+
+const viewportReducer = createReducer(getInitialState(), (builder) =&gt; {
+builder.addCase(VIEWPORT_ACTIONS.setViewportState, (state, action) =&gt; {
+    return action.payload.state;
+});
+builder.addCase(VIEWPORT_ACTIONS.updateDimensions, (state, action) =&gt; {
+    state.innerHeight = action.payload.innerHeight;
+    state.innerWidth = action.payload.innerWidth;
+});
+});
+
+export const ViewportCtx = React.createContext&lt;ViewportState&gt;(getInitialState());
+
+export const ViewportProvider: React.FC&lt;PropsWithChildren&lt;{}&gt;&gt; = (props) =&gt; {
+const [state, dispatch] = useReducer(viewportReducer, getInitialState());
+
+const breakpoint = useMedia(BREAKPOINT_QUERIES, BREAKPOINTS, &#39;xxl&#39;);
+
+useEffect(() =&gt; {
+    dispatch(VIEWPORT_ACTIONS.setViewportState({ state: getViewportState(breakpoint) }));
+}, [breakpoint]);
+
+useEffect(() =&gt; {
+    const onResize = () =&gt; {
+    dispatch(VIEWPORT_ACTIONS.updateDimensions({ innerHeight: window.innerHeight, innerWidth: window.innerWidth }));
+    };
+    window.addEventListener(&#39;resize&#39;, onResize);
+    window.addEventListener(&#39;orientationchange&#39;, onResize);
+    return () =&gt; {
+    window.removeEventListener(&#39;resize&#39;, onResize);
+    window.addEventListener(&#39;orientationchange&#39;, onResize);
+    };
+}, []);
+
+return &lt;ViewportCtx.Provider value={state}&gt;{props.children}&lt;/ViewportCtx.Provider&gt;;
+};
+</code></pre><hr>
+<ul>
+<li>Why is database migration + seed performed on container restart? Not following the &ldquo;migrate&rdquo; docker-compose.yml service or how it&rsquo;d apply here, unless it&rsquo;s a formality to migrate upon db initialization for some sort of &ldquo;clean start&rdquo;? Or is this a way of providing dummy data to the application?</li>
+<li>Why is secrets.env demanded by the readme and included in the environment if it&rsquo;s not used? I&rsquo;ve confirmed that only env/dev.env variables are used when starting the database in dev; those secrets presumably are required when connecting to AWS services in production, and there&rsquo;s an entire /aws folder dedicated to orchestrating that prod infrastructure, but it&rsquo;s never touched in dev or fakeprod, unless I&rsquo;m missing something.</li>
+<li>What&rsquo;s the difference between a dispatcher and a worker? I&rsquo;ve traced three &ldquo;jobs&rdquo; in the codebase: sendMail, pulseCheck, and AssociateVideoUrl, which all occur every 60 seconds, and they&rsquo;re visible in the terminal while the docker network runs.</li>
+</ul>
+<p>readme.md:</p>
+<pre tabindex="0"><code>### Commands
+
+codebase commands are run using the ./bin/cb command.
+
+To view all the commands, run:
+
+
+./bin/cb
+
+
+Before running the api for the first time, you will need to generate a secrets file (not tracked by .git):
+
+
+./bin/cb gensecrets
+
+
+The file it generates will have fake credentials, but this should be OK as long as you don&#39;t interact with dev AWS resources (such as uploading a file to AWS).
+
+To run the api, start Docker engine and run:
+
+
+./bin/cb dev
+</code></pre><p>backend package.json:</p>
+<pre tabindex="0"><code>&#34;migrate&#34;: &#34;yarn mikro-orm migration:up&#34;,
+    &#34;seed&#34;: &#34;yarn ts-node src/db/mikro-orm/seeds/seed.ts&#34;, 
+</code></pre><p>docker-compose.dev.yml:</p>
+<pre tabindex="0"><code># A container is an OS-level virtualization, i.e., a box of dependencies meant to run an app, concealed from the rest of the OS. Many containers can be run on one OS instance (in Docker&#39;s case, a Linux VM). This prevents issues arising from outdated dependencies, version conflicts, dev/prod env inconsistencies, etc.
+
+# A Docker Compose network is a group of Docker containers that can communicate with each other through Docker&#39;s internal DNS. For example, &#34;web:3000&#34; is the &#34;web&#34; service&#39;s port 3000, which the &#34;api&#34; service can see (for CORS whitelist, etc.), but not the local browser.
+
+# &#34;web&#34; is the frontend&#39;s CRA dev server, which runs on localhost:3000 by default. But here, we use Nginx to route requests to port 80 (HTTP default), allowing us to see the frontend on localhost.
+
+services:
+
+# ===========================================
+# build container from Dockerfile image (frontend)
+# ===========================================
+
+web:
+    container_name: web
+    image: codebase:latest
+    volumes:
+    - ./web:/app/web # node_modules troubleshooting requires full frontend dir bind mount
+
+    # - ./web/src:/app/web/src
+    # - ./web/public:/app/web/public
+    environment:
+    - CHOKIDAR_USEPOLLING=true
+    - CHOKIDAR_INTERVAL=500  # 500ms poll interval instead of 100ms
+    command: [&#39;yarn&#39;, &#39;dev:web&#39;]
+
+# ===========================================
+# build containers from Dockerfile image (same backend, different service)
+# ===========================================
+
+api:
+    container_name: api
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3000:3000
+    command: [&#39;yarn&#39;, &#39;dev:api&#39;]
+
+migrate:
+    container_name: migrate
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    command: &#39;bash -c &#34;yarn migrate &amp;&amp; yarn seed&#34;&#39;
+
+dispatch:
+    container_name: dispatcher
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    environment:
+    PORT: 3002
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3002:3002
+    command: [&#39;yarn&#39;, &#39;dev:dispatcher&#39;]
+
+worker:
+    container_name: worker
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    environment:
+    PORT: 3001
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3001:3001
+    command: [&#39;yarn&#39;, &#39;dev:worker&#39;]
+
+# ===========================================
+# build containers from Docker Hub
+# ===========================================
+
+db:
+    container_name: db
+    image: postgres:11
+    restart: always
+    environment:
+    POSTGRES_DB: codebase
+    POSTGRES_USER: codebase
+    POSTGRES_PASSWORD: codebase
+    ports:
+    - 5432:5432
+
+redis:
+    container_name: redis
+    image: redis:5.0
+
+# nginx as reverse proxy only
+nginx:
+    container_name: nginx
+    image: nginx:1.21
+    volumes:
+    - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+    links:
+    - api
+    - web
+    ports:
+    - 80:80
+</code></pre><hr>
+<p>seed.ts seems to confirm that dummy data is provided (i missed this!). so it connects to the database from a separate server to the main API and populates it with ephemeral(?) data when the compose network starts:</p>
+<pre tabindex="0"><code>import { last, random, sample, shuffle, times } from &#39;lodash&#39;;
+import { isMikroORMDb } from &#39;../..&#39;;
+import { Notation, Tag, User, UserRole } from &#39;../../../domain&#39;;
+import { InternalError } from &#39;../../../errors&#39;;
+import { container } from &#39;../../../inversify.config&#39;;
+import { TYPES } from &#39;../../../inversify.constants&#39;;
+import { Logger, rand } from &#39;../../../util&#39;;
+import { Db } from &#39;../../types&#39;;
+import { NotationEntity, TagEntity, UserEntity } from &#39;../entities&#39;;
+import {
+ADJECTIVES,
+ARTIST_NAMES,
+ENCRYPTED_PASSWORD,
+MUSIC_XML_URLS,
+NOTATION_THUMBNAIL_URLS,
+NOUNS,
+USERNAMES,
+USER_AVATAR_URLS,
+VIDEO_URL,
+} from &#39;./constants&#39;;
+
+(async () =&gt; {
+const db = container.get&lt;Db&gt;(TYPES.Db);
+const logger = container.get&lt;Logger&gt;(TYPES.Logger);
+
+if (!isMikroORMDb(db)) {
+    throw new InternalError(&#39;must use MikroORM db, check inversify.config.ts&#39;);
+}
+logger.info(&#39;connecting to the database...&#39;);
+await db.init();
+logger.info(&#39;connection succeeded&#39;);
+logger.info(&#39;seeding database...&#39;);
+
+const buildUser = (props: Partial&lt;User&gt; = {}) =&gt; {
+    const user = new UserEntity(
+    {
+        ...rand.notation({
+        id: undefined,
+        username: ${sample(USERNAMES)}_${random(0, 99999)},
+        email: ${rand.str(5)}@${rand.str(5)}.com,
+        encryptedPassword: ENCRYPTED_PASSWORD,
+        avatarUrl: sample(USER_AVATAR_URLS),
+        ...props,
+        }),
+    },
+    { em: db.em }
+    );
+    db.em.persist(user);
+    return user;
+};
+const buildNotation = (props: Partial&lt;Notation&gt; = {}) =&gt; {
+    const notation = new NotationEntity(
+    rand.notation({
+        id: undefined,
+        cursor: 0,
+        durationMs: 34933,
+        songName: ${sample(ADJECTIVES)} ${sample(NOUNS)},
+        artistName: sample(ARTIST_NAMES),
+        transcriberId: undefined,
+        thumbnailUrl: sample(NOTATION_THUMBNAIL_URLS),
+        musicXmlUrl: sample(MUSIC_XML_URLS),
+        videoUrl: VIDEO_URL,
+        private: false,
+        ...props,
+    }),
+    { em: db.em }
+    );
+    db.em.persist(notation);
+    return notation;
+};
+const buildTag = (props: Partial&lt;Tag&gt; = {}) =&gt; {
+    const tag = new TagEntity(rand.tag({ id: undefined, ...props }), { em: db.em });
+    db.em.persist(tag);
+    return tag;
+};
+
+// create users
+const jared = buildUser({ username: &#39;jaredplaysguitar&#39;, email: &#39;jared@codebase.com&#39;, role: UserRole.ADMIN });
+const admin = buildUser({ username: &#39;admin&#39;, email: &#39;admin@codebase.com&#39;, role: UserRole.ADMIN });
+const teacher = buildUser({ username: &#39;teacher&#39;, email: &#39;teacher@codebase.com&#39;, role: UserRole.TEACHER });
+const student = buildUser({ username: &#39;student&#39;, email: &#39;student@codebase.com&#39;, role: UserRole.STUDENT });
+const students = times(50, () =&gt; buildUser({ role: UserRole.STUDENT }));
+const teachers = [jared, admin, teacher];
+
+// create notations
+const notations = times(100, () =&gt; {
+    const notation = buildNotation();
+    const transcriber = sample(teachers)!;
+    notation.transcriber.set(transcriber);
+    return notation;
+});
+
+// create notations named after the music xml file that backs them
+notations.push(
+    ...MUSIC_XML_URLS.map((musicXmlUrl) =&gt; {
+    const filename = last(musicXmlUrl.split(&#39;/&#39;));
+    const notation = buildNotation({ musicXmlUrl, songName: filename, deadTimeMs: -67 });
+    const transcriber = sample(teachers)!;
+    notation.transcriber.set(transcriber);
+    return notation;
+    })
+);
+
+// create tags
+const tags = [
+    buildTag({ name: &#39;acoustic&#39; }),
+    buildTag({ name: &#39;alternative&#39; }),
+    buildTag({ name: &#39;electric&#39; }),
+    buildTag({ name: &#39;jazz&#39; }),
+    buildTag({ name: &#39;neosoul&#39; }),
+    buildTag({ name: &#39;prog&#39; }),
+];
+
+// create notation tags
+for (const notation of notations) {
+    const numTags = random(1, 3);
+    const shuffledTags = shuffle(tags);
+    const selectedTags = shuffledTags.slice(0, numTags);
+    for (const selectedTag of selectedTags) {
+    notation.tags.add(selectedTag);
+    }
+}
+
+logger.info(&#39;persisting seeded entities...&#39;);
+try {
+    await db.em.flush();
+    logger.info(&#39;seed succeeded&#39;);
+} catch (e) {
+    logger.error(&#39;seed failed&#39;);
+    console.error(e);
+} finally {
+    logger.info(&#39;closing connection...&#39;);
+    await db.closeConnection();
+    logger.info(&#39;connection closed&#39;);
+}
+})();
+</code></pre><hr>
+<p>Question: what did the readme mean by &ldquo;dev AWS resources&rdquo; if the dev environment doesn&rsquo;t use AWS? And I assume the API endpoints that involve AWS in any way simply aren&rsquo;t used in dev</p>
+<hr>
+<ol>
+<li>
+<p>it seems that inversify infers from NODE_ENV whether to run DevApiServer.ts or ApiServer.ts via entrypoints/api.ts. In dev, middleware is absent (no withCors(), withSession(), etc.). Does this imply that dev does not use the network, and user data is limited to the database seed? Without an auth layer, how would something like login work?</p>
+</li>
+<li>
+<p>If Redis is used to persist both job and session data, and the Compose network has only one Redis container, how are its responsibilities split?</p>
+</li>
+<li>
+<p>Re: AWS services being exposed in gulpfile.ts and /aws, but not part of the straightahead dev / fakeprod flow &ndash; does this imply a middle-ground (staging?) environment not discussed in the readme, and the &ldquo;using AWS resources&rdquo; contingency mentioned a case of an external developer like me overstepping their role? Can you help pinpoint which gulpfile.ts commands involving aws are used in staging or prod, outside of the docker flow? I assume &ldquo;install&rdquo; is used in prod, but &ldquo;deploy&rdquo; and &ldquo;cdkdeploy&rdquo; seem like equal suspects.</p>
+</li>
+<li>
+<p>the WorkerServer (run by both dispatcher and worker services) has only a /health endpoint, meaning the core dispatcher/worker logic is happening elsewhere? Both dispatcher.ts and worker.ts entrypoints launch that WorkerServer, and only diverge in that they run startDispatching() and startWorking() on each job&rsquo;s &ldquo;job&rdquo; property, respectively. Help me piece together how this cooperates with the main API server.</p>
+</li>
+</ol>
+<p>(1) inversify.config.ts:</p>
+<pre tabindex="0"><code>if (config.NODE_ENV === &#39;development&#39;) {
+container.bind&lt;GraphqlServer&gt;(TYPES.ApiServer).to(DevApiServer);
+} else {
+container.bind&lt;GraphqlServer&gt;(TYPES.ApiServer).to(ApiServer);
+}
+container.bind&lt;JobServer&gt;(TYPES.WorkerServer).to(WorkerServer);
+</code></pre><p>(2) gulpfile.ts:</p>
+<pre tabindex="0"><code>exports[&#39;dev&#39;] = series(buildapp, dev);
+exports[&#39;fakeprod&#39;] = series(buildnginx, buildapp, fakeprod);
+
+exports[&#39;down&#39;] = down;
+exports[&#39;typegen&#39;] = typegen;
+exports[&#39;gensecrets&#39;] = gensecrets;
+exports[&#39;logs&#39;] = logs;
+exports[&#39;deploy&#39;] = deploy;
+exports[&#39;rollback&#39;] = rollback;
+exports[&#39;db&#39;] = db;
+exports[&#39;redis&#39;] = redis;
+exports[&#39;migrator&#39;] = series(buildapp, migrator);
+
+exports[&#39;tscapi&#39;] = tscapi;
+exports[&#39;tscweb&#39;] = tscweb;
+
+exports[&#39;install&#39;] = parallel(installapi, installweb, installaws);
+exports[&#39;installapi&#39;] = installapi;
+exports[&#39;installweb&#39;] = installweb;
+exports[&#39;installaws&#39;] = installaws;
+
+exports[&#39;buildapp&#39;] = buildapp;
+exports[&#39;buildnginx&#39;] = series(installweb, buildnginx);
+
+exports[&#39;testall&#39;] = series(gensecrets, buildapp, testapi, testweb);
+exports[&#39;testapi&#39;] = series(gensecrets, buildapp, testapi);
+exports[&#39;testweb&#39;] = series(gensecrets, buildapp, testweb);
+exports[&#39;extractreports&#39;] = extractReports;
+
+exports[&#39;cdkdeploy&#39;] = cdkdeploy;
+
+exports[&#39;admin&#39;] = admin;
+exports[&#39;admindb&#39;] = admindb;
+exports[&#39;adminmigrate&#39;] = adminmigrate;
+</code></pre><p>(4) A job looks like this:</p>
+<pre tabindex="0"><code>export class AssociateVideoUrl {
+readonly job: Job&lt;AssociateVideoUrlPayload&gt;;
+private readonly config: Config;
+
+constructor(@inject(TYPES.Config) config: Config) {
+    this.config = config;
+    this.job = new BullMqJob(&#39;ASSOCIATE_VIDEO_URL&#39;, associateVideoUrl, this.config, { intervalMs: 60000 });
+}
+}
+</code></pre><p>with these functions on its &ldquo;job&rdquo; property:</p>
+<pre tabindex="0"><code>async startWorking(): Promise&lt;void&gt; {
+    const queue = this.ensureQueue();
+    await queue.waitUntilReady();
+
+    const worker = this.ensureWorker();
+    await worker.waitUntilReady();
+
+    const scheduler = this.ensureScheduler();
+    await scheduler.waitUntilReady();
+}
+
+async startDispatching(): Promise&lt;void&gt; {
+    const queue = this.ensureQueue();
+    await queue.waitUntilReady();
+
+    const scheduler = this.ensureScheduler();
+    await scheduler.waitUntilReady();
+
+    if (isNumber(this.opts.intervalMs)) {
+    const name = this.getRepeatTaskName();
+    await queue.add(name, {} as P, { repeat: { every: this.opts.intervalMs } });
+    }
+}
+</code></pre><hr>
+<p>I&rsquo;m remembering that the dev nginx.conf forces HTTP 1.1. Could this explain the absence of middleware? Maybe since it&rsquo;s a controlled environment, security is assumed? Or is it ultimately just an auth-less system.</p>
+<hr>
+<p>Is it looking like I&rsquo;m in too deep not to pursue a SWE career?</p>
+<hr>
+<p>How generalizable is this knowledge? I&rsquo;ve approached learning this codebase pretty obsessively for the past week and part of me hopes the patterns and architecture aren&rsquo;t too bespoke to be useful. At least I&rsquo;ve developed my systems thinking and tolerance for cognitive load.</p>
+<hr>
+<p>in the HOC, is the fallback (spinner) component displayed only until the appropriate redirect (per switch block) is performed?</p>
+<hr>
+<p>Are Number values -1, 0, and 1 treated as booleans in some JS contexts? The switch table in this HOC that tests auth status returns values like &ldquo;isLoggedIn &amp;&amp; [function* that returns -1, 0, or 1 by enumerating user role based on its index in its native array]&rdquo;</p>
+<hr>
+<p>Right, so we have the switch table return [boolean] &amp;&amp; [boolean], since gtEq(userRole, minimumRole) is itself a test that returns a boolean.</p>
+<hr>
+<p>Is the hierarchical order of custom context providers in this component tree intentional, or would the route components gain access to each state slice regardless of the order?</p>
+<hr>
+<p>so, given the order here is intentional:</p>
+<ul>
+<li>route state depends on auth state</li>
+<li>auth state depends on device state</li>
+<li>device state depends on viewport state?</li>
+</ul>
+<p>i can&rsquo;t imagine why operations requiring auth state would depend on device information.</p>
+<hr>
+<p>no matches for &ldquo;device&rdquo; in AuthCtx.jsx (<!-- raw HTML omitted -->-returning module), so it&rsquo;s probably incidental. device/auth context tree segment is intentional, all else above is arbitary.</p>
+<hr>
+<p>Earlier I said &ldquo;In dev, middleware is absent (no withCors(), withSession(), etc.). Does this imply that dev does not use the network, and user data is limited to the database seed?&rdquo;</p>
+<p>Upon closer inspection, I&rsquo;ve realized that the DevApiServer DOES have middleware and thus functioning auth. The class extends ApiServer and runs all of the same app.use() calls &ndash; only difference is that it additionally mounts an Altar playground to /altair. So while the app has only seed data at the outset, it&rsquo;s presumably possible to login and signup.</p>
+<hr>
+</div>
+
+      </div>
+
+        <footer class="footer text-center">
+	<p>Copyright &copy; 2025  -
+		<span class="credit">
+			Joe Lauletta
+		</span>
+	</p>
+</footer>
+
+    </div>
+
+  </body>
+</html>

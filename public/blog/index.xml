@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Joe Lauletta</title>
+    <link>https://joelaul.dev/blog/</link>
+    <description>Recent content in Blog on Joe Lauletta</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 10 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://joelaul.dev/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>grok-log-arch-1</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-arch-1/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-arch-1/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. can you explain the reasoning for how linters, formatters, and other dependencies are distributed across the following three package.json files? not sure why eslint appears in both root and frontend. also, do the dependencies / devDependencies here abide by the sorting system we&amp;rsquo;ve discussed before?</description>
+    </item>
+    
+    <item>
+      <title>grok-log-arch-2</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-arch-2/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-arch-2/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. true or false: the conditional rendering and the lazy loading demonstrated in the below protected component are logically independent, i.e., whether it&amp;rsquo;s the first time the component loads or not, current auth state is tested by the withAuthRequirement HOC before returning either route or fallback.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-arch-3</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-arch-3/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-arch-3/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. calling useDevice() eturns the state stored in this component. It seems overkill when you can simply query navigator.userAgent as needed. Device can&amp;rsquo;t change during a session, so I don&amp;rsquo;t see how there could be a case where the context changes and subscribed components re-render in response.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-aws-1</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-aws-1/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-aws-1/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. In staging (internal EC2 deployment?) &amp;ndash; presumably, since /aws is not touched in dev or fakeprod &amp;ndash; some or all of the following gulp task runner commands are run to spin up AWS infra via CDK. only admin() seems to execute the &amp;ldquo;bin&amp;rdquo; script (/aws/bin/aws.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-aws-2</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-aws-2/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-aws-2/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. how does &amp;ldquo;git push aws master:master&amp;rdquo; work at the end?
+async function deploy() {const BUMP_FLAGS = {PATCH: &amp;#39;--patch&amp;#39;,MINOR: &amp;#39;--minor&amp;#39;,MAJOR: &amp;#39;--major&amp;#39;,};const bump = BUMP.getOrDefault(&amp;#39;PATCH&amp;#39;);const branch = BRANCH.getOrDefault(&amp;#39;master&amp;#39;);const remote = REMOTE.getOrDefault(&amp;#39;aws&amp;#39;);if (!(bump in BUMP_FLAGS)) {throw new TypeError(BUMP must be one of: ${Object.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-docker-1</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-docker-1/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-docker-1/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. Explain the following three files and how they work together in this open-source codebase. I&amp;rsquo;m assuming they were used to start the production server on Heroku, because I used Next&amp;rsquo;s dev server during development.
+Makefile:
+dev:docker compose up --build --remove-orphans --renew-anon-volumes docker-compose.yml:
+version: &amp;#39;3.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-docker-2</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-docker-2/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-docker-2/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. when installing dependencies in a legacy node project, how do i ensure that &amp;ldquo;yarn install&amp;rdquo; adheres to yarn.lock? could the issue be my node version? is this the pain point that explains the beauty of docker?
+i have one. i&amp;rsquo;m realizing that my project&amp;rsquo;s dev environment runs in a docker container, which INCLUDES the frontend&amp;rsquo;s CRA dev server &amp;ndash; nothing is ever running local in dev or fakeprod.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-docker-3</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-docker-3/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-docker-3/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. I&amp;rsquo;m running my react dev server in a docker container. HMR doesn&amp;rsquo;t seem to be working, and I wonder if there&amp;rsquo;s something wrong with the bind mount. Here&amp;rsquo;s my docker-composer.yml (react service name is &amp;ldquo;web&amp;rdquo;):
+version: &amp;#39;3.7&amp;#39;services:# ===========================================# build container from Dockerfile image (frontend)# ===========================================web:container_name: webimage: codebase:latestvolumes:- .</description>
+    </item>
+    
+    <item>
+      <title>grok-log-gql</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-gql/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-gql/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. Could use some help with validating the notes and answering the questions commented in this gql request builder module. It implements a chaining pattern that iteratively returns more &amp;ldquo;populated&amp;rdquo; GqlQueryBuilder instances, finally returning a fully populated $gql instance, which is passed to useGql.ts. I&amp;rsquo;m mostly trying to trace how the $gql instance properties are transformed into a legal graphql query string, to be injected in the core POST request&amp;rsquo;s &amp;ldquo;body&amp;rdquo; field.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-hocs</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-hocs/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-hocs/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. Is the reason why useRoutingInfo() returns the route previous to the the component returned by this HOC, rather than that component&amp;rsquo;s route, that the hook is called at the HOC level before the component is rendered?
+import React, { useEffect } from &amp;#34;react&amp;#34;;import { useLocation, useNavigate } from &amp;#34;react-router-dom&amp;#34;;import { Fallback } from &amp;#34;.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-inversify</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-inversify/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-inversify/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. AuthResolver.sendMail is injected by Inversify &amp;ndash; why?
+AuthResolver.ts:
+// ====================================// POST /signup { $gql.mutation(&amp;#39;signup&amp;#39;) }// ====================================@Mutation((returns) =&amp;gt; types.SignupOutput)async signup(@Arg(&amp;#39;input&amp;#39;) input: types.SignupInput, @Ctx() ctx: ResolverCtx): Promise&amp;lt;typeof types.SignupOutput&amp;gt; {const sessionUser = ctx.getSessionUser();if (sessionUser.isLoggedIn) {return types.ForbiddenError.of({ message: &amp;#39;must be logged out&amp;#39; });}try {const user = await this.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-ts</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-ts/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-ts/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. Break down this typescript function syntax:
+// imports class &amp;#34;$gql&amp;#34; from barrelled $gql.tsimport * as graphql from &amp;#34;../lib/graphql&amp;#34;; export const useGql = &amp;lt;G extends graphql.Any$gql&amp;gt;(gql: G): [exec: Exec&amp;lt;G&amp;gt;, res: GqlRes&amp;lt;G&amp;gt;, cancel: xhr.Cancel, reset: xhr.Reset] =&amp;gt; { ... } so here, the vertical bars separate all possible types that GqlRes can be?</description>
+    </item>
+    
+  </channel>
+</rss>

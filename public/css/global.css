@@ -1,0 +1,98 @@
+/* import */
+
+@import url('home.css');
+@import url('section-page.css');
+@import url('fx.css');
+@import url('responsive.css');
+
+/* font */
+
+@font-face {
+	font-family: 'nds-bios';
+	src: url('../font/nds-bios.woff') format('woff');
+}
+
+/* reset */
+
+* {
+	margin: 0;
+	box-sizing: border-box;
+}
+
+/* types */
+
+body { 
+	background-image: url("../img/leaves.png");
+	animation: gradient 15s ease infinite;
+	
+	font-family: nds-bios;
+	cursor: url('../mp-hand.cur'), auto;
+}
+
+nav {
+	font-size: 1.5em;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+img {
+	max-width: 100%;
+}
+
+i {
+	margin: 10px 20px 10px 20px;
+	color: #333;
+}
+
+div p {
+	text-align: justify;
+}
+
+td {
+	margin: 0 20px 0 20px;
+}
+
+/* classes */
+
+.flex-wrapper {
+	display: flex;
+  	min-height: 100vh;
+  	flex-direction: column;
+	justify-content: space-between;
+	padding-top: 70px;
+}
+.container {
+	margin: 0 auto;
+	max-width: 725px;
+}
+
+.navbar-dark {
+	opacity: 0.94;
+}
+.navbar-brand {
+	font-size: 1.07em;
+}
+
+.footer {
+	/* position: fixed;
+	width: 100%;
+	bottom: 0; */
+
+	background-color: #F5F5F5;
+	display: flex;
+	justify-content: center;
+	padding: 10px;
+}
+.footer p {
+	margin: 0 !important;
+	font-size: initial;
+}
+
+.col-centered {
+	float: none;
+	margin: 0 auto;
+}
+
+.notfound-content {
+	font-size: 1.15em;
+}
