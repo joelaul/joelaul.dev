@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grok-log-arch-1 | Joe Lauletta</title>
+
+    <meta name="generator" content="Hugo 0.111.3">
+
+<meta content='initial-scale=1.0, width=device-width' name='viewport'>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+
+
+<link rel="icon" href="https://joelaul.dev/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://joelaul.dev/css/global.css">
+
+
+	<script>
+		window.addEventListener('load', () => {
+			const theme = sessionStorage.getItem('theme');
+			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+			console.log(bgColor);
+			const leaves = `url("../img/leaves.png")`
+
+			if (theme) {
+				document.body.style.background = `${bgColor}, ${leaves}`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
+
+  </head>
+
+  	
+
+  <body>
+    
+    <header>
+  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
+    <div class="container-fluid">
+
+      
+      <a
+        class="navbar-brand"
+        href="https://joelaul.dev"
+      >
+        joelaul.dev
+      </a>
+
+      
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse-1"
+        aria-controls="navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav ms-auto">
+
+          
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link d-flex justify-content-center"
+              href="https://joelaul.dev"
+            >
+              /home</a
+            >
+          </li>
+
+          
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/portfolio"
+                >/portfolio</a
+              >
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/blog"
+                >/blog</a
+              >
+            </li>
+          
+          
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+    <div class="flex-wrapper">
+
+      <div class="container wrapper">
+
+        <h1 class="post-title">grok-log-arch-1</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>can you explain the reasoning for how linters, formatters, and other dependencies are distributed across the following three package.json files? not sure why eslint appears in both root and frontend. also, do the dependencies / devDependencies here abide by the sorting system we&rsquo;ve discussed before?</p>
+<p>root:</p>
+<pre tabindex="0"><code>{ 
+&#34;name&#34;: &#34;codebase&#34;,
+&#34;version&#34;: &#34;0.1.0&#34;,
+&#34;repository&#34;: &#34;git@github.com:jaredjj3/code-base.git&#34;,
+&#34;private&#34;: true,
+&#34;scripts&#34;: {
+    &#34;test:api&#34;: &#34;cd api &amp;&amp; yarn test&#34;,
+    &#34;test:web&#34;: &#34;cd web &amp;&amp; yarn test&#34;,
+    &#34;dev:web&#34;: &#34;cd web &amp;&amp; yarn start&#34;,
+    &#34;dev:api&#34;: &#34;cd api &amp;&amp; yarn dev:api&#34;,
+    &#34;dev:worker&#34;: &#34;cd api &amp;&amp; yarn dev:worker&#34;,
+    &#34;dev:dispatcher&#34;: &#34;cd api &amp;&amp; yarn dev:dispatcher&#34;,
+    &#34;migrate&#34;: &#34;cd api &amp;&amp; yarn migrate&#34;,
+    &#34;seed&#34;: &#34;cd api &amp;&amp; yarn seed&#34;,
+    &#34;prod:api&#34;: &#34;cd api &amp;&amp; yarn prod:api&#34;,
+    &#34;prod:worker&#34;: &#34;cd api &amp;&amp; yarn prod:worker&#34;,
+    &#34;prod:dispatcher&#34;: &#34;cd api &amp;&amp; yarn prod:dispatcher&#34;
+},
+&#34;devDependencies&#34;: {
+    &#34;@types/node&#34;: &#34;^14.14.30&#34;,
+    &#34;@types/node-cleanup&#34;: &#34;^2.1.1&#34;,
+    &#34;@typescript-eslint/eslint-plugin&#34;: &#34;5.30.4&#34;,
+    &#34;@typescript-eslint/parser&#34;: &#34;5.30.4&#34;,
+    &#34;babel-eslint&#34;: &#34;10.x&#34;,
+    &#34;chalk&#34;: &#34;^4.1.0&#34;,
+    &#34;eslint&#34;: &#34;^7.11.0&#34;,
+    &#34;eslint-config-prettier&#34;: &#34;^6.13.0&#34;,
+    &#34;eslint-config-react-app&#34;: &#34;^5.1.0&#34;,
+    &#34;eslint-loader&#34;: &#34;^4.0.2&#34;,
+    &#34;eslint-plugin-flowtype&#34;: &#34;3.13.0&#34;,
+    &#34;eslint-plugin-import&#34;: &#34;^2.20.2&#34;,
+    &#34;eslint-plugin-jest-dom&#34;: &#34;^1.3.0&#34;,
+    &#34;eslint-plugin-jsx-a11y&#34;: &#34;6.2.3&#34;,
+    &#34;eslint-plugin-prettier&#34;: &#34;^3.1.1&#34;,
+    &#34;eslint-plugin-react&#34;: &#34;7.16.0&#34;,
+    &#34;eslint-plugin-react-hooks&#34;: &#34;^1.6.1&#34;,
+    &#34;eslint-plugin-testing-library&#34;: &#34;^1.3.4&#34;,
+    &#34;execa&#34;: &#34;^5.1.1&#34;,
+    &#34;gulp&#34;: &#34;^4.0.2&#34;,
+    &#34;node-cleanup&#34;: &#34;^2.1.2&#34;,
+    &#34;prettier&#34;: &#34;2.7.1&#34;,
+    &#34;prettier-plugin-organize-imports&#34;: &#34;^1.1.1&#34;,
+    &#34;ts-node&#34;: &#34;^10.0.0&#34;,
+    &#34;typescript&#34;: &#34;^4.1.5&#34;
+},
+&#34;dependencies&#34;: {
+    &#34;@types/uuid&#34;: &#34;^8.3.1&#34;
+}
+}
+</code></pre><p>frontend:</p>
+<pre tabindex="0"><code>{
+&#34;name&#34;: &#34;web&#34;,
+&#34;version&#34;: &#34;1.4.3&#34;,
+&#34;private&#34;: true,
+&#34;dependencies&#34;: {
+    &#34;@ant-design/icons&#34;: &#34;4.5.0&#34;,
+    &#34;@craco/craco&#34;: &#34;6.4.1&#34;,
+    &#34;@graphql-codegen/cli&#34;: &#34;1.21.2&#34;,
+    &#34;@graphql-codegen/typescript&#34;: &#34;1.21.1&#34;,
+    &#34;@moonwave99/fretboard.js&#34;: &#34;0.2.7&#34;,
+    &#34;@reduxjs/toolkit&#34;: &#34;1.5.0&#34;,
+    &#34;@codebase/musicxml&#34;: &#34;0.2.6&#34;,
+    &#34;@testing-library/dom&#34;: &#34;8.13.0&#34;,
+    &#34;@testing-library/jest-dom&#34;: &#34;5.16.4&#34;,
+    &#34;@testing-library/react&#34;: &#34;13.3.0&#34;,
+    &#34;@testing-library/user-event&#34;: &#34;14.2.0&#34;,
+    &#34;@tonaljs/tonal&#34;: &#34;4.6.5&#34;,
+    &#34;@types/extract-files&#34;: &#34;8.1.0&#34;,
+    &#34;@types/graphql&#34;: &#34;14.5.0&#34;,
+    &#34;@types/jest&#34;: &#34;26.0.20&#34;,
+    &#34;@types/jest-when&#34;: &#34;2.7.2&#34;,
+    &#34;@types/jquery&#34;: &#34;3.5.6&#34;,
+    &#34;@types/lodash&#34;: &#34;4.14.168&#34;,
+    &#34;@types/node&#34;: &#34;12.0.0&#34;,
+    &#34;@types/react&#34;: &#34;18.0.9&#34;,
+    &#34;@types/react-dom&#34;: &#34;18.0.4&#34;,
+    &#34;@types/react-router-dom&#34;: &#34;5.3.3&#34;,
+    &#34;@types/react-scroll&#34;: &#34;1.8.2&#34;,
+    &#34;@types/react-transition-group&#34;: &#34;4.4.1&#34;,
+    &#34;@types/styled-components&#34;: &#34;5.1.25&#34;,
+    &#34;@types/uuid&#34;: &#34;8.3.1&#34;,
+    &#34;@types/video.js&#34;: &#34;7.3.15&#34;,
+    &#34;@xstate/react&#34;: &#34;1.5.1&#34;,
+    &#34;antd&#34;: &#34;4.22.4&#34;,
+    &#34;babel-eslint&#34;: &#34;10.1.0&#34;,
+    &#34;babel-plugin-import&#34;: &#34;1.13.3&#34;,
+    &#34;craco-less&#34;: &#34;1.17.1&#34;,
+    &#34;css-loader&#34;: &#34;5.1.1&#34;,
+    &#34;customize-cra&#34;: &#34;1.0.0&#34;,
+    &#34;dayjs&#34;: &#34;1.10.4&#34;,
+    &#34;detect-it&#34;: &#34;4.0.1&#34;,
+    &#34;extract-files&#34;: &#34;9.0.0&#34;,
+    &#34;fast-deep-equal&#34;: &#34;3.1.3&#34;,
+    &#34;graphql&#34;: &#34;15.5.0&#34;,
+    &#34;intersection-observer&#34;: &#34;0.12.0&#34;,
+    &#34;jest-environment-jsdom-sixteen&#34;: &#34;1.0.3&#34;,
+    &#34;jest-extended&#34;: &#34;0.11.5&#34;,
+    &#34;jest-junit&#34;: &#34;12.0.0&#34;,
+    &#34;jest-when&#34;: &#34;3.2.1&#34;,
+    &#34;jquery&#34;: &#34;3.6.0&#34;,
+    &#34;lodash&#34;: &#34;4.17.21&#34;,
+    &#34;opensheetmusicdisplay&#34;: &#34;1.5.4&#34;,
+    &#34;react&#34;: &#34;18.1.0&#34;,
+    &#34;react-dom&#34;: &#34;18.1.0&#34;,
+    &#34;react-is&#34;: &#34;17.0.1&#34;,
+    &#34;react-router-dom&#34;: &#34;6.3.0&#34;,
+    &#34;react-scripts&#34;: &#34;4.0.3&#34;,
+    &#34;react-scroll&#34;: &#34;1.8.1&#34;,
+    &#34;react-snap&#34;: &#34;1.23.0&#34;,
+    &#34;resize-observer-polyfill&#34;: &#34;1.5.1&#34;,
+    &#34;styled-components&#34;: &#34;5.3.5&#34;,
+    &#34;ts-toolbelt&#34;: &#34;9.6.0&#34;,
+    &#34;typed-graphqlify&#34;: &#34;3.1.4&#34;,
+    &#34;typescript&#34;: &#34;4.7.4&#34;,
+    &#34;uuid&#34;: &#34;8.3.1&#34;,
+    &#34;video.js&#34;: &#34;7.14.3&#34;,
+    &#34;videojs-contrib-quality-levels&#34;: &#34;^2.1.0&#34;,
+    &#34;web-vitals&#34;: &#34;1.0.1&#34;,
+    &#34;workbox-background-sync&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-broadcast-update&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-cacheable-response&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-core&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-expiration&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-google-analytics&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-navigation-preload&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-precaching&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-range-requests&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-routing&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-strategies&#34;: &#34;5.1.3&#34;,
+    &#34;workbox-streams&#34;: &#34;5.1.3&#34;,
+    &#34;xstate&#34;: &#34;4.23.1&#34;
+},
+&#34;scripts&#34;: {
+    &#34;start&#34;: &#34;craco start&#34;,
+    &#34;build&#34;: &#34;craco build&#34;,
+    &#34;postbuild&#34;: &#34;react-snap&#34;,
+    &#34;test&#34;: &#34;craco test&#34;,
+    &#34;eject&#34;: &#34;craco eject&#34;,
+    &#34;typegen&#34;: &#34;graphql-codegen&#34;
+},
+&#34;eslintConfig&#34;: {
+    &#34;extends&#34;: [
+    &#34;react-app&#34;,
+    &#34;react-app/jest&#34;
+    ]
+},
+&#34;browserslist&#34;: {
+    &#34;production&#34;: [
+    &#34;&gt;0.2%&#34;,
+    &#34;not dead&#34;,
+    &#34;not op_mini all&#34;
+    ],
+    &#34;development&#34;: [
+    &#34;last 1 chrome version&#34;,
+    &#34;last 1 firefox version&#34;,
+    &#34;last 1 safari version&#34;
+    ]
+},
+&#34;jest-junit&#34;: {
+    &#34;suiteName&#34;: &#34;web&#34;,
+    &#34;outputName&#34;: &#34;junit.web.xml&#34;,
+    &#34;outputDirectory&#34;: &#34;./reports&#34;,
+    &#34;suiteNameTemplate&#34;: &#34;{displayName}&#34;,
+    &#34;classNameTemplate&#34;: &#34;{classname}&#34;
+},
+&#34;jest&#34;: {
+    &#34;transformIgnorePatterns&#34;: [
+    &#34;/node_modules/(?!antd|@ant-design|rc-.+?|@babel/runtime).+(js|jsx)$&#34;
+    ]
+},
+&#34;reactSnap&#34;: {
+    &#34;puppeteerArgs&#34;: [
+    &#34;--no-sandbox&#34;,
+    &#34;--disable-setuid-sandbox&#34;
+    ]
+}
+}
+</code></pre><p>backend:</p>
+<pre tabindex="0"><code>{
+&#34;name&#34;: &#34;api&#34;,
+&#34;version&#34;: &#34;1.4.3&#34;,
+&#34;description&#34;: &#34;GraphQL server for @codebase&#34;,
+&#34;license&#34;: &#34;MIT&#34;,
+&#34;private&#34;: true,
+&#34;scripts&#34;: {
+    &#34;migrate&#34;: &#34;yarn mikro-orm migration:up&#34;,
+    &#34;seed&#34;: &#34;yarn ts-node src/db/mikro-orm/seeds/seed.ts&#34;,
+    &#34;dev:api&#34;: &#34;yarn ts-node-dev --transpile-only src/entrypoints/api.ts&#34;,
+    &#34;dev:worker&#34;: &#34;yarn ts-node-dev --transpile-only src/entrypoints/worker.ts&#34;,
+    &#34;dev:dispatcher&#34;: &#34;yarn ts-node-dev --transpile-only src/entrypoints/dispatcher.ts&#34;,
+    &#34;prod:api&#34;: &#34;node build/entrypoints/api.js&#34;,
+    &#34;prod:worker&#34;: &#34;node build/entrypoints/worker.js&#34;,
+    &#34;prod:dispatcher&#34;: &#34;node build/entrypoints/dispatcher.js&#34;,
+    &#34;pretest&#34;: &#34;yarn migrate&#34;,
+    &#34;test&#34;: &#34;yarn jest --maxWorkers=$JEST_NUM_WORKERS&#34;,
+    &#34;typegen&#34;: &#34;graphql-codegen&#34;
+},
+&#34;dependencies&#34;: {
+    &#34;@mikro-orm/core&#34;: &#34;^4.5.7&#34;,
+    &#34;@mikro-orm/postgresql&#34;: &#34;^4.5.7&#34;,
+    &#34;altair-express-middleware&#34;: &#34;^3.2.1&#34;,
+    &#34;aws-sdk&#34;: &#34;^2.844.0&#34;,
+    &#34;bcrypt&#34;: &#34;^5.0.0&#34;,
+    &#34;bullmq&#34;: &#34;1.89.1&#34;,
+    &#34;class-validator&#34;: &#34;^0.13.1&#34;,
+    &#34;cls-hooked&#34;: &#34;^4.2.2&#34;,
+    &#34;connect-redis&#34;: &#34;^5.1.0&#34;,
+    &#34;cors&#34;: &#34;^2.8.5&#34;,
+    &#34;dataloader&#34;: &#34;^2.0.0&#34;,
+    &#34;execa&#34;: &#34;^5.1.1&#34;,
+    &#34;express&#34;: &#34;^4.17.1&#34;,
+    &#34;express-graphql&#34;: &#34;^0.12.0&#34;,
+    &#34;express-session&#34;: &#34;^1.17.1&#34;,
+    &#34;extract&#34;: &#34;^1.0.0&#34;,
+    &#34;files&#34;: &#34;^2.1.1&#34;,
+    &#34;graphql&#34;: &#34;^15.5.0&#34;,
+    &#34;graphql-upload&#34;: &#34;^11.0.0&#34;,
+    &#34;inversify&#34;: &#34;^5.0.5&#34;,
+    &#34;knex&#34;: &#34;^0.21.17&#34;,
+    &#34;lodash&#34;: &#34;^4.17.21&#34;,
+    &#34;morgan&#34;: &#34;^1.10.0&#34;,
+    &#34;nodemailer&#34;: &#34;^6.4.18&#34;,
+    &#34;pg&#34;: &#34;^8.5.1&#34;,
+    &#34;redis&#34;: &#34;^3.1.1&#34;,
+    &#34;reflect-metadata&#34;: &#34;^0.1.13&#34;,
+    &#34;type-graphql&#34;: &#34;1.1.1&#34;,
+    &#34;uuid&#34;: &#34;^8.3.2&#34;,
+    &#34;winston&#34;: &#34;^3.3.3&#34;
+},
+&#34;devDependencies&#34;: {
+    &#34;@aws-cdk/aws-cloudfront&#34;: &#34;^1.113.0&#34;,
+    &#34;@graphql-codegen/cli&#34;: &#34;^1.20.1&#34;,
+    &#34;@graphql-codegen/typescript&#34;: &#34;^1.21.0&#34;,
+    &#34;@mikro-orm/cli&#34;: &#34;^4.5.7&#34;,
+    &#34;@types/aws-sdk&#34;: &#34;^2.7.0&#34;,
+    &#34;@types/bcrypt&#34;: &#34;^3.0.0&#34;,
+    &#34;@types/bluebird&#34;: &#34;^3.5.33&#34;,
+    &#34;@types/cls-hooked&#34;: &#34;^4.3.3&#34;,
+    &#34;@types/connect-redis&#34;: &#34;^0.0.16&#34;,
+    &#34;@types/cors&#34;: &#34;^2.8.10&#34;,
+    &#34;@types/express&#34;: &#34;^4.17.11&#34;,
+    &#34;@types/express-graphql&#34;: &#34;^0.9.0&#34;,
+    &#34;@types/express-session&#34;: &#34;^1.17.3&#34;,
+    &#34;@types/extract-files&#34;: &#34;^8.1.0&#34;,
+    &#34;@types/graphql&#34;: &#34;^14.5.0&#34;,
+    &#34;@types/graphql-upload&#34;: &#34;^8.0.4&#34;,
+    &#34;@types/inversify&#34;: &#34;^2.0.33&#34;,
+    &#34;@types/jest&#34;: &#34;^26.0.20&#34;,
+    &#34;@types/knex&#34;: &#34;^0.16.1&#34;,
+    &#34;@types/lodash&#34;: &#34;^4.14.168&#34;,
+    &#34;@types/morgan&#34;: &#34;^1.9.2&#34;,
+    &#34;@types/node&#34;: &#34;^14.14.28&#34;,
+    &#34;@types/nodemailer&#34;: &#34;^6.4.0&#34;,
+    &#34;@types/redis&#34;: &#34;^2.8.28&#34;,
+    &#34;@types/supertest&#34;: &#34;^2.0.10&#34;,
+    &#34;@types/uuid&#34;: &#34;^8.3.0&#34;,
+    &#34;@types/validator&#34;: &#34;^13.1.3&#34;,
+    &#34;@types/winston&#34;: &#34;^2.4.4&#34;,
+    &#34;jest&#34;: &#34;^27.0.6&#34;,
+    &#34;jest-circus&#34;: &#34;^27.0.6&#34;,
+    &#34;jest-extended&#34;: &#34;^0.11.5&#34;,
+    &#34;jest-junit&#34;: &#34;^12.0.0&#34;,
+    &#34;jest-watch-typeahead&#34;: &#34;^0.6.1&#34;,
+    &#34;supertest&#34;: &#34;^6.1.3&#34;,
+    &#34;ts-jest&#34;: &#34;^27.0.4&#34;,
+    &#34;ts-node&#34;: &#34;^10.2.0&#34;,
+    &#34;ts-node-dev&#34;: &#34;^1.1.6&#34;,
+    &#34;typescript&#34;: &#34;^4.1.5&#34;
+},
+&#34;jest-junit&#34;: {
+    &#34;suiteName&#34;: &#34;api&#34;,
+    &#34;outputName&#34;: &#34;junit.api.xml&#34;,
+    &#34;outputDirectory&#34;: &#34;./reports&#34;,
+    &#34;suiteNameTemplate&#34;: &#34;{displayName}&#34;,
+    &#34;classNameTemplate&#34;: &#34;{classname}&#34;
+},
+&#34;mikro-orm&#34;: {
+    &#34;useTsNode&#34;: true,
+    &#34;configPaths&#34;: [
+    &#34;./src/db/mikro-orm/mikro-orm.config.ts&#34;
+    ]
+}
+}
+</code></pre><hr>
+<p>high-level rundown of the project directory. i assume ./aws is used to orchestrate database and file storage.. as well as deployment? and ./nginx is for the server meant to be used in production? but i see that docker-compose.yml sources nginx config from ./nginx, but nothing about aws. is this because on the production server, the API is run in a container, but connects to AWS architecture outside of it?</p>
+<pre tabindex="0"><code>.
+|-- api
+|   |-- src
+|   |   |-- config
+|   |   |-- db
+|   |   |-- domain
+|   |   |-- entrypoints
+|   |   |-- errors
+|   |   |-- jobs
+|   |   |-- repos
+|   |   |-- resolvers
+|   |   |-- server
+|   |   |-- services
+|   |   |-- testing
+|   |   |-- util
+|   |   |-- inversify.config.ts
+|   |   -- inversify.constants.ts
+|   |-- codegen.yml
+|   |-- jest.config.js
+|   |-- package.json
+|   |-- tsconfig.json
+|   |-- tsconfig.prod.json
+|   -- yarn.lock
+|-- aws
+|   |-- bin
+|   |   -- aws.ts
+|   |-- lib
+|   |   |-- constructs
+|   |   |-- CodebaseDevStack.ts
+|   |   -- CodebaseStack.ts
+|   |-- scripts
+|   |   -- config.sh
+|   |-- templates
+|   |   -- vod.yml
+|   |-- test
+|   |   -- aws.test.ts
+|   |-- README.md
+|   |-- cdk.json
+|   |-- jest.config.js
+|   |-- package.json
+|   |-- tsconfig.json
+|   -- yarn.lock
+|-- bin
+|   -- ss
+|-- e2e
+|   |-- src
+|   |   |-- util
+|   |   |-- landing.test.ts
+|   |   |-- library.test.ts
+|   |   |-- login.test.ts
+|   |   -- signup.test.ts
+|   |-- Dockerfile
+|   |-- PuppeteerEnvironment.js
+|   |-- jest.config.js
+|   |-- jest.setup.js
+|   |-- package.json
+|   |-- setup.js
+|   |-- teardown.js
+|   |-- tsconfig.json
+|   -- yarn.lock
+|-- env
+|   |-- api.test.env
+|   |-- dev.env
+|   |-- fakeprod.env
+|   -- web.test.env
+|-- nginx
+|   |-- nginx.conf
+|   |-- nginx.dev.conf
+|   -- nginx.fakeprod.conf
+|-- scripts
+|   |-- Env.ts
+|   |-- aws.ts
+|   |-- cleanup.ts
+|   |-- constants.ts
+|   |-- db.ts
+|   |-- docker.ts
+|   |-- graphql.ts
+|   |-- test.ts
+|   |-- types.ts
+|   -- util.ts
+|-- templates
+|   -- secrets.template.env
+|-- web
+|   |-- public
+|   |   |-- static
+|   |   |-- favicon.ico
+|   |   |-- index.html
+|   |   |-- logo192.png
+|   |   |-- logo384.png
+|   |   |-- logo512.png
+|   |   |-- manifest.json
+|   |   -- robots.txt
+|   |-- src
+|   |   |-- assets
+|   |   |-- components
+|   |   |-- ctx
+|   |   |-- domain
+|   |   |-- hocs
+|   |   |-- hooks
+|   |   |-- lib
+|   |   |-- testing
+|   |   |-- util
+|   |   |-- App.less
+|   |   |-- App.test.tsx
+|   |   |-- App.tsx
+|   |   |-- config.ts
+|   |   |-- constants.ts
+|   |   |-- index.tsx
+|   |   |-- jest.d.ts
+|   |   |-- react-app-env.d.ts
+|   |   |-- reportWebVitals.ts
+|   |   |-- service-worker.ts
+|   |   |-- serviceWorkerRegistration.ts
+|   |   |-- setupTests.ts
+|   |   -- theme.js
+|   |-- README.md
+|   |-- codegen.yml
+|   |-- craco.config.js
+|   |-- package.json
+|   |-- tsconfig.json
+|   -- yarn.lock
+|-- Dockerfile
+|-- Dockerfile.nginx
+|-- LICENSE
+|-- README.md
+|-- SECURITY.md
+|-- docker-compose.api.test.yml
+|-- docker-compose.dev.yml
+|-- docker-compose.migrator.yml
+|-- docker-compose.web.test.yml
+|-- docker-compose.yml
+|-- gulpfile.ts
+|-- package.json
+|-- tree.txt
+-- yarn.lock
+
+42 directories, 92 files
+</code></pre><hr>
+<p>so the nginx reverse proxy, like the aws services, runs outside of the API container? and it&rsquo;s used as a security layer?</p>
+<hr>
+<p>is Render&rsquo;s nginx server also a reverse proxy that directs requests to your node server that runs on the instance? IWO, are the architectural choices in this codebase made in a Render deployment context, but abstracted from the developer? Also, I&rsquo;ve used mongodb atlas in production, i.e., the database is in the cloud, not local to the instance. Is there an analogous cloud postgres database that doesn&rsquo;t require navigating AWS?</p>
+<hr>
+<p>still not clocking exactly why docker-compose.yml references the nginx RP but not AWS services. here&rsquo;s the content:</p>
+<pre tabindex="0"><code>version: &#39;3.7&#39;
+
+services:
+db:
+    container_name: db
+    image: postgres:11
+    restart: always
+    environment:
+    POSTGRES_DB: codebase
+    POSTGRES_USER: codebase
+    POSTGRES_PASSWORD: codebase
+    ports:
+    - 5432:5432
+
+redis:
+    container_name: redis
+    image: redis:5.0
+
+nginx:
+    container_name: nginx
+    image: codebasenginx:latest
+    volumes:
+    - ./nginx/nginx.fakeprod.conf:/etc/nginx/nginx.conf
+    links:
+    - api
+    ports:
+    - 80:80
+
+migrate:
+    container_name: migrate
+    image: codebase:latest
+    build:
+    context: .
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    links:
+    - db
+    command: &#39;bash -c &#34;cd api &amp;&amp; yarn migrate &amp;&amp; yarn seed&#34;&#39;
+
+api:
+    container_name: api
+    image: codebase:latest
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    links:
+    - db
+    - redis
+    command: [&#39;node&#39;, &#39;/app/api/build/entrypoints/api.js&#39;]
+
+worker:
+    container_name: worker
+    image: codebase:latest
+    build:
+    context: .
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    environment:
+    NODE_ENV: production
+    PORT: 3000
+    links:
+    - db
+    - redis
+    ports:
+    - 3000:3000
+    command: [&#39;node&#39;, &#39;/app/api/build/entrypoints/worker.js&#39;]
+
+dispatcher:
+    container_name: dispatcher
+    image: codebase:latest
+    build:
+    context: .
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    environment:
+    NODE_ENV: production
+    PORT: 3001
+    links:
+    - db
+    - redis
+    ports:
+    - 3001:3001
+    command: [&#39;node&#39;, &#39;/app/api/build/entrypoints/dispatcher.js&#39;]
+</code></pre><hr>
+<p>it seems from the project readme that docker is used to build the app locally too. so in all environments, the react frontend and express api, and the other services in docker-compose.yml are all run in a series of containers?</p>
+<hr>
+<p>why isn&rsquo;t the frontend run as a container?</p>
+<hr>
+<p>There are two dockerfiles, one just called dockerfile:</p>
+<pre tabindex="0"><code>FROM node:16.0.0
+
+# Includes ffprobe
+RUN apt-get update &amp;&amp; apt-get -y install ffmpeg
+
+WORKDIR /app
+
+# make ss commands work
+COPY ./package.json .
+COPY ./yarn.lock .
+RUN yarn
+COPY ./bin bin
+COPY ./scripts scripts
+COPY ./gulpfile.ts .
+ENV PATH=&#34;/app/bin:${PATH}&#34;
+
+# install api dependencies
+COPY ./api/package.json api/
+COPY ./api/yarn.lock api/
+RUN ss installapi
+
+# install web dependencies
+COPY ./web/package.json web/
+COPY ./web/yarn.lock web/
+RUN ss installweb
+
+# copy the web files over
+COPY ./web/tsconfig.json web/
+COPY ./web/craco.config.js web/
+COPY ./web/.env web/
+
+# copy the api files over
+COPY ./api/tsconfig.json api/
+COPY ./api/tsconfig.prod.json api/
+COPY ./api/jest.config.js api/
+COPY ./api/src api/src/
+
+# build the api project
+RUN yarn tsc --project api/tsconfig.prod.json
+
+# run the project
+
+CMD [&#34;node&#34;, &#34;yarn prod:api&#34;]
+</code></pre><p>and one called dockerfile.nginx:</p>
+<pre tabindex="0"><code>FROM nginx:1.21
+
+WORKDIR /www/data
+COPY ./web/build/ /www/data/
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+</code></pre><hr>
+<p>I can see that Dockerfile.nginx bundles the frontend build into the nginx container, just not sure why that step requires a separate file. Also realizing the root level package.json provides gulp, which seems to be a tool that allows build/teardown/etc logic written in javascript (for which scripts/ may contain module code) to be triggered in the terminal as &ldquo;./bin/ss [command] [args]&rdquo;.</p>
+<hr>
+<p>&ldquo;Copies the contents of ./web/build (which must have already been built)&rdquo;</p>
+<p>Yes, at that point in the pipeline, ./web/build is presumably created by the gulp command &ldquo;installweb&rdquo; specified in the main Dockerfile.</p>
+<hr>
+<p>I&rsquo;m gathering from the series commands exported by the gulpfile&hellip;</p>
+<pre tabindex="0"><code>exports[&#39;dev&#39;] = series(buildapp, dev);
+exports[&#39;fakeprod&#39;] = series(buildnginx, buildapp, fakeprod);
+
+dev: buildapp() (&#34;docker build Dockerfile&#34;) -&gt; dev() (&#34;docker compose ./docker-compose-dev.yml&#34;)
+fakeprod: buildnginx() (&#34;docker build Dockerfile.nginx&#34;) -&gt; buildapp() (&#34;docker build Dockerfile&#34;) -&gt; fakeprod() (&#34;docker compose ./docker-compose.yml&#34;)
+</code></pre><p>that buildnginx() is only run in fakeprod (&quot;./bin/ss fakeprod&quot; command) &ndash; so in fakeprod, Dockerfile.nginx is run before Dockerfile, which builds the frontend and bundles it in the nginx container; whereas in dev, the frontend runs on a node dev server.</p>
+<p>So first you build the container with Dockerfile, then compose?</p>
+<hr>
+<p>I&rsquo;m just confused that both nginx and web services are listed in docker-compose-dev.yml:</p>
+<pre tabindex="0"><code>nginx:
+    container_name: nginx
+    image: nginx:1.21
+    volumes:
+    - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+    links:
+    - api
+    - web
+    ports:
+    - 80:80
+
+// node
+web:
+    container_name: web
+    image: codebase:latest
+    volumes:
+    - ./web/src:/app/web/src
+    - ./web/public:/app/web/public
+    command: [&#39;yarn&#39;, &#39;dev:web&#39;]
+</code></pre><hr>
+<p>Explain nginx.dev.conf:</p>
+<pre tabindex="0"><code>http { 
+
+client_max_body_size 2G;
+
+server {
+    listen 80;
+
+    location / {
+    proxy_pass http://web:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection &#34;Upgrade&#34;;
+    proxy_set_header Host $host;
+    }
+
+    location /altair {
+    proxy_pass http://api:3000;
+    }
+
+    location /health {
+    proxy_pass http://api:3000;
+    }
+
+    location /graphql {
+    proxy_pass http://api:3000;
+    }
+}
+}
+
+events {}
+</code></pre><p>as contrasted with nginx.fakeprod.conf:</p>
+<pre tabindex="0"><code>http {
+include mime.types;
+
+client_max_body_size 2G;
+
+gzip on;
+gzip_proxied any;
+gzip_types text/plain application/json;
+gzip_min_length 1000;
+
+# Lie about scheme since it&#39;s fake prod.
+proxy_set_header X-Forwarded-Proto https;
+
+server {
+    listen 80;
+    
+    root /www/data;
+    index index.html
+
+    error_page 404 =200 /;
+
+    location / {
+    try_files $uri /index.html;
+    }
+
+    location /altair {
+    proxy_pass http://api:3000;
+    }
+
+    location /health {
+    proxy_pass http://api:3000;
+    }
+
+    location /graphql {
+    proxy_pass http://api:3000;
+    }
+}
+}
+
+events {}
+</code></pre><p>Further, explain how the docker-compose files copy the nginx.conf files into the appropriate docker container,</p>
+<hr>
+<p>And how do compose files know where to find the image mounted by a Dockerfile?</p>
+<hr>
+<p>I&rsquo;ve been using this project on and off for a while to develop architectural knowledge. Am I a maniacal genius?</p>
+<hr>
+<p>how does the nginx container understand what &ldquo;http://web:3000&rdquo; and &ldquo;http://api:3000&rdquo; mean? are those actual domains, or shorthand for localhost:3000 in each container?</p>
+<hr>
+<p>So docker is imposing a communications layer on top of http. otherwise, i&rsquo;m not sure how those domains would work, virtualization or not.</p>
+<hr>
+<p>so communication between services (i.e., frontend and backend, or backend and redis), is happening on different internal hosts + same port, rather than same host + different ports as in a typical dev environment?</p>
+<hr>
+<p>why would redis need its own container for a session store when the api container could simply import connect-redis as usually happens?</p>
+<hr>
+<p>do these internal domains work in a browser on the physical machine? how does the cra frontend communicate with them in dev? what is a docker &ldquo;link&rdquo;? why do only some services across the docker-compose files have &ldquo;build: context .&rdquo;? How do two images between both Dockerfiles become 5+ containers? Perhaps break down both docker-compose files again bearing these questions in mind.</p>
+<hr>
+<p>so build applies to images built from existing dockerfiles, and build isn&rsquo;t included for images specified directly in the docker-compose. comments below to demonstrate understanding:</p>
+<pre tabindex="0"><code>version: &#39;3.7&#39;
+
+services:
+
+# build container from Dockerfile.nginx image
+
+nginx:
+    container_name: nginx
+    image: codebasenginx:latest
+    volumes:
+    - ./nginx/nginx.fakeprod.conf:/etc/nginx/nginx.conf
+    links:
+    - api
+    ports:
+    - 80:80
+
+# build containers from Dockerfile image (same backend, different service)
+
+migrate:
+    container_name: migrate
+    image: codebase:latest
+    build:
+    context: .
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    links:
+    - db
+    command: &#39;bash -c &#34;cd api &amp;&amp; yarn migrate &amp;&amp; yarn seed&#34;&#39;
+
+api:
+    container_name: api
+    image: codebase:latest
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    links:
+    - db
+    - redis
+    command: [&#39;node&#39;, &#39;/app/api/build/entrypoints/api.js&#39;]
+
+worker:
+    container_name: worker
+    image: codebase:latest
+    build:
+    context: .
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    environment:
+    NODE_ENV: production
+    PORT: 3000
+    links:
+    - db
+    - redis
+    ports:
+    - 3000:3000
+    command: [&#39;node&#39;, &#39;/app/api/build/entrypoints/worker.js&#39;]
+
+dispatcher:
+    container_name: dispatcher
+    image: codebase:latest
+    build:
+    context: .
+    env_file:
+    - ./env/fakeprod.env
+    - ./env/secrets.env
+    environment:
+    NODE_ENV: production
+    PORT: 3001
+    links:
+    - db
+    - redis
+    ports:
+    - 3001:3001
+    command: [&#39;node&#39;, &#39;/app/api/build/entrypoints/dispatcher.js&#39;]
+
+# build containers from other images
+    
+db:
+    container_name: db
+    image: postgres:11
+    restart: always
+    environment:
+    POSTGRES_DB: codebase
+    POSTGRES_USER: codebase
+    POSTGRES_PASSWORD: codebase
+    ports:
+    - 5432:5432
+
+redis:
+    container_name: redis
+    image: redis:5.0
+</code></pre><hr>
+<p>then why don&rsquo;t any services have build fields in docker-compose.dev.yml? it&rsquo;s only used in the fakeprod version. look:</p>
+<pre tabindex="0"><code>version: &#39;3.7&#39;
+
+services:
+
+# ===========================================
+# build container from Dockerfile image (frontend)
+# ===========================================
+
+web:
+    container_name: web
+    image: codebase:latest
+    volumes:
+    - ./web/src:/app/web/src
+    - ./web/public:/app/web/public
+    command: [&#39;yarn&#39;, &#39;dev:web&#39;]
+
+# ===========================================
+# build containers from Dockerfile image (same backend, different service)
+# ===========================================
+
+api:
+    container_name: api
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3000:3000
+    command: [&#39;yarn&#39;, &#39;dev:api&#39;]
+
+migrate:
+    container_name: migrate
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    command: &#39;bash -c &#34;yarn migrate &amp;&amp; yarn seed&#34;&#39;
+
+worker:
+    container_name: worker
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    environment:
+    PORT: 3001
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3001:3001
+    command: [&#39;yarn&#39;, &#39;dev:worker&#39;]
+
+dispatch:
+    container_name: dispatcher
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    environment:
+    PORT: 3002
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3002:3002
+    command: [&#39;yarn&#39;, &#39;dev:dispatcher&#39;]
+
+# ===========================================
+# build containers from Docker Hub
+# ===========================================
+
+db:
+    container_name: db
+    image: postgres:11
+    restart: always
+    environment:
+    POSTGRES_DB: codebase
+    POSTGRES_USER: codebase
+    POSTGRES_PASSWORD: codebase
+    ports:
+    - 5432:5432
+
+redis:
+    container_name: redis
+    image: redis:5.0
+
+# nginx as reverse proxy only
+nginx:
+    container_name: nginx
+    image: nginx:1.21
+    volumes:
+    - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+    links:
+    - api
+    - web
+    ports:
+    - 80:80
+</code></pre><hr>
+<p>&ldquo;docker build -t&rdquo; is run in both dev and fakeprod.</p>
+<p>gulpfile.ts:</p>
+<pre tabindex="0"><code>exports[&#39;dev&#39;] = series(buildapp, dev);
+exports[&#39;fakeprod&#39;] = series(buildnginx, buildapp, fakeprod);
+
+async function buildapp() {
+const dockerTag = DOCKER_TAG.getOrDefault(&#39;codebase:latest&#39;);
+const dockerfile = DOCKERFILE.getOrDefault(&#39;Dockerfile&#39;);
+
+await docker.build(dockerfile, dockerTag);
+}
+</code></pre><hr>
+</div>
+
+      </div>
+
+        <footer class="footer text-center">
+	<p>Copyright &copy; 2025  -
+		<span class="credit">
+			Joe Lauletta
+		</span>
+	</p>
+</footer>
+
+    </div>
+
+  </body>
+</html>

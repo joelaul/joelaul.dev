@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grok-log-aws-1 | Joe Lauletta</title>
+
+    <meta name="generator" content="Hugo 0.111.3">
+
+<meta content='initial-scale=1.0, width=device-width' name='viewport'>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+
+
+<link rel="icon" href="https://joelaul.dev/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://joelaul.dev/css/global.css">
+
+
+	<script>
+		window.addEventListener('load', () => {
+			const theme = sessionStorage.getItem('theme');
+			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+			console.log(bgColor);
+			const leaves = `url("../img/leaves.png")`
+
+			if (theme) {
+				document.body.style.background = `${bgColor}, ${leaves}`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
+
+  </head>
+
+  	
+
+  <body>
+    
+    <header>
+  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
+    <div class="container-fluid">
+
+      
+      <a
+        class="navbar-brand"
+        href="https://joelaul.dev"
+      >
+        joelaul.dev
+      </a>
+
+      
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse-1"
+        aria-controls="navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav ms-auto">
+
+          
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link d-flex justify-content-center"
+              href="https://joelaul.dev"
+            >
+              /home</a
+            >
+          </li>
+
+          
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/portfolio"
+                >/portfolio</a
+              >
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/blog"
+                >/blog</a
+              >
+            </li>
+          
+          
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+    <div class="flex-wrapper">
+
+      <div class="container wrapper">
+
+        <h1 class="post-title">grok-log-aws-1</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>In staging (internal EC2 deployment?) &ndash; presumably, since /aws is not touched in dev or fakeprod &ndash; some or all of the following gulp task runner commands are run to spin up AWS infra via CDK. only admin() seems to execute the &ldquo;bin&rdquo; script (/aws/bin/aws.js, once compiled from TS), which creates the CDK instance and builds the construct stack, defined in the attached file.</p>
+<pre tabindex="0"><code>/aws/bin/aws.js:
+
+#!/usr/bin/env node
+
+import * as core from &#39;aws-cdk-lib&#39;;
+import &#39;source-map-support/register&#39;;
+import { CodebaseDevStack } from &#39;../lib/CodebaseDevStack&#39;;
+import { CodebaseStack } from &#39;../lib/CodebaseStack&#39;;
+
+const app = new core.App();
+
+new CodebaseStack(app, &#39;codebase&#39;, {
+stackName: &#39;codebase&#39;,
+description: &#39;Production resources for codebase&#39;,
+});
+
+new CodebaseDevStack(app, &#39;codebasedev&#39;, {
+stackName: &#39;codebasedev&#39;,
+description: &#39;Development resources for codebase&#39;,
+});
+</code></pre><p>the gulp command functions:</p>
+<pre tabindex="0"><code>async function cdkdeploy() {
+await cmd(&#39;yarn&#39;, [&#39;cdk&#39;, &#39;deploy&#39;, &#39;--all&#39;], { reject: false, cwd: Project.AWS });
+}
+
+async function admin() {
+const stackName = STACK_NAME.getOrDefault(&#39;codebase&#39;);
+
+// download credentials
+const downloadKeyCommand = await aws.getStackOutputValue(stackName, &#39;AdminInstanceDownloadKeyCommand&#39;);
+await cmd(&#39;aws&#39;, downloadKeyCommand.split(&#39; &#39;).slice(1), { shell: true, reject: false });
+
+// ssh into instance
+const sshCommand = await aws.getStackOutputValue(stackName, &#39;AdminInstanceSshCommand&#39;);
+const [sshCmd, ...sshArgs] = sshCommand.split(&#39; &#39;);
+await cmd(sshCmd, sshArgs);
+}
+
+async function admindb() {
+const stackName = STACK_NAME.getOrDefault(&#39;codebase&#39;);
+const awsRegion = AWS_REGION.getOrDefault(&#39;us-east-1&#39;);
+const nodeEnv = NODE_ENV.getOrDefault(&#39;production&#39;);
+
+const dbEnv = await getDbEnv(stackName, awsRegion);
+await cmd(
+    &#39;psql&#39;,
+    [
+    --host=${dbEnv.DB_HOST},
+    --port=${dbEnv.DB_PORT},
+    --username=${dbEnv.DB_USERNAME},
+    --dbname=${dbEnv.DB_NAME},
+    ],
+    {
+    env: { NODE_ENV: nodeEnv, PGPASSWORD: dbEnv.DB_PASSWORD },
+    }
+);
+}
+
+async function adminmigrate() {
+const stackName = STACK_NAME.getOrDefault(&#39;codebase&#39;);
+const awsRegion = AWS_REGION.getOrDefault(&#39;us-east-1&#39;);
+const nodeEnv = NODE_ENV.getOrDefault(&#39;production&#39;);
+
+const dbEnv = await getDbEnv(stackName, awsRegion);
+await cmd(&#39;yarn&#39;, [&#39;migrate&#39;], { env: { NODE_ENV: nodeEnv, ...dbEnv } });
+}
+</code></pre><p>in dev and fakeprod, a docker compose network is used to run services (frontend, backend, nginx RP, postgres db, db migrator/seeder, redis message queue + session store, dispatcher, and worker).</p>
+<p>questions:</p>
+<p>which of the above gulp commands are used in staging
+whether docker itself is ditched for an AWS service, and
+if it&rsquo;s not, which part of the attached CDK stack file incorporates docker and runs the containers?
+could you walk me through the CDK stack file in full?</p>
+<hr>
+<p>Where is aws_secretsmanager.Secret() pulling secrets from? Does it know to communicate with an .env file? How is the github repo accessed and configured to trigger a CDK deploy? What values are the CI construct params referring to?</p>
+<p>CI construct:</p>
+<pre tabindex="0"><code>const ci = new CI(this, &#39;CI&#39;, { repoName: &#39;codebase&#39;, accountId: this.account, domainName }); 
+
+Session secret (it&#39;s &#34;keyboardcat&#34; in the .env file, but process.env is never accessed):
+
+    const appSessionSecret = new aws_secretsmanager.Secret(this, &#39;AppSessionSecret&#39;);
+    const secrets = {
+    SESSION_SECRET: aws_ecs.Secret.fromSecretsManager(appSessionSecret),
+    };
+</code></pre><hr>
+<p>This is the CI construct code:</p>
+<pre tabindex="0"><code>import {
+aws_codebuild,
+aws_codecommit,
+aws_codepipeline,
+aws_codepipeline_actions,
+aws_ecr,
+aws_iam,
+Duration,
+RemovalPolicy,
+} from &#39;aws-cdk-lib&#39;;
+import { Construct } from &#39;constructs&#39;;
+
+type CIProps = {
+repoName: string;
+accountId: string;
+domainName: string;
+};
+
+const APP_IMAGE_DEFINITION_FILE = &#39;imagedefinitions.app.json&#39;;
+const WORKER_IMAGE_DEFINITION_FILE = &#39;imagedefinitions.worker.json&#39;;
+const DISPATCHER_IMAGE_DEFINITION_FILE = &#39;imagedefinitions.dispatcher.json&#39;;
+const DOCKER_CREDS_SECRET_NAME = &#39;DockerCreds&#39;;
+const DOCKER_USERNAME = &#39;codebase&#39;;
+
+export class CI extends Construct {
+readonly codeRepository: aws_codecommit.Repository;
+readonly apiRepository: aws_ecr.Repository;
+readonly nginxRepository: aws_ecr.Repository;
+readonly workerRepository: aws_ecr.Repository;
+readonly pipeline: aws_codepipeline.Pipeline;
+readonly appArtifactPath: aws_codepipeline.ArtifactPath;
+readonly workerArtifactPath: aws_codepipeline.ArtifactPath;
+readonly dispatcherArtifactPath: aws_codepipeline.ArtifactPath;
+
+private buildOutput: aws_codepipeline.Artifact;
+
+constructor(scope: Construct, id: string, props: CIProps) {
+    super(scope, id);
+
+    this.codeRepository = new aws_codecommit.Repository(this, &#39;CodeRepository&#39;, {
+    repositoryName: props.repoName,
+    });
+
+    const lifecycleRules: aws_ecr.LifecycleRule[] = [
+    {
+        rulePriority: 1,
+        description: &#39;Keep only one untagged image, expire all others&#39;,
+        tagStatus: aws_ecr.TagStatus.UNTAGGED,
+        maxImageCount: 1,
+    },
+    ];
+
+    this.apiRepository = new aws_ecr.Repository(this, &#39;ApiRepository&#39;, {
+    removalPolicy: RemovalPolicy.DESTROY,
+    lifecycleRules,
+    });
+
+    this.nginxRepository = new aws_ecr.Repository(this, &#39;NginxRepository&#39;, {
+    removalPolicy: RemovalPolicy.DESTROY,
+    lifecycleRules,
+    });
+
+    this.workerRepository = new aws_ecr.Repository(this, &#39;WorkerRepository&#39;, {
+    removalPolicy: RemovalPolicy.DESTROY,
+    lifecycleRules,
+    });
+
+    const ecrBuild = new aws_codebuild.PipelineProject(this, &#39;EcrBuild&#39;, {
+    timeout: Duration.minutes(30),
+    cache: aws_codebuild.Cache.local(aws_codebuild.LocalCacheMode.DOCKER_LAYER, aws_codebuild.LocalCacheMode.CUSTOM),
+    environment: {
+        buildImage: aws_codebuild.LinuxBuildImage.STANDARD_5_0,
+        computeType: aws_codebuild.ComputeType.MEDIUM,
+        privileged: true,
+        environmentVariables: {
+        AWS_ACCOUNT_ID: {
+            type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: props.accountId,
+        },
+        // This is available in the DockerCreds secret under the &#39;username&#39; key,
+        // but it will filter anything that matches the username in the logs.
+        // For this reason, we just leave it as plain text.
+        DOCKER_USERNAME: {
+            type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: DOCKER_USERNAME,
+        },
+        // https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec.env.secrets-manager
+        DOCKER_PASSWORD: {
+            type: aws_codebuild.BuildEnvironmentVariableType.SECRETS_MANAGER,
+            value: ${DOCKER_CREDS_SECRET_NAME}:password,
+        },
+        CI: {
+            type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: &#39;true&#39;,
+        },
+        NGINX_REPO_URI: {
+            type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: this.nginxRepository.repositoryUri,
+        },
+        API_REPO_URI: {
+            type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: this.apiRepository.repositoryUri,
+        },
+        WORKER_REPO_URI: {
+            type: aws_codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+            value: this.workerRepository.repositoryUri,
+        },
+        },
+    },
+    buildSpec: aws_codebuild.BuildSpec.fromObject({
+        version: &#39;0.2&#39;,
+        cache: {
+        paths: [&#39;/root/.yarn/**/*/&#39;],
+        },
+        phases: {
+        install: {
+            commands: [
+            &#39;yarn install&#39;,
+            &#39;yarn --cwd web&#39;,
+            // Install puppeteer dependencies
+            &#39;apt-get update&#39;,
+            &#39;apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget&#39;,
+            ],
+        },
+        pre_build: {
+            commands: [
+            // https://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker.html#sample-docker-files
+            &#39;aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com&#39;,
+            &#39;docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD&#39;,
+            &#39;(docker pull $API_REPO_URI:latest &amp;&amp; docker tag $API_REPO_URI:latest codebase:latest) || true&#39;,
+            &#39;(docker pull $NGINX_REPO_URI:latest &amp;&amp; docker tag $NGINX_REPO_URI:latest codebasenginx:latest) || true&#39;,
+            ],
+        },
+        build: {
+            commands: [
+            &#39;./bin/ss buildapp&#39;,
+            &#39;docker tag codebase:latest $API_REPO_URI:latest&#39;,
+            // NB: The api image also runs the workers!
+            &#39;docker tag codebase:latest $WORKER_REPO_URI:latest&#39;,
+            &#39;./bin/ss buildnginx&#39;,
+            &#39;docker tag codebasenginx:latest $NGINX_REPO_URI:latest&#39;,
+            &#39;./bin/ss testall&#39;,
+            ],
+            finally: [&#39;./bin/ss extractreports&#39;],
+            &#39;on-failure&#39;: &#39;ABORT&#39;,
+        },
+        post_build: {
+            commands: [
+            &#39;docker push $API_REPO_URI:latest&#39;,
+            &#39;docker push $NGINX_REPO_URI:latest&#39;,
+            &#39;docker push $WORKER_REPO_URI:latest&#39;,
+            printf &#39;[{&#34;name&#34;:&#34;nginx&#34;,&#34;imageUri&#34;:&#34;&#39;$NGINX_REPO_URI&#39;&#34;}, {&#34;name&#34;:&#34;api&#34;,&#34;imageUri&#34;:&#34;&#39;$API_REPO_URI&#39;&#34;}]&#39; &gt; ${APP_IMAGE_DEFINITION_FILE},
+            printf &#39;[{&#34;name&#34;:&#34;worker&#34;,&#34;imageUri&#34;:&#34;&#39;$WORKER_REPO_URI&#39;&#34;}]&#39; &gt; ${WORKER_IMAGE_DEFINITION_FILE},
+            printf &#39;[{&#34;name&#34;:&#34;dispatcher&#34;,&#34;imageUri&#34;:&#34;&#39;$WORKER_REPO_URI&#39;&#34;}]&#39; &gt; ${DISPATCHER_IMAGE_DEFINITION_FILE},
+            ],
+        },
+        },
+        reports: {
+        jest_reports: {
+            &#39;file-format&#39;: &#39;JUNITXML&#39;,
+            &#39;base-directory&#39;: &#39;reports&#39;,
+            files: [&#39;junit.web.xml&#39;, &#39;junit.api.xml&#39;],
+        },
+        },
+        artifacts: {
+        files: [APP_IMAGE_DEFINITION_FILE, DISPATCHER_IMAGE_DEFINITION_FILE, WORKER_IMAGE_DEFINITION_FILE],
+        },
+    }),
+    });
+    ecrBuild.addToRolePolicy(
+    new aws_iam.PolicyStatement({
+        actions: [
+        &#39;ecr:BatchGetImage&#39;,
+        &#39;ecr:GetDownloadUrlForLayer&#39;,
+        &#39;ecr:BatchCheckLayerAvailability&#39;,
+        &#39;ecr:CompleteLayerUpload&#39;,
+        &#39;ecr:GetAuthorizationToken&#39;,
+        &#39;ecr:InitiateLayerUpload&#39;,
+        &#39;ecr:PutImage&#39;,
+        &#39;ecr:UploadLayerPart&#39;,
+        ],
+        // We must use &#39;*&#39; for ecr:GetAuthorizationToken
+        resources: [&#39;*&#39;],
+        effect: aws_iam.Effect.ALLOW,
+    })
+    );
+
+    const sourceOutput = new aws_codepipeline.Artifact(&#39;SourceOutput&#39;);
+
+    this.buildOutput = new aws_codepipeline.Artifact(&#39;BuildOutput&#39;);
+
+    this.pipeline = new aws_codepipeline.Pipeline(this, &#39;Pipeline&#39;, {
+    restartExecutionOnUpdate: false,
+    stages: [
+        {
+        stageName: &#39;Source&#39;,
+        actions: [
+            new aws_codepipeline_actions.CodeCommitSourceAction({
+            actionName: &#39;GetSourceCode&#39;,
+            branch: &#39;master&#39;,
+            repository: this.codeRepository,
+            output: sourceOutput,
+            }),
+        ],
+        },
+        {
+        stageName: &#39;Build&#39;,
+        actions: [
+            new aws_codepipeline_actions.CodeBuildAction({
+            actionName: &#39;BuildImage&#39;,
+            project: ecrBuild,
+            input: sourceOutput,
+            outputs: [this.buildOutput],
+            }),
+        ],
+        },
+    ],
+    });
+
+    this.appArtifactPath = this.buildOutput.atPath(APP_IMAGE_DEFINITION_FILE);
+    this.workerArtifactPath = this.buildOutput.atPath(WORKER_IMAGE_DEFINITION_FILE);
+    this.dispatcherArtifactPath = this.buildOutput.atPath(DISPATCHER_IMAGE_DEFINITION_FILE);
+}
+}
+</code></pre><hr>
+<p>So then, what&rsquo;s the relationship between the github repo and the AWS infrastructure?</p>
+<hr>
+<p>Here are the git-related gulp command functions:</p>
+<pre tabindex="0"><code>async function deploy() {
+const BUMP_FLAGS = {
+    PATCH: &#39;--patch&#39;,
+    MINOR: &#39;--minor&#39;,
+    MAJOR: &#39;--major&#39;,
+};
+
+const bump = BUMP.getOrDefault(&#39;PATCH&#39;);
+const branch = BRANCH.getOrDefault(&#39;master&#39;);
+const remote = REMOTE.getOrDefault(&#39;aws&#39;);
+
+if (!(bump in BUMP_FLAGS)) {
+    throw new TypeError(BUMP must be one of: ${Object.keys(BUMP_FLAGS).join(&#39;, &#39;)}, got: ${bump});
+}
+const bumpFlag = BUMP_FLAGS[bump as keyof typeof BUMP_FLAGS];
+
+log(&#39;bumping api version&#39;);
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, bumpFlag, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.API });
+
+log(&#39;bumping web version&#39;);
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, bumpFlag, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.WEB });
+
+log(&#39;committing version changes&#39;);
+const version = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+await cmd(&#39;git&#39;, [&#39;add&#39;, &#39;api/package.json&#39;, &#39;web/package.json&#39;]);
+await cmd(&#39;git&#39;, [&#39;commit&#39;, &#39;-m&#39;, Bump app version to v${version}]);
+await cmd(&#39;git&#39;, [&#39;tag&#39;, &#39;-a&#39;, v${version}, &#39;-m&#39;, Bump app version to v${version}]);
+
+log(&#39;pushing to remotes&#39;);
+await cmd(&#39;git&#39;, [&#39;push&#39;, &#39;origin&#39;]);
+await cmd(&#39;git&#39;, [&#39;push&#39;, remote, ${branch}:master]);
+}
+</code></pre><pre tabindex="0"><code>async function rollback() {
+const tag = TAG.get();
+const branch = BRANCH.getOrDefault(&#39;master&#39;);
+const remote = REMOTE.getOrDefault(&#39;aws&#39;);
+
+log(&#39;getting current version&#39;);
+const prevVersion = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+
+// Leverage yarn to bump the version for us, so we don&#39;t have to deal with edge cases of all the semantic version
+// names.
+log(&#39;bumping version by a minor step&#39;);
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, &#39;--minor&#39;, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;], { cwd: Project.API });
+
+log(&#39;getting next version&#39;);
+const nextVersion = (
+    await cmd(&#39;node&#39;, [&#39;-e&#39;, &#34;process.stdout.write(require(&#39;./package.json&#39;).version);&#34;], {
+    cwd: Project.API,
+    shell: true,
+    stdio: &#39;pipe&#39;,
+    })
+).stdout;
+
+log(&#39;cleaning changes&#39;);
+await cmd(&#39;git&#39;, [&#39;checkout&#39;, &#39;./package.json&#39;], { cwd: Project.API });
+
+log(getting commit of tag: ${tag});
+const commit = (await cmd(&#39;git&#39;, [&#39;rev-list&#39;, &#39;-n&#39;, &#39;1&#39;, tag], { shell: true, stdio: &#39;pipe&#39; })).stdout;
+
+log(reverting all commits back to: ${commit});
+await cmd(&#39;git&#39;, [&#39;revert&#39;, &#39;--no-edit&#39;, &#39;--no-commit&#39;, ${commit}..HEAD]);
+
+log(updating api version to: ${nextVersion});
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;, &#39;--new-version&#39;, v${nextVersion}], {
+    cwd: Project.API,
+});
+
+log(updating web version to: ${nextVersion});
+await cmd(&#39;yarn&#39;, [&#39;version&#39;, &#39;--no-git-tag-version&#39;, &#39;--no-commit-hooks&#39;, &#39;--new-version&#39;, v${nextVersion}], {
+    cwd: Project.WEB,
+});
+
+log(&#39;committing version changes&#39;);
+await cmd(&#39;git&#39;, [&#39;add&#39;, &#39;api/package.json&#39;, &#39;web/package.json&#39;]);
+await cmd(&#39;git&#39;, [&#39;commit&#39;, &#39;-m&#39;, Rollback app version to v${prevVersion} as v${nextVersion}]);
+await cmd(&#39;git&#39;, [
+    &#39;tag&#39;,
+    &#39;-a&#39;,
+    v${nextVersion},
+    &#39;-m&#39;,
+    Rollback app version to v${prevVersion} as v${nextVersion},
+]);
+
+log(&#39;pushing to remotes&#39;);
+await cmd(&#39;git&#39;, [&#39;push&#39;, &#39;origin&#39;]);
+await cmd(&#39;git&#39;, [&#39;push&#39;, remote, ${branch}:master]);
+}
+</code></pre><p>From this, and the fact that the CDK flow has no github integration, would you suppose that the dev treats git and aws as separate processes &ndash; version control / open source provisioning, and deployment, respectively?</p>
+<hr>
+<p>So a fresh version cut would consist of deploy(), cdkdeploy(), and potentially admin*() for SSH access, mediated entirely via CLI + internal env creds? There&rsquo;s no in-browser setup?</p>
+<hr>
+<p>Oh, cdkdeploy() doesn&rsquo;t need to follow deploy(), since deploy() pushes to CodeCommit. deploy() needs only run as AWS updates are made.</p>
+<hr>
+</div>
+
+      </div>
+
+        <footer class="footer text-center">
+	<p>Copyright &copy; 2025  -
+		<span class="credit">
+			Joe Lauletta
+		</span>
+	</p>
+</footer>
+
+    </div>
+
+  </body>
+</html>

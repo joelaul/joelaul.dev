@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grok-log-docker-3 | Joe Lauletta</title>
+
+    <meta name="generator" content="Hugo 0.111.3">
+
+<meta content='initial-scale=1.0, width=device-width' name='viewport'>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+
+
+<link rel="icon" href="https://joelaul.dev/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://joelaul.dev/css/global.css">
+
+
+	<script>
+		window.addEventListener('load', () => {
+			const theme = sessionStorage.getItem('theme');
+			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+			console.log(bgColor);
+			const leaves = `url("../img/leaves.png")`
+
+			if (theme) {
+				document.body.style.background = `${bgColor}, ${leaves}`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
+
+  </head>
+
+  	
+
+  <body>
+    
+    <header>
+  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
+    <div class="container-fluid">
+
+      
+      <a
+        class="navbar-brand"
+        href="https://joelaul.dev"
+      >
+        joelaul.dev
+      </a>
+
+      
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse-1"
+        aria-controls="navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav ms-auto">
+
+          
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link d-flex justify-content-center"
+              href="https://joelaul.dev"
+            >
+              /home</a
+            >
+          </li>
+
+          
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/portfolio"
+                >/portfolio</a
+              >
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/blog"
+                >/blog</a
+              >
+            </li>
+          
+          
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+    <div class="flex-wrapper">
+
+      <div class="container wrapper">
+
+        <h1 class="post-title">grok-log-docker-3</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>I&rsquo;m running my react dev server in a docker container. HMR doesn&rsquo;t seem to be working, and I wonder if there&rsquo;s something wrong with the bind mount. Here&rsquo;s my docker-composer.yml (react service name is &ldquo;web&rdquo;):</p>
+<pre tabindex="0"><code>version: &#39;3.7&#39;
+
+services:
+
+# ===========================================
+# build container from Dockerfile image (frontend)
+# ===========================================
+
+web:
+    container_name: web
+    image: codebase:latest
+    volumes:
+    - ./web/src:/app/web/src
+    - ./web/public:/app/web/public
+    command: [&#39;yarn&#39;, &#39;dev:web&#39;]
+
+# ===========================================
+# build containers from Dockerfile image (same backend, different service)
+# ===========================================
+
+api:
+    container_name: api
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3000:3000
+    command: [&#39;yarn&#39;, &#39;dev:api&#39;]
+
+migrate:
+    container_name: migrate
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    command: &#39;bash -c &#34;yarn migrate &amp;&amp; yarn seed&#34;&#39;
+
+worker:
+    container_name: worker
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    environment:
+    PORT: 3001
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3001:3001
+    command: [&#39;yarn&#39;, &#39;dev:worker&#39;]
+
+dispatch:
+    container_name: dispatcher
+    image: codebase:latest
+    env_file:
+    - ./env/dev.env
+    - ./env/secrets.env
+    environment:
+    PORT: 3002
+    volumes:
+    - ./api/src:/app/api/src
+    links:
+    - db
+    - redis
+    ports:
+    - 3002:3002
+    command: [&#39;yarn&#39;, &#39;dev:dispatcher&#39;]
+
+# ===========================================
+# build containers from Docker Hub
+# ===========================================
+
+db:
+    container_name: db
+    image: postgres:11
+    restart: always
+    environment:
+    POSTGRES_DB: codebase
+    POSTGRES_USER: codebase
+    POSTGRES_PASSWORD: codebase
+    ports:
+    - 5432:5432
+
+redis:
+    container_name: redis
+    image: redis:5.0
+
+# nginx as reverse proxy only
+nginx:
+    container_name: nginx
+    image: nginx:1.21
+    volumes:
+    - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
+    links:
+    - api
+    - web
+    ports:
+    - 80:80
+</code></pre><hr>
+<p>I&rsquo;m using CRA.</p>
+<hr>
+<p>CHOKIDAR_USEPOLLING=true did work, but according to a stackoverflow discussion I saw, polling causes high CPU usage. Something about &ldquo;inotify&rdquo; was suggested as an alternative, but I&rsquo;m not sure what that means. Can you reiterate the method of hiding node_modules from Chokidar (or whatever tool we need for this) to reduce CPU?</p>
+<hr>
+<p>Having node_modules in my local source is necessary because I&rsquo;m troubleshooting this:</p>
+<pre tabindex="0"><code>&#34;./node_modules/@tonaljs/chord/node_modules/@tonaljs/chord-type/dist/index.mjs
+Can&#39;t import the named export &#39;EmptyPcset&#39; from non EcmaScript module (only default export is available)&#34;
+</code></pre><p>I&rsquo;m assuming the fix involves editing the @tonaljs import syntax directly, so wouldn&rsquo;t I want the container to track changes in node_modules after all?</p>
+<hr>
+<p>The error seems to be global to the entire @tonaljs package, so editing individual files won&rsquo;t help. Here&rsquo;s a few of the 160 current errors showing up in devtools console:</p>
+<pre tabindex="0"><code>vendors~main.chunk.js:255506 ./node_modules/@tonaljs/progression/node_modules/@tonaljs/chord/dist/index.mjs
+Can&#39;t import the named export &#39;note&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+3vendors~main.chunk.js:255506 ./node_modules/@tonaljs/chord/node_modules/@tonaljs/pitch-distance/dist/index.mjs
+Can&#39;t import the named export &#39;note&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/pitch-note/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/tonal/node_modules/@tonaljs/pitch-interval/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/tonal/node_modules/@tonaljs/pitch-note/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/pitch-interval/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/chord/node_modules/@tonaljs/pitch-interval/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/chord/node_modules/@tonaljs/pitch-note/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/tonal/node_modules/@tonaljs/mode/node_modules/@tonaljs/pitch-interval/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/tonal/node_modules/@tonaljs/mode/node_modules/@tonaljs/pitch-note/dist/index.mjs
+Can&#39;t import the named export &#39;pitch&#39; from non EcmaScript module (only default export is available)
+console.&lt;computed&gt; @ vendors~main.chunk.js:255506Understand this error
+vendors~main.chunk.js:255506 ./node_modules/@tonaljs/pcset/dist/index.mjs
+Can&#39;t import the named export &#39;range&#39; from non EcmaScript module (only default export is available)
+</code></pre><hr>
+<p>Can you differentiate the &ldquo;persistence&rdquo; use of docker compose volumes from any other uses they might have? Every service besides database and redis has a volumes field &ndash; A database service is the only kind I would imagine persistence between runs is important for, yet it doesn&rsquo;t have one. Additionally, the web and api services are built from a Dockerfile image that already has relevant source directories copied over&hellip; so in the event that volumes are a way to access source directories, why the redundancy here?</p>
+<hr>
+<p>So a Docker image&rsquo;s built-in source directories provide initial state, and volumes allow changes in local source to update those image directories.</p>
+<hr>
+<p>So just as CRA enables HMR on save in frontend, ts-node-dev enables it in backend, and the respective containers&rsquo; volume fields make it work.</p>
+<hr>
+<p>I&rsquo;m assuming the migrate and db containers connect to the same database, since they use the same creds and there can&rsquo;t be more than one process running on Docker port 5432 at once (this is probably obvious) &ndash; so how is it ensured that the database is running before the migrate container attempts to migrate and seed? Does it matter which source initiates the database, or is it a race condition scenario?</p>
+<hr>
+</div>
+
+      </div>
+
+        <footer class="footer text-center">
+	<p>Copyright &copy; 2025  -
+		<span class="credit">
+			Joe Lauletta
+		</span>
+	</p>
+</footer>
+
+    </div>
+
+  </body>
+</html>

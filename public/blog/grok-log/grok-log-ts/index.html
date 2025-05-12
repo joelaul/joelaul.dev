@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title> Tags | Joe Lauletta </title>
+  <head>
+    <title>grok-log-ts | Joe Lauletta</title>
 
-		<meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.111.3">
 
 <meta content='initial-scale=1.0, width=device-width' name='viewport'>
 
@@ -33,12 +33,13 @@
 		});
 	</script>
 
+  </head>
 
-	</head>
+  	
 
-	<body>
-
-		<header>
+  <body>
+    
+    <header>
   <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
     <div class="container-fluid">
 
@@ -103,48 +104,46 @@
   </nav>
 </header>
 
-		<div class="flex-wrapper">
+    <div class="flex-wrapper">
 
-			<div class="container">
+      <div class="container wrapper">
 
-				<div class="col-xs-12 text-center">
-					<h1 class="post-title">Tags</h1>
-				</div>
+        <h1 class="post-title">grok-log-ts</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>Break down this typescript function syntax:</p>
+<pre tabindex="0"><code>// imports class &#34;$gql&#34; from barrelled $gql.ts
+import * as graphql from &#34;../lib/graphql&#34;; 
 
-				
-			
-				<ul id="post-list">
-	
-	<li>
-		<div class="post-list-item">
+export const useGql = &lt;G extends graphql.Any$gql&gt;(
+gql: G
+): [exec: Exec&lt;G&gt;, res: GqlRes&lt;G&gt;, cancel: xhr.Cancel, reset: xhr.Reset] =&gt; { ... }
+</code></pre><hr>
+<p>so here, the vertical bars separate all possible types that GqlRes can be? Is this a union type?</p>
+<pre tabindex="0"><code>export type GqlRes&lt;G extends graphql.Any$gql&gt; = 
+| {
+    status: GqlStatus.Init;
+    }
+| {
+    status: GqlStatus.Pending;
+    }
+| {
+    status: GqlStatus.Success;
+    data: graphql.SuccessfulResponse&lt;G&gt;[&#34;data&#34;];
+    }
+| {
+    status: GqlStatus.Errors;
+    errors: string[];
+    }
+| {
+    status: GqlStatus.Cancelled;
+    };
+</code></pre><hr>
+</div>
 
-			<div class="post-header">
+      </div>
 
-				
-
-					<h4 class="text-center">
-						<a href="https://joelaul.dev/tags/tech/">tech</a>
-					</h4>
-
-				
-				
-			</div>
-
-			
-
-		</div>
-	</li>
-	
-</ul>
-
-				
-
-
-
-
-			</div>
-
-			<footer class="footer text-center">
+        <footer class="footer text-center">
 	<p>Copyright &copy; 2025  -
 		<span class="credit">
 			Joe Lauletta
@@ -152,8 +151,7 @@
 	</p>
 </footer>
 
-			
-		</div>
+    </div>
 
-	</body>
+  </body>
 </html>

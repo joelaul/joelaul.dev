@@ -4,6 +4,8 @@ title = "Joe Lauletta"
 languageCode = "en-us"
 pluralizelisttitles = false
 
+paginate = 20
+
 [taxonomies]
   tag = 'tags'
 
