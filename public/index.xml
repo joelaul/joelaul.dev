@@ -116,6 +116,25 @@ AuthResolver.ts:
     </item>
     
     <item>
+      <title>grok-log-pagination</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-pagination/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-pagination/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. I understand that useNotationPreviews() calls its loadPage() function to query the db for the next page of notations, and loadPage() is triggered by Library.tsx:onIntersectionEnter() when the user scrolls past some threshold. But I don&amp;rsquo;t understand how the first page of notations is rendered, since when a search query state change re-renders Library.</description>
+    </item>
+    
+    <item>
+      <title>grok-log-sql</title>
+      <link>https://joelaul.dev/blog/grok-log/grok-log-sql/</link>
+      <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://joelaul.dev/blog/grok-log/grok-log-sql/</guid>
+      <description>As I studied an open-source codebase with intent to contribute, I used ChatGPT as a note-taking tool. This is my side of one of our conversations. answer the questions commented in the below code:
+CREATE DATABASE tattlelog;USE tattlelog;/* CREATE */CREATE TABLE entries (id INT NOT NULL AUTO_INCREMENT,entry_name VARCHAR(255),description VARCHAR(255),image VARCHAR(255),hp INT,atk INT,def INT,PRIMARY KEY (id));CREATE TABLE locations (id INT NOT NULL AUTO_INCREMENT,location_name VARCHAR(255) NOT NULL,PRIMARY KEY (id));/* POPULATE */INSERT INTO entries (entry_name, description, image, hp, atk, def)VALUES (&amp;#39;Goomba&amp;#39;, &amp;#39;The underling of underlings.</description>
+    </item>
+    
+    <item>
       <title>grok-log-ts</title>
       <link>https://joelaul.dev/blog/grok-log/grok-log-ts/</link>
       <pubDate>Sat, 10 May 2025 00:00:00 +0000</pubDate>

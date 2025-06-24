@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>grok-log-pagination | Joe Lauletta</title>
+
+    <meta name="generator" content="Hugo 0.111.3">
+
+<meta content='initial-scale=1.0, width=device-width' name='viewport'>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+
+
+<link rel="icon" href="https://joelaul.dev/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://joelaul.dev/css/global.css">
+
+
+	<script>
+		window.addEventListener('load', () => {
+			const theme = sessionStorage.getItem('theme');
+			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
+			
+			const leaves = `url("../img/leaves.png")`
+
+			if (theme) {
+				document.body.style.background = `${bgColor}, ${leaves}`;
+				document.querySelector('.navbar-brand').style.color = theme;
+			}
+		});
+	</script>
+
+  </head>
+
+  	
+
+  <body>
+    
+    <header>
+  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg">
+    <div class="container-fluid">
+
+      
+      <a
+        class="navbar-brand"
+        href="https://joelaul.dev"
+      >
+        joelaul.dev
+      </a>
+
+      
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbar-collapse-1"
+        aria-controls="navbar-collapse-1"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav ms-auto">
+
+          
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link d-flex justify-content-center"
+              href="https://joelaul.dev"
+            >
+              /home</a
+            >
+          </li>
+
+          
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/portfolio"
+                >/portfolio</a
+              >
+            </li>
+           
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link d-flex justify-content-center"
+                href="https://joelaul.dev/blog"
+                >/blog</a
+              >
+            </li>
+          
+          
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+    <div class="flex-wrapper">
+
+      <div class="container wrapper">
+
+        <h1 class="post-title">grok-log-pagination</h1>
+        <div class="post-content"><h2 id="as-i-studied-an-open-source-codebase-with-intent-to-contribute-i-used-chatgpthttpschatgptcom-as-a-note-taking-tool-this-is-my-side-of-one-of-our-conversations">As I studied an open-source codebase with intent to contribute, I used <a href="https://chatgpt.com">ChatGPT</a> as a note-taking tool. This is my side of one of our conversations.</h2>
+<hr>
+<p>I understand that useNotationPreviews() calls its loadPage() function to query the db for the next page of notations, and loadPage() is triggered by  Library.tsx:onIntersectionEnter() when the user scrolls past some threshold. But I don&rsquo;t understand how the first page of notations is rendered, since when a search query state change re-renders Library.tsx, loadPage() is not called. What are the flows for first page (query state change) and next page(s) (loadPage()), respectively?</p>
+<p>Library component:</p>
+<pre tabindex="0"><code>export const Library: React.FC = enhance(() =&gt; {
+  const { xs, sm } = useViewport();
+
+  const [tags] = useTags();
+
+  const [affixed, setAffixed] = useState(false);
+  const onAffixChange = (nextAffixed?: boolean | undefined) =&gt; setAffixed(!!nextAffixed);
+  const [query, setQuery] = useState(&#39;&#39;);
+  const [tagIds, setTagIds] = useState(new Array&lt;string&gt;());
+
+  const tagIdsSet = useMemo(() =&gt; new Set(tagIds), [tagIds]);
+  const onQueryChange: ChangeEventHandler&lt;HTMLInputElement&gt; = (event) =&gt; {
+    setQuery(event.target.value);
+  };
+  const onTagIdsChange = (tagId: string) =&gt; (isChecked: boolean) =&gt; {
+    const normalize = (tagIds: string[]) =&gt; uniq(tagIds).sort();
+    let nextTagIds: string[];
+    if (isChecked) {
+      nextTagIds = normalize([...tagIds, tagId]);
+    } else {
+      nextTagIds = normalize(without([...tagIds], tagId));
+    }
+    if (!isEqual(tagIds, nextTagIds)) {
+      setTagIds(nextTagIds);
+    }
+  };
+  const isTagChecked = useCallback((tagId: string) =&gt; tagIdsSet.has(tagId), [tagIdsSet]);
+  const hasSearchTerm = query.length &gt; 0 || tagIds.length &gt; 0;
+  const onSearchTermClear: MouseEventHandler&lt;HTMLSpanElement&gt; = (event) =&gt; {
+    setQuery(&#39;&#39;);
+    setTagIds([]);
+  };
+
+  // =============================================================================
+  // FLOW: query change -&gt; setQuery() -&gt; re-render -&gt; run useNotationPreviews(query) -&gt; ? / pass scroll threshold -&gt; onIntersectionEnter -&gt; loadPage() -&gt; ? -&gt; 
+  // pg_trgm.gin_trgm_ops index used on notations fields (artist_name, song_name) and joined users field (username) to resolve misspelled queries
+  const [notations, pageInfo, loadPage, status] = useNotationPreviews(PAGE_SIZE, query, tagIds);
+  // =============================================================================
+  
+  // =============================================================================
+  // SEARCH FIELD DEBOUNCING
+  // =============================================================================
+
+  const [hasLoadedFirstPageOnce, setHasLoadedFirstPageOnce] = useState(false);
+  useEffect(() =&gt; {
+    setHasLoadedFirstPageOnce((hasLoadedFirstPageOnce) =&gt; hasLoadedFirstPageOnce || pageInfo.hasLoadedFirstPage);
+  }, [pageInfo]);
+
+  const [debouncing, debounce] = useDebouncer(DEBOUNCE_DELAY, { leading: !hasLoadedFirstPageOnce });
+  useEffect(debounce, [debounce, query, tagIds]);
+
+  // Loads next page (10 notations)
+  const onIntersectionEnter = useCallback(() =&gt; {
+    if (REACT_SNAP_ACTIVE) {
+      return;
+    }
+    if (debouncing) {
+      return;
+    }
+    loadPage();
+  }, [debouncing, loadPage]);
+
+  // =============================================================================
+  // RENDER BRANCHES
+  // =============================================================================
+
+  const isLoading = debouncing || status === GqlStatus.Init || status === GqlStatus.Pending;
+
+  const shouldShowList = !debouncing &amp;&amp; pageInfo.hasLoadedFirstPage &amp;&amp; notations.length &gt; 0;
+
+  const shouldShowErrors = status === GqlStatus.Errors;
+  const shouldShowNothingFound = !debouncing &amp;&amp; pageInfo.hasLoadedFirstPage &amp;&amp; notations.length === 0;
+  const shouldShowNoMoreContent =
+    !debouncing &amp;&amp; pageInfo.hasLoadedFirstPage &amp;&amp; !pageInfo.hasNextPage &amp;&amp; notations.length &gt; 0;
+
+  return (
+    &lt;Outer data-testid=&#34;library&#34; xs={xs}&gt;
+      &lt;Affix onChange={onAffixChange}&gt;
+        &lt;AffixInner xs={xs} affixed={affixed}&gt;
+          &lt;SearchOuter xs={xs}&gt;
+            {/* Search field */}
+            &lt;Input
+              value={query}
+              onChange={onQueryChange}
+              placeholder=&#34;song, artist, or transcriber name&#34;
+              prefix={&lt;SearchIcon /&gt;}
+              suffix={hasSearchTerm &amp;&amp; &lt;CloseCircleOutlined onClick={onSearchTermClear} /&gt;}
+            /&gt;
+            &lt;TagSearch justify=&#34;center&#34; align=&#34;middle&#34;&gt;
+              {tags.map((tag) =&gt; (
+                &lt;StyledCheckableTag key={tag.id} checked={isTagChecked(tag.id)} onChange={onTagIdsChange(tag.id)}&gt;
+                  {tag.name}
+                &lt;/StyledCheckableTag&gt;
+              ))}
+            &lt;/TagSearch&gt;
+          &lt;/SearchOuter&gt;
+        &lt;/AffixInner&gt;
+      &lt;/Affix&gt;
+
+      &lt;Row justify=&#34;center&#34; align=&#34;middle&#34;&gt;
+        {hasSearchTerm ? (
+          &lt;Button type=&#34;link&#34; size=&#34;small&#34; onClick={onSearchTermClear}&gt;
+            remove filters
+          &lt;/Button&gt;
+        ) : (
+          &lt;Button size=&#34;small&#34;&gt;{/* Dummy button for DOM spacing */}&lt;/Button&gt;
+        )}
+      &lt;/Row&gt;
+
+      {shouldShowList &amp;&amp; (
+        &lt;&gt;
+          &lt;br /&gt;
+          &lt;br /&gt;
+
+          &lt;List
+            grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 3 }}
+            style={{ padding: xs || sm ? &#39;16px&#39; : 0, border: &#39;1px solid rgba(255,255,255,0)&#39; }}
+            dataSource={notations}
+            rowKey={(notation) =&gt; notation.id}
+            renderItem={(notation) =&gt; (
+              &lt;List.Item&gt;
+                &lt;Link to={/n/${notation.id}}&gt;
+                  &lt;NotationCard notation={notation} query={query} isTagChecked={isTagChecked} /&gt;
+                &lt;/Link&gt;
+              &lt;/List.Item&gt;
+            )}
+          /&gt;
+        &lt;/&gt;
+      )}
+
+      {shouldShowNothingFound &amp;&amp; (
+        &lt;&gt;
+          &lt;br /&gt;
+          &lt;br /&gt;
+
+          &lt;Row justify=&#34;center&#34; align=&#34;middle&#34;&gt;
+            &lt;SonarSearch style={{ width: &#39;50%&#39; }} /&gt;
+          &lt;/Row&gt;
+
+          &lt;br /&gt;
+
+          &lt;Row justify=&#34;center&#34;&gt;
+            &lt;NoMore&gt;did not find anything&lt;/NoMore&gt;
+          &lt;/Row&gt;
+        &lt;/&gt;
+      )}
+
+      &lt;IntersectionTrigger onEnter={onIntersectionEnter} /&gt;
+
+      {shouldShowErrors &amp;&amp; (
+        &lt;AlertOuter xs={xs}&gt;
+          &lt;Alert showIcon closable type=&#34;error&#34; message=&#34;something went wrong&#34; /&gt;
+        &lt;/AlertOuter&gt;
+      )}
+
+      {isLoading &amp;&amp; (
+        &lt;&gt;
+          &lt;br /&gt;
+          &lt;br /&gt;
+          &lt;Row justify=&#34;center&#34;&gt;{&lt;LoadingIcon /&gt;}&lt;/Row&gt;
+        &lt;/&gt;
+      )}
+
+      {shouldShowNoMoreContent &amp;&amp; (
+        &lt;Row justify=&#34;center&#34;&gt;
+          &lt;NoMore&gt;no more content&lt;/NoMore&gt;
+        &lt;/Row&gt;
+      )}
+    &lt;/Outer&gt;
+  );
+});
+</code></pre><p>useNotationPreviews hook:</p>
+<pre tabindex="0"><code>import { useCallback, useEffect, useState } from &#39;react&#39;;
+import { Notation, Tag, User } from &#39;../domain&#39;;
+import * as graphql from &#39;../lib/graphql&#39;;
+import * as pager from &#39;../lib/pager&#39;;
+import * as queries from &#39;../lib/queries&#39;;
+import { GqlStatus, useGql } from &#39;./useGql&#39;;
+import { useGqlHandler } from &#39;./useGqlHandler&#39;;
+
+type Transcriber = Pick&lt;User, &#39;id&#39; | &#39;username&#39; | &#39;role&#39; | &#39;avatarUrl&#39;&gt;;
+
+type NotationPreview = Omit&lt;Notation, &#39;createdAt&#39; | &#39;updatedAt&#39;&gt; &amp; {
+  transcriber: Transcriber;
+  tags: Tag[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+type LoadPage = () =&gt; void;
+
+type PageInfo = pager.PageInfo &amp; {
+  hasLoadedFirstPage: boolean;
+};
+
+const getInitialPageInfo = () =&gt; ({
+  ...pager.getInitialPageInfo(),
+  hasLoadedFirstPage: false,
+});
+
+const toNotationPreviews = (connection: graphql.DataOf&lt;typeof queries.NOTATION_PREVIEWS&gt;): NotationPreview[] =&gt; {
+  return (connection?.edges || []).map((edge) =&gt; {
+    const transcriber = { ...edge.node.transcriber };
+    return { ...edge.node, transcriber } as NotationPreview;
+  });
+};
+
+export const useNotationPreviews = (
+  pageSize: number,
+  query: string,
+  tagIds: string[]
+): [notations: NotationPreview[], pageInfo: PageInfo, loadPage: LoadPage, status: GqlStatus] =&gt; {
+  const [notations, setNotations] = useState(new Array&lt;NotationPreview&gt;());
+  const [pageInfo, setPageInfo] = useState(getInitialPageInfo);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [exec, res, _, reset] = useGql(queries.NOTATION_PREVIEWS);
+  useGqlHandler.onSuccess(res, ({ data }) =&gt; {
+    const connection = data.notations!;
+    // the server sorts by ascending cursor, but we&#39;re pagingating backwards
+    // this is correct according to spec:
+    // https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    setNotations((notations) =&gt; [...notations, ...toNotationPreviews(connection).reverse()]);
+    setPageInfo({ ...connection.pageInfo, hasLoadedFirstPage: true });
+  });
+
+  useEffect(() =&gt; {
+    setNotations([]);
+    setPageInfo(getInitialPageInfo);
+    reset();
+  }, [query, tagIds, reset]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const loadPage = useCallback(() =&gt; {
+    if (res.status === GqlStatus.Pending) {
+      return;
+    }
+    if (!pageInfo.hasNextPage) {
+      return;
+    }
+    exec({
+      first: pageSize,
+      after: pageInfo.endCursor,
+      query: query ? query : null,
+      tagIds: tagIds.length ? tagIds : null,
+    });
+  }, [exec, res, pageSize, pageInfo, query, tagIds]);
+
+  return [notations, pageInfo, loadPage, res.status];
+};
+</code></pre><hr>
+<p>So IntersectionTrigger gatekeeps loadPage() on both first and subsequent page renders? Then if scroll threshold is used for subsequent, what is used for first? And what exactly does IntersectionTrigger do?</p>
+<pre tabindex="0"><code>import { noop } from &#39;lodash&#39;;
+import React, { useEffect, useRef } from &#39;react&#39;;
+
+type Props = {
+  onEnter?: () =&gt; void;
+  onExit?: () =&gt; void;
+};
+
+export const IntersectionTrigger: React.FC&lt;Props&gt; = (props) =&gt; {
+  const onEnter = props.onEnter || noop;
+  const onExit = props.onExit || noop;
+
+  const divRef = useRef&lt;HTMLDivElement&gt;(null);
+
+  useEffect(() =&gt; {
+    const div = divRef.current;
+    if (!div) {
+      return;
+    }
+    if (!onEnter &amp;&amp; !onExit) {
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) =&gt; {
+      if (entries[0].isIntersecting) {
+        onEnter();
+      } else {
+        onExit();
+      }
+    });
+
+    observer.observe(div);
+    return () =&gt; {
+      observer.disconnect();
+    };
+  }, [divRef, onEnter, onExit]);
+
+  return (
+    &lt;div data-testid=&#34;intersection-trigger&#34; ref={divRef}&gt;
+      &lt;br /&gt;
+    &lt;/div&gt;
+  );
+};
+</code></pre><p>Also, can you explain GraphQL nodes and edges in the context of this app&rsquo;s notation preview / pagination layer, as well as the meaning of &ldquo;first&rdquo; and &ldquo;after&rdquo; (and why &ldquo;before&rdquo; and &ldquo;last&rdquo; never seem to be provided client-side, but are handled on the backend)?</p>
+<p>Backend - NotationRepo:findPage():</p>
+<pre tabindex="0"><code>  // Trigger: &#34;notations&#34; query via &lt;Library /&gt; search field
+  async findPage(args: NotationConnectionArgs): Promise&lt;Connection&lt;Notation&gt;&gt; {
+    const tagIds = args.tagIds || null;
+    // Search field query
+    const query = args.query ? %${args.query}% : null;
+
+    return await NotationRepo.pager.connect(args, async (pagingCtx: PagingCtx) =&gt; {
+      const { cursor, limit, pagingType } = pagingCtx;  
+      const queryArgs = { cursor, limit, pagingType, tagIds, query };
+
+      const [entities, minRows, maxRows] = await Promise.all([
+        this.db.query&lt;Notation&gt;(findNotationPageQuery(queryArgs)),
+        this.db.query&lt;number&gt;(findNotationPageMinQuery(queryArgs)),
+        this.db.query&lt;number&gt;(findNotationPageMaxQuery(queryArgs)),
+      ]);
+
+      // ==============================================================
+      // SAME CODE FOR BOTH NOTATIONREPO.FINDPAGE AND USERREPO.FINDPAGE
+      // ==============================================================
+
+      if (pagingType === PagingType.BACKWARD) {
+        entities.reverse();
+      }
+
+      const min = get(minRows, &#39;[0].min&#39;) || -Infinity;
+      const max = get(maxRows, &#39;[0].max&#39;) || +Infinity;
+
+      return { entities, min, max };
+    });
+</code></pre><p>Backend - Pager.ts (NotationRepo.pager):</p>
+<pre tabindex="0"><code>// https://graphql.org/learn/pagination/
+
+import { first, last } from &#39;lodash&#39;;
+import { InternalError, UnknownError } from &#39;../../errors&#39;;
+import { Base64 } from &#39;../base64&#39;;
+import {
+  Connection,
+  ConnectionArgs,
+  Edge,
+  EntityFinder,
+  EntityFinderResults,
+  PageInfo,
+  PagingCtx,
+  PagingEntity,
+  PagingMeta,
+  PagingType,
+} from &#39;./types&#39;;
+
+export class Pager&lt;T extends PagingEntity&gt; {
+  static DEFAULT_FORWARD_CURSOR = 0;
+  static DEFAULT_BACKWARD_CURSOR = 2147483645;
+  static CURSOR_DELIMITER = &#39;:&#39;;
+
+  static meta(connectionArgs: ConnectionArgs): PagingMeta {
+    const { first = null, last = null, after = null, before = null } = connectionArgs;
+    const isForwardPaging = !!first || !!after;
+    const isBackwardPaging = !!last || !!before;
+
+    if (isForwardPaging &amp;&amp; isBackwardPaging) {
+      throw new Error(&#39;cursor-based pagination cannot be forwards and backwards&#39;);
+    }
+    if ((isForwardPaging &amp;&amp; before) || (isBackwardPaging &amp;&amp; after)) {
+      throw new Error(&#39;paging must use either first/after or last/before&#39;);
+    }
+    if ((typeof first === &#39;number&#39; &amp;&amp; first &lt; 0) || (typeof last === &#39;number&#39; &amp;&amp; last &lt; 0)) {
+      throw new Error(&#39;paging limit must be positive&#39;);
+    }
+
+    if (isBackwardPaging) {
+      return { pagingType: PagingType.BACKWARD, before, last };
+    }
+    return { pagingType: PagingType.FORWARD, after, first };
+  }
+
+  readonly defaultLimit: number;
+  readonly cursorType: string;
+
+  constructor(defaultLimit: number, cursorType: string) {
+    this.defaultLimit = defaultLimit;
+    this.cursorType = cursorType;
+  }
+
+  decodeCursor(encodedCursor: string): number {
+    const [cursorType, cursor] = Base64.decode(encodedCursor).split(Pager.CURSOR_DELIMITER);
+    if (cursorType !== this.cursorType) {
+      throw new Error(expected cursor type &#39;${this.cursorType}&#39;, got: ${cursorType});
+    }
+    try {
+      return parseInt(cursor, 10);
+    } catch (e) {
+      throw new Error(cannot decode cursor: ${cursor});
+    }
+  }
+
+  encodeCursor(decodedCursor: number): string {
+    return Base64.encode(${this.cursorType}${Pager.CURSOR_DELIMITER}${decodedCursor});
+  }
+  
+  async connect(connectionArgs: ConnectionArgs, findEntities: EntityFinder&lt;T&gt;): Promise&lt;Connection&lt;T&gt;&gt; {
+    /* pagingCtx = {
+        cursor: pagingMeta.after ? this.decodeCursor(pagingMeta.after) : Pager.DEFAULT_FORWARD_CURSOR,
+        limit: typeof pagingMeta.first === &#39;number&#39; ? pagingMeta.first : this.defaultLimit,
+        pagingType: pagingMeta.pagingType,
+      };
+    */
+    const pagingCtx = this.getPagingCtx(connectionArgs);
+
+    // Pass pagingCtx to NotationRepo.pager.connect() callback
+    let results = await findEntities(pagingCtx);
+    results = this.sanitizeNaNs(results);
+    this.validate(results, pagingCtx);
+
+    const edges = this.getEdges(results);
+    const pageInfo = this.getPageInfo(results, pagingCtx);
+
+    return { edges, pageInfo };
+  }
+
+  private getPagingCtx(connectionArgs: ConnectionArgs): PagingCtx {
+    /* pagingMeta = { 
+        pagingType: PagingType.FORWARD, 
+        after, 
+        first 
+      }
+    */
+    const pagingMeta = Pager.meta(connectionArgs);
+
+    switch (pagingMeta.pagingType) {
+      case PagingType.FORWARD:
+        return {
+          cursor: pagingMeta.after ? this.decodeCursor(pagingMeta.after) : Pager.DEFAULT_FORWARD_CURSOR,
+          limit: typeof pagingMeta.first === &#39;number&#39; ? pagingMeta.first : this.defaultLimit,
+          pagingType: pagingMeta.pagingType,
+        };
+
+      case PagingType.BACKWARD:
+        return {
+          cursor: pagingMeta.before ? this.decodeCursor(pagingMeta.before) : Pager.DEFAULT_BACKWARD_CURSOR,
+          limit: typeof pagingMeta.last === &#39;number&#39; ? pagingMeta.last : this.defaultLimit,
+          pagingType: pagingMeta.pagingType,
+        };
+
+      default:
+        throw new UnknownError();
+    }
+  }
+
+  private sanitizeNaNs(results: EntityFinderResults&lt;T&gt;): EntityFinderResults&lt;T&gt; {
+    return {
+      ...results,
+      min: isNaN(results.min) ? -Infinity : results.min,
+      max: isNaN(results.max) ? +Infinity : results.max,
+    };
+  }
+
+  private validate(results: EntityFinderResults&lt;T&gt;, pagingCtx: PagingCtx): void {
+    const { cursor, limit, pagingType } = pagingCtx;
+    const { entities, min, max } = results;
+
+    if (typeof min !== &#39;number&#39;) {
+      throw new InternalError(&#39;min must be a number&#39;);
+    }
+
+    if (typeof max !== &#39;number&#39;) {
+      throw new InternalError(&#39;max must be a number&#39;);
+    }
+
+    if (entities.length &gt; limit) {
+      throw new InternalError(&#39;too many entities returned&#39;);
+    }
+
+    for (let ndx = 0; ndx &lt; entities.length - 1; ndx++) {
+      const [curr, next] = entities.slice(ndx, ndx + 2);
+      if (curr.cursor &gt; next.cursor) {
+        throw new InternalError(&#39;entities must be sorted in ascending cursors&#39;);
+      }
+    }
+
+    switch (pagingType) {
+      case PagingType.FORWARD:
+        if (entities.some((entity) =&gt; entity.cursor &lt; cursor)) {
+          throw new InternalError(&#39;entity returned with cursor outside of context&#39;);
+        }
+        break;
+
+      case PagingType.BACKWARD:
+        if (entities.some((entity) =&gt; entity.cursor &gt; cursor)) {
+          throw new InternalError(&#39;entity returned with cursor outside of context&#39;);
+        }
+        break;
+
+      default:
+        throw new UnknownError();
+    }
+  }
+
+  private getEdges(results: EntityFinderResults&lt;T&gt;): Array&lt;Edge&lt;T&gt;&gt; {
+    return results.entities.map((entity) =&gt; ({ node: entity, cursor: this.encodeCursor(entity.cursor) }));
+  }
+
+  private getPageInfo(results: EntityFinderResults&lt;T&gt;, pagingCtx: PagingCtx): PageInfo {
+    const { cursor, pagingType } = pagingCtx;
+    const { entities, min, max } = results;
+
+    let hasNextPage: boolean;
+    let hasPreviousPage: boolean;
+    const cursors = entities.map((entity) =&gt; entity.cursor);
+    switch (pagingType) {
+      case PagingType.FORWARD:
+        hasNextPage = Boolean(cursors.length) &amp;&amp; max &gt; Math.max(...cursors);
+        hasPreviousPage = cursor &gt;= min &amp;&amp; min &lt; Math.min(...cursors);
+        break;
+
+      case PagingType.BACKWARD:
+        hasNextPage = Boolean(cursors.length) &amp;&amp; min &lt; Math.min(...cursors);
+        hasPreviousPage = cursor &lt;= max &amp;&amp; max &gt; Math.max(...cursors);
+        break;
+
+      default:
+        throw new UnknownError();
+    }
+
+    const startCursor = entities.length ? this.encodeCursor(first(entities)!.cursor) : null;
+    const endCursor = entities.length ? this.encodeCursor(last(entities)!.cursor) : null;
+
+    return { startCursor, endCursor, hasNextPage, hasPreviousPage };
+  }
+}
+</code></pre><hr>
+<p>loadPage() isn&rsquo;t directly called anywhere on first page query, from what I&rsquo;m seeing.</p>
+<hr>
+<p>Throughout the codebase, loadPage() only exists in the locations mentioned. I&rsquo;ll assume it&rsquo;s rendered immediately due to a short DOM.</p>
+<p>The GraphQL response handler is confusing, since it calls properties that don&rsquo;t directly belong to the NotationRepo.findPage() (db) return type: pageInfo and edges.</p>
+<p>On deeper inspection, the db results are passed up to the top-level API resolver, which seems to wrap them in NotationConnection object, providing the pageInfo and edges properties. But in that block, the db result (attrs) apparently has those properties as well. When were they set?</p>
+<p>useNotationPreviews confusing bit:</p>
+<pre tabindex="0"><code>  useGqlHandler.onSuccess(res, ({ data }) =&gt; {
+    const connection = data.notations!;
+    // the server sorts by ascending cursor, but we&#39;re pagingating backwards
+    // this is correct according to spec:
+    // https://relay.dev/graphql/connections.htm#sec-Backward-pagination-arguments
+    setNotations((notations) =&gt; [...notations, ...toNotationPreviews(connection).reverse()]);
+    setPageInfo({ ...connection.pageInfo, hasLoadedFirstPage: true });
+  });
+</code></pre><p>Backend - NotationResolver:</p>
+<pre tabindex="0"><code>  @Query((returns) =&gt; types.NotationConnection)
+  async notations(@Args() args: types.NotationConnectionArgs): Promise&lt;types.NotationConnection&gt; {
+    // connection = { entities, min, max }
+    const connection = await this.notationService.findPage(args);
+    return types.NotationConnection.of(connection);
+  }
+</code></pre><p>Backend - NotationConnection:</p>
+<pre tabindex="0"><code>@ObjectType()
+export class NotationConnection implements Connection&lt;domain.Notation&gt; {
+  static of(attrs: Connection&lt;domain.Notation&gt;) {
+    const connection = new NotationConnection();
+    connection.pageInfo = PageInfo.of(attrs.pageInfo);
+    connection.edges = attrs.edges;
+    return connection;
+  }
+
+  @Field((type) =&gt; PageInfo)
+  pageInfo!: PageInfo;
+
+  @Field((type) =&gt; [NotationEdge])
+  edges!: Edge&lt;domain.Notation&gt;[];
+}
+</code></pre><hr>
+<p>So how does the Pager track the most recent rendered page when loadPage() fires on the frontend?</p>
+<hr>
+<p>So the backend passes back a new pageInfo.endCursor value with each query, and that value is used as the &ldquo;after&rdquo; variable in the next loadPage() call.</p>
+<hr>
+<p>So an edge is composed of a cursor and a node, which is a single object in the array of data returned?</p>
+<hr>
+</div>
+
+      </div>
+
+        <footer class="footer text-center">
+	<p>Copyright &copy; 2025  -
+		<span class="credit">
+			Joe Lauletta
+		</span>
+	</p>
+</footer>
+
+    </div>
+
+  </body>
+</html>
