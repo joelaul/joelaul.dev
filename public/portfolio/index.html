@@ -23,8 +23,9 @@
 		window.addEventListener('load', () => {
 			const theme = sessionStorage.getItem('theme');
 			let bgColor = `linear-gradient(-45deg, ${theme}30, white)`;
-			
-			const leaves = `url("../img/leaves.png")`
+			console.log(bgColor);
+
+			const leaves = `url("/img/leaves.png")`
 
 			if (theme) {
 				document.body.style.background = `${bgColor}, ${leaves}`;
